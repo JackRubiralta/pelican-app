@@ -4,7 +4,6 @@ import { fetchSearchResults } from '../API';
 import ArticleList from '../components/ArticleList';
 import LoadingIndicator from '../components/LoadingIndicator'; // Ensure path is correct
 import ErrorBox from '../components/ErrorBox'; // Ensure path is correct
-import Header from "../components/Header"; // Adjust this path to your Header component's location
 
 const SearchPage = () => {
   const [query, setQuery] = useState('');

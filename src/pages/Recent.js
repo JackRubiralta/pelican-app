@@ -23,7 +23,7 @@ const Recent = () => {
       setError(error.toString());
     }
     setIsLoading(false);
-  };
+  }; 
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
