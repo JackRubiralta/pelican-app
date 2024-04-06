@@ -1,0 +1,59 @@
+{
+  "expo": {
+    "name": "Pelican",
+    "slug": "Pelican",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "softwareKeyboardLayoutMode": "pan",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.jackrubiralta.Pelican",
+      "usesCleartextTraffic": true
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ce35bb38-85c9-4d54-bf74-b5ccc29e6d3d"
+      }
+    },
+    "plugins": [
+      [
+        "expo-font",
+        {
+          "loadAsync": {
+            "nyt-cheltenham": "./assets/fonts/nyt-cheltenham.ttf",
+            "nyt-franklin": "./assets/fonts/nyt-franklin.ttf",
+            "nyt-cheltenham-normal": "./fonts/nyt-cheltenham-normal.ttf",
+            "fraunces-black": "./assets/fonts/Fraunces-Black.ttf",
+            "fraunces-bold": "./assets/fonts/Fraunces-Bold.ttf",
+            "fraunces-extra-bold": "./assets/fonts/Fraunces-ExtraBold.ttf",
+            "fraunces-extra-light": "./assets/fonts/Fraunces-ExtraLight.ttf",
+            "fraunces-light": "./assets/fonts/Fraunces-Light.ttf",
+            "fraunces-medium": "./assets/fonts/Fraunces-Medium.ttf",
+            "fraunces-regular": "./assets/fonts/Fraunces-Regular.ttf",
+            "fraunces-semi-bold": "./assets/fonts/Fraunces-SemiBold.ttf",
+            "fraunces-thin": "./assets/fonts/Fraunces-Thin.ttf"
+          }
+        }
+      ]
+    ]
+  }
+}
