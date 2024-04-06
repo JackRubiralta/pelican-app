@@ -64,31 +64,31 @@ const styles = StyleSheet.create({
   storyContent: {
   },
   bigTitle: {
-    fontFamily: 'nyt-cheltenham-normal', // fraunces-bold',
+    fontFamily: 'nyt-cheltenham-bold', // fraunces-bold',
     fontSize: 28, // Converted from 1.68rem
+    lineHeight: 30,
     color: '#121212',
-    fontWeight: 'bold', // React Native does not support numerical font weights; 'bold' is equivalent to 700
   },
   mediumTitle: {
-    fontFamily: 'nyt-cheltenham-normal',
+    lineHeight: 26,
+    fontFamily: 'nyt-cheltenham-bold',
     fontSize: 24, // Converted from 1.5rem
     color: '#121212',
-    fontWeight: 'bold',
   },
   smallTitle: {
-    fontFamily: 'nyt-cheltenham-normal',
+    lineHeight: 23.5,
+    fontFamily: 'nyt-cheltenham-bold',
     fontSize: 21.5, // Converted from 1.27rem; React Native might round this value
     color: '#121212',
-    fontWeight: 'bold',
   },
  
   summary: {
     color: '#5A5A5A',
     fontFamily: 'nyt-cheltenham-normal', // fraunces
-    fontSize: 16.5, // Converted from 1.01rem; React Native might round this value
+    fontSize: 17, // Converted from 1.01rem; React Native might round this value
     lineHeight: 22, // Approximated conversion from 1.375rem
     position: 'relative',
-    marginTop: 10,
+    marginTop: 9,
 
     
     // React Native does not support 'margin-inline-start' and 'margin-inline-end' directly,
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     fontFamily: 'georgia',
     fontSize: 12, // Converted from 0.6875rem
     color: '#727272',
-    marginTop: 11.5,
+    marginTop: 9,
   },
 
 
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   },
   
   image: {
-	marginTop: 10,
+	marginTop: 9,
     width: '100%',
   },
   // React Native does not support the CSS pseudo-class :not

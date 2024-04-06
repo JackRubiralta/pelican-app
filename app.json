@@ -39,7 +39,7 @@
         "expo-font",
         {
           "loadAsync": {
-            "nyt-cheltenham": "./assets/fonts/nyt-cheltenham.ttf",
+            "nyt-cheltenham-bold": "./assets/fonts/nyt-cheltenham-bold.ttf",
             "nyt-franklin": "./assets/fonts/nyt-franklin.ttf",
             "nyt-cheltenham-normal": "./fonts/nyt-cheltenham-normal.ttf",
             "fraunces-black": "./assets/fonts/Fraunces-Black.ttf",

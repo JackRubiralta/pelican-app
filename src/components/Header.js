@@ -23,8 +23,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 37,
-    fontWeight: 'bold',
-    fontFamily: 'nyt-cheltenham',  
+    fontFamily: 'nyt-cheltenham-bold',  
     // Add other styling as needed
   },
 });

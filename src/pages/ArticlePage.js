@@ -100,42 +100,42 @@ const ArticlePage = () => {
 const styles = StyleSheet.create({
   articleContainer: {
     padding: 20, // 20px
+    paddingBottom: 0,
     backgroundColor: '#fff',
 
   },
   articleTitle: {
-    fontFamily: 'times', // Make sure to load custom fonts properly in React Native
+    fontFamily: 'nyt-cheltenham-bold', // Make sure to load custom fonts properly in React Native
     fontSize: 31, // 2rem * 16
-    lineHeight: 31.5, // Approximation for 2.25rem * 16
+    lineHeight: 33.5, // Approximation for 2.25rem * 16
     color: '#121212',
-    fontWeight: '700', // Bold
   },
   articleSummary: {
     color: '#5A5A5A',
     fontFamily: 'nyt-cheltenham-normal',
-    fontSize: 19, // 1.3rem * 16
+    fontSize: 20, // 1.3rem * 16
     lineHeight: 26, // Approximation for 1.5925rem * 16
-    marginTop: 12,
+    marginTop: 10.5,
   },
 
   author: {
     fontFamily: 'georgia',
     fontSize: 13.5, // Converted from 0.6875rem
     color: '#727272',
-    marginTop: 12,
+    marginTop: 10.5,
   },
   articleMainImage: {
     width: '100%',
     height: undefined, // Remove 'auto' and use undefined to allow dynamic height calculation
-    marginTop: 12,
+    marginTop: 10.5,
   },
 
   articleContentParagraph: {
     marginTop: 12 , // 0.78125rem * 16 approximation
     // overflow-wrap: break-word; Not supported, text will wrap by default in React Native
-    color: '#2e2e2e', // Assuming this was the intended fallback color
-    fontFamily: 'times',
-    fontSize: 15.8, // 1.12rem * 16
+    color: '#141414', // Assuming this was the intended fallback color
+    fontFamily: 'nyt-cheltenham-normal',
+    fontSize: 15, // 1.12rem * 16
     lineHeight: 25, // 1.5625rem * 16 approximation
   },
  

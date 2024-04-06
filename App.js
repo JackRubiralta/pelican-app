@@ -14,7 +14,7 @@ const App = () => {
   async function loadFonts() {
     await Font.loadAsync({
        // Existing NYT fonts
-       'nyt-cheltenham': require('./assets/fonts/nyt-cheltenham.ttf'),
+       'nyt-cheltenham-bold': require('./assets/fonts/nyt-cheltenham-bold.ttf'),
        'nyt-franklin': require('./assets/fonts/nyt-franklin.ttf'),
        'nyt-cheltenham-normal': require('./assets/fonts/nyt-cheltenham-normal.ttf'),
        // Fraunces fonts

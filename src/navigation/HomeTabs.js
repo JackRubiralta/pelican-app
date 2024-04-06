@@ -25,8 +25,8 @@ function HomeTabs() {
           return <Image source={icons[route.name]} style={{ width: size, height: size }} />;
         },
         header: () => {
-          const title = route.name;
-          return <Header title={title} />;
+          //const title = route.name;
+          //return <Header title={title} />;
         },
         tabBarLabel: () => null, 
       })}

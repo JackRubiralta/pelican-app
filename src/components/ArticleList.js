@@ -6,7 +6,7 @@ import NewsBlock from './NewsBlock'; // Adjust the import path as necessary
 import NewsSeperator from './NewsSeperator'; // Import the new NewsSeperator component
 
 // Define your ArticleList component
-const ArticleList = ({ articles, refreshControl  }) => {
+const ArticleList = ({ articles, refreshControl, onScroll   }) => {
   if (!articles || articles.length === 0) {
     return (
       <View style={styles.centeredView}>
@@ -19,10 +19,11 @@ const ArticleList = ({ articles, refreshControl  }) => {
       data={articles}
       keyExtractor={(item) => item.id.toString()}
       renderItem={({ item }) => <NewsBlock article={item} />}
-      ItemSeparatorComponent={NewsSeperator} // Use NewsSeperator as the ItemSeparatorComponent
+      ItemSeparatorComponent={NewsSeperator}
       style={styles.listBackground}
-      refreshControl={refreshControl} // Add this line to apply the refreshControl
-
+      refreshControl={refreshControl}
+      onScroll={onScroll} // Add this to handle custom scroll logic
+      scrollEventThrottle={16} // Optional but recommended for performance
     />
   );
 };
