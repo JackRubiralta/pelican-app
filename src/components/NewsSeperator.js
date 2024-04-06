@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#121212',
     width: '90%',
     alignSelf: 'center',
-    marginVertical: 12,
+    marginVertical: 7,
 
   },
 });
