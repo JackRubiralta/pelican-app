@@ -70,7 +70,7 @@ const Recent = () => {
           flex: 1,
           marginTop: marginTopForContent, // Use the animated value for dynamic margin
         }}
-      >
+      > 
         {isLoading ? (
           <LoadingIndicator />
         ) : error ? (

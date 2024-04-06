@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Animated, RefreshControl } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { fetchSearchResults } from '../API';
 import ArticleList from '../components/ArticleList';
 import LoadingIndicator from '../components/LoadingIndicator'; // Ensure path is correct
@@ -11,10 +11,6 @@ const SearchPage = () => {
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const scrollY = new Animated.Value(0);
-  const [refreshing, setRefreshing] = useState(false);
-
-
 
   const fetchArticles = async () => {
     if (query.length === 0) {
@@ -35,27 +31,11 @@ const SearchPage = () => {
     }
     setIsLoading(false);
   };
-  const onRefresh = useCallback(async () => {
-    setRefreshing(true);
-    await fetchArticles();
-    setRefreshing(false);
-  }, []);
+
   useEffect(() => {
     fetchArticles();
   }, [query]);
 
-  
-  const headerTranslateY = scrollY.interpolate({
-    inputRange: [0, 60],
-    outputRange: [0, -60],
-    extrapolate: "clamp",
-  });
-
-  const marginTopForContent = scrollY.interpolate({
-    inputRange: [0, 60],
-    outputRange: [60, 0], // Adjust these values if your header size is different
-    extrapolate: "clamp",
-  });
   // Modify article data
   articles.forEach(article => {
     article.summary.show = true;
@@ -65,21 +45,12 @@ const SearchPage = () => {
 
   return (
     <View style={styles.container}>
-    <Animated.View
-      style={{
-        transform: [
-          {
-            translateY: headerTranslateY,
-          },
-        ],
-        zIndex: 1,
-        position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
-      }}
-    >
-        <View style={styles.searchBarContainer}>
+
+<Header title="Search" />
+
+
+      
+      <View style={styles.searchBarContainer}>
         <TextInput
           style={styles.searchBar}
           placeholder="Search articles..."
@@ -87,40 +58,36 @@ const SearchPage = () => {
           onChangeText={text => setQuery(text)}
         />
       </View>
-    </Animated.View>
-    <Animated.View
-      style={{
-        flex: 1,
-        marginTop: marginTopForContent, // Use the animated value for dynamic margin
-      }}
-    > 
-      {isLoading ? (
-        <LoadingIndicator />
-      ) : error ? (
-        <ErrorBox errorMessage={error} onRetry={fetchArticles} />
-      ) : (
-        <ArticleList
-          articles={articles}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-            { useNativeDriver: false } // useNativeDriver should be false because we are animating layout properties (marginTop)
-          )}
-        />
-      )}
-    </Animated.View>
-  </View>
+      <View style={[styles.centeredView]}>
+      
+        {isLoading ? (
+          <LoadingIndicator/>
+        ) : error ? (
+          <ErrorBox errorMessage={error} onRetry={fetchArticles} />
+        ) : query.length === 0 ? (
+          <Text style={styles.infoMessage}>Enter a query to start searching.</Text>
+        ) : articles.length === 0 ? (
+          <Text style={styles.infoMessage}>No articles found. Try a different search.</Text>
+        ) : (
+          <ArticleList articles={articles} />
+        )}
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffff",
+    backgroundColor: '#ffff',
+    
   },
- 
+  centeredView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    // Add other styling properties as needed, like flex, width, height, etc.
+  },
   searchBarContainer: {
     borderBottomWidth: 1,
     borderBottomColor: '#dedede',
