@@ -93,15 +93,15 @@ const SearchPage = () => {
         marginTop: marginTopForContent, // Use the animated value for dynamic margin
       }}
     > 
-      {isLoading ? (
+      {isLoading && !refreshing ? (
         <LoadingIndicator />
       ) : error ? (
-        <ErrorBox errorMessage={error} onRetry={fetchArticles} />
+        <ErrorBox errorMessage={error}/>
       ) : (
         <ArticleList
           articles={articles}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            <RefreshControl refreshing={refreshing} />
           }
           onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { y: scrollY } } }],
@@ -136,6 +136,8 @@ const styles = StyleSheet.create({
     borderColor: '#d5a64a',
     borderRadius: 5,
     marginHorizontal: 10,
+    fontFamily: 'times',
+    letterSpacing: 0.3,
   },
   
   

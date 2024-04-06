@@ -72,10 +72,10 @@ const Athletics = () => {
           marginTop: marginTopForContent, // Use the animated value for dynamic margin
         }}
       > 
-        {isLoading ? (
+       {isLoading && !refreshing ? (
           <LoadingIndicator />
         ) : error ? (
-          <ErrorBox errorMessage={error} onRetry={fetchArticles} />
+          <ErrorBox errorMessage={error} />
         ) : (
           <ArticleList
             articles={articles}
