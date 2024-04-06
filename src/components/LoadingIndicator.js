@@ -9,7 +9,7 @@ const LoadingIndicator = () => (
 
 const styles = StyleSheet.create({
   loadingContainer: {
-    marginTop: 0,
+    marginTop: 20,
     
   },
 });

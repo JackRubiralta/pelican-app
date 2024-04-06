@@ -7,4 +7,7 @@ npm run web
 npm rebuild node-sass
 eas build --platform android --profile preview
 
-https://medium.com/@Sarmilasivaraja/choosing-the-right-project-structure-for-your-react-native-app-77b91479dd41
+TODO
+- Fix line spacing issues with margin and padding for summary and title for news blocks and start of article
+- Add some SPS branding
+- 
