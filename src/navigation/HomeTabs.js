@@ -21,14 +21,16 @@ function HomeTabs() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          return <Image source={icons[route.name]} style={{ width: size, height: size }} />;
+        tabBarIcon: ({ focused }) => {
+          // Use focused state to dynamically set the icon color
+          const color = focused ? 'black' : 'gray';
+          return <Image source={icons[route.name]} style={{ width: 20, height: 20, tintColor: color }} />;
         },
         header: () => {
           //const title = route.name;
           //return <Header title={title} />;
         },
-        tabBarLabel: () => null, 
+        tabBarLabel: () => null, // Hides the tab bar label
       })}
       tabBarOptions={{
         activeTintColor: 'tomato',

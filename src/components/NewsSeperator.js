@@ -6,7 +6,7 @@ const NewsSeperator = () => <View style={styles.separator} />;
 const styles = StyleSheet.create({
   separator: {
     height: 2,
-    backgroundColor: '#121212',
+    backgroundColor: '#44444',
     width: '90%',
     alignSelf: 'center',
     marginVertical: 7,

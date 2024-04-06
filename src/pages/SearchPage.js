@@ -88,28 +88,34 @@ const SearchPage = () => {
       </View>
     </Animated.View>
     <Animated.View
-      style={{
-        flex: 1,
-        marginTop: marginTopForContent, // Use the animated value for dynamic margin
-      }}
-    > 
-      {isLoading && !refreshing ? (
-        <LoadingIndicator />
-      ) : error ? (
-        <ErrorBox errorMessage={error}/>
-      ) : (
-        <ArticleList
-          articles={articles}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} />
-          }
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-            { useNativeDriver: false } // useNativeDriver should be false because we are animating layout properties (marginTop)
-          )}
-        />
+  style={{
+    flex: 1,
+    marginTop: marginTopForContent, // Use the animated value for dynamic margin
+  }}
+> 
+  {isLoading && !refreshing ? (
+    <LoadingIndicator />
+  ) : error ? (
+    <ErrorBox errorMessage={error}/>
+  ) : articles.length === 0 ? (
+    // Prompt for search if there are no articles
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Please enter a query to search for articles.</Text>
+    </View>
+  ) : (
+    <ArticleList
+      articles={articles}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} />
+      }
+      onScroll={Animated.event(
+        [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+        { useNativeDriver: false } // useNativeDriver should be false because we are animating layout properties (marginTop)
       )}
-    </Animated.View>
+    />
+  )}
+</Animated.View>
+
   </View>
   );
 };

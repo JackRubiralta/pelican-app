@@ -139,9 +139,9 @@ const styles = StyleSheet.create({
   contentParagraph: {
     marginTop: 12 , // 0.78125rem * 16 approximation
     // overflow-wrap: break-word; Not supported, text will wrap by default in React Native
-    color: '#141414', // Assuming this was the intended fallback color
+    color: '#242424', // Assuming this was the intended fallback color
     fontFamily: 'nyt-cheltenham-normal',
-    fontSize: 15, // 1.12rem * 16
+    fontSize: 16.4, // 1.12rem * 16
     lineHeight: 25, // 1.5625rem * 16 approximation
   },
  

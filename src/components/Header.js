@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     // Add shadow or elevation if you want
   },
   headerTitle: {
-    fontSize: 37,
+    fontSize: 40,
     fontFamily: 'nyt-cheltenham-bold',  
     // Add other styling as needed
   },
