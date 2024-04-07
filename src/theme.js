@@ -9,7 +9,7 @@ export const theme = {
       },
       summary: {
         fontFamily: 'georgia',
-        fontSize: 17,
+        fontSize: 16,
         lineHeight: 22,
         color: '#313131',
       },
@@ -20,7 +20,7 @@ export const theme = {
       },
       content: {
         fontFamily: 'georgia',
-        fontSize: 16.4,
+        fontSize: 15.5,
         lineHeight: 25,
         color: '#242424',
       },

@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jackrubiralta.Pelican"
     },
     "android": {
       "softwareKeyboardLayoutMode": "pan",
@@ -53,7 +54,6 @@
             "fraunces-thin": "./assets/fonts/Fraunces-Thin.ttf",
             "utm-times-bold": "./assets/fonts/UTMTimesBold.ttf",
             "utm-times-regular": "./assets/fonts/UTMTimesRegular.ttf"
-
           }
         }
       ]
