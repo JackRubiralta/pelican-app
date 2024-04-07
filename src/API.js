@@ -59,6 +59,21 @@ export const fetchNewArticles = async () => {
   }
 };
 
+
+export const fetchCrosswordData = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/crossword`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok.');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch crossword data:", error);
+    throw error; // Rethrow so callers can handle errors.
+  }
+};
+
 // Fetch athletics articles
 export const fetchAthleticsArticles = async () => {
   try {

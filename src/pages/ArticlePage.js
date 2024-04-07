@@ -3,6 +3,7 @@ import { View, Text, Image, ScrollView, StyleSheet, ActivityIndicator, Dimension
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { fetchArticleById, API_BASE_URL } from '../API';
 import { SafeAreaView } from 'react-native';
+import { theme } from '../theme'; // Adjust the import path to where you've saved theme.js
 
 const ArticlePage = () => {
   const navigation = useNavigation();
@@ -16,7 +17,7 @@ const ArticlePage = () => {
     const fetchArticle = async () => {
       try {
         
-
+ 
         // Load main article image dimensions
         
         if (article.image.source) {
@@ -100,58 +101,44 @@ const ArticlePage = () => {
 );
 };
 
+
+const SIZE_MULTIPLIER = 1.15;
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20, // 20px
-    paddingBottom: 0,// 48.33
-    backgroundColor: '#fff'
-    ,
-    // maybe need above
-
+    paddingHorizontal: theme.spacing.large,
+    paddingBottom: 0,
+    backgroundColor: theme.colors.background,
   },
   title: {
-    marginTop: 10,
-    fontFamily: 'nyt-cheltenham-bold', // Make sure to load custom fonts properly in React Native
-    fontSize: 31, // 2rem * 16
-    lineHeight: 33.5, // Approximation for 2.25rem * 16
-    color: '#121212',
+    ...theme.fonts.title,
+    fontSize: theme.titleSizes.big.fontSize * SIZE_MULTIPLIER,
+    lineHeight: theme.titleSizes.big.lineHeight * SIZE_MULTIPLIER,
+    marginTop: theme.spacing.medium,
   },
   summary: {
-    color: '#5A5A5A',
-    fontFamily: 'nyt-cheltenham-normal',
-    fontSize: 20, // 1.3rem * 16
-    lineHeight: 26, // Approximation for 1.5925rem * 16
-    marginTop: 10.5,
+    ...theme.fonts.summary,
+    fontSize: theme.fonts.summary.fontSize * SIZE_MULTIPLIER,
+    lineHeight: theme.fonts.summary.lineHeight ? theme.fonts.summary.lineHeight * SIZE_MULTIPLIER : undefined, // Only scale lineHeight if it exists
+    marginTop: theme.spacing.small,
   },
-
   author: {
-    fontFamily: 'georgia',
-    fontSize: 13.5, // Converted from 0.6875rem
-    color: '#727272',
-    marginTop: 10.5,
+    ...theme.fonts.author,
+    fontSize: theme.fonts.author.fontSize * SIZE_MULTIPLIER,
+    lineHeight: theme.fonts.author.lineHeight ? theme.fonts.author.lineHeight * SIZE_MULTIPLIER : undefined, // Only scale lineHeight if it exists
+    marginTop: theme.spacing.small,
   },
   mainImage: {
     width: '100%',
-    height: undefined, // Remove 'auto' and use undefined to allow dynamic height calculation
-    marginTop: 10.5,
+    marginTop: theme.spacing.small,
   },
-
+  articleContent: {},
   contentParagraph: {
-    marginTop: 12 , // 0.78125rem * 16 approximation
-    // overflow-wrap: break-word; Not supported, text will wrap by default in React Native
-    color: '#242424', // Assuming this was the intended fallback color
-    fontFamily: 'nyt-cheltenham-normal',
-    fontSize: 16.4, // 1.12rem * 16
-    lineHeight: 25, // 1.5625rem * 16 approximation
+    ...theme.fonts.content,
+    marginTop: theme.spacing.medium,
   },
- 
   contentImage: {
     width: '100%',
-    marginTop: 12 ,  },
-  
+    marginTop: theme.spacing.medium,
+  },
 });
-
-
-
-
 export default ArticlePage;

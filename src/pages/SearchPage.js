@@ -80,11 +80,13 @@ const SearchPage = () => {
     >
         <View style={styles.searchBarContainer}>
         <TextInput
-          style={styles.searchBar}
-          placeholder="Search articles..."
-          value={query}
-          onChangeText={text => setQuery(text)}
-        />
+  style={styles.searchBar}
+  placeholder="Search articles..."
+  placeholderTextColor="#808080" // This sets the placeholder text color to gray
+  value={query}
+  onChangeText={text => setQuery(text)}
+  // You've already set a darker color for when typing via the color property in your styles.searchBar
+/>
       </View>
     </Animated.View>
     <Animated.View
@@ -132,17 +134,19 @@ const styles = StyleSheet.create({
     height: 60, // Maintain the explicit height setting for the container
     justifyContent: 'center', // Centers the searchBar vertically within the container
     paddingHorizontal: 10, // Optional: add some horizontal padding to the container if desired
+    backgroundColor: "#ffff",
   },
   
   searchBar: {
     height: 40, // Adjust the height as needed to fit within the container, considering border and padding
     paddingHorizontal: 10, // Adjust horizontal padding to control the text input area size
-    fontSize: 18,
+    fontSize: 17.5,
     borderWidth: 3,
     borderColor: '#d5a64a',
     borderRadius: 5,
     marginHorizontal: 10,
-    fontFamily: 'times',
+    color: '#1c1c1c', // Dark color for typed text
+    fontFamily: 'georgia',
     letterSpacing: 0.3,
   },
   

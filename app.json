@@ -50,7 +50,10 @@
             "fraunces-medium": "./assets/fonts/Fraunces-Medium.ttf",
             "fraunces-regular": "./assets/fonts/Fraunces-Regular.ttf",
             "fraunces-semi-bold": "./assets/fonts/Fraunces-SemiBold.ttf",
-            "fraunces-thin": "./assets/fonts/Fraunces-Thin.ttf"
+            "fraunces-thin": "./assets/fonts/Fraunces-Thin.ttf",
+            "utm-times-bold": "./assets/fonts/UTMTimesBold.ttf",
+            "utm-times-regular": "./assets/fonts/UTMTimesRegular.ttf"
+
           }
         }
       ]

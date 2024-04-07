@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { API_BASE_URL } from '../API';
+import { theme } from '../theme'; // Adjust the import path to where you've saved theme.js
 
 const NewsBlock = ({ article }) => {
   const navigation = useNavigation();
@@ -53,70 +54,34 @@ const NewsBlock = ({ article }) => {
 
 const styles = StyleSheet.create({
   storyWrapper: {
-    padding: 20,
+    padding: theme.spacing.large,
     backgroundColor: '#fff',
-    position: 'relative', /* Needed for absolute positioning of pseudo-element */
-
-    // React Native does not support pseudo-elements (:before),
-    // so you might need to add a separate View for the border if necessary.
-  },
-  // Removed storyLink since textDecorationLine: 'none' and color: 'inherit' are the defaults in React Native.
-  storyContent: {
+    position: 'relative',
   },
   bigTitle: {
-    fontFamily: 'nyt-cheltenham-bold', // fraunces-bold',
-    fontSize: 28, // Converted from 1.68rem
-    lineHeight: 30,
-    color: '#121212',
+    ...theme.fonts.title,
+    ...theme.titleSizes.big,
   },
   mediumTitle: {
-    lineHeight: 26,
-    fontFamily: 'nyt-cheltenham-bold',
-    fontSize: 24, // Converted from 1.5rem
-    color: '#121212',
+    ...theme.fonts.title,
+    ...theme.titleSizes.medium,
   },
   smallTitle: {
-    lineHeight: 23.5,
-    fontFamily: 'nyt-cheltenham-bold',
-    fontSize: 21.5, // Converted from 1.27rem; React Native might round this value
-    color: '#121212',
+    ...theme.fonts.title,
+    ...theme.titleSizes.small,
   },
- 
   summary: {
-    color: '#5A5A5A',
-    fontFamily: 'nyt-cheltenham-normal', // fraunces
-    fontSize: 17, // Converted from 1.01rem; React Native might round this value
-    lineHeight: 22, // Approximated conversion from 1.375rem
-    position: 'relative',
-    marginTop: 9,
-
-    
-    // React Native does not support 'margin-inline-start' and 'margin-inline-end' directly,
-    // but if you are looking to ensure some spacing inside a container, paddingHorizontal can be used.
-    // 'display: block;' and 'unicode-bidi: isolate;' have no direct equivalents in React Native.
-    // React Native components like <Text> and <View> naturally block-level display in a flex context.
-    // Additional properties for text and layout adjustment can be applied as needed.
-    margin: 0,
+    ...theme.fonts.summary,
+    marginTop: theme.spacing.small,
   },
   author: {
-    fontFamily: 'georgia',
-    fontSize: 12, // Converted from 0.6875rem
-    color: '#727272',
-    marginTop: 9,
+    ...theme.fonts.author,
+    marginTop: theme.spacing.small,
   },
-
-
-  readTime: {
-    textTransform: 'uppercase',
-    color: '#727272',
-  },
-  
   image: {
-	marginTop: 9,
+    marginTop: theme.spacing.small,
     width: '100%',
   },
-  // React Native does not support the CSS pseudo-class :not
-  // You might need to add border logic in your component rendering based on index or condition
 });
 
 export default NewsBlock;
