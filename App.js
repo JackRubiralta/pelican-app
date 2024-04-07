@@ -28,7 +28,7 @@ const App = () => {
        'fraunces-semi-bold': require('./assets/fonts/Fraunces-SemiBold.ttf'),
        'fraunces-thin': require('./assets/fonts/Fraunces-Thin.ttf'),
        'utm-times-bold': require('./assets/fonts/UTMTimesBold.ttf'),
-       //'utm-times-regular': require('./assets/fonts/UTMTimesRegular.ttf'),
+       'utm-times-regular': require('./assets/fonts/UTMTimesRegular.ttf'),
 
        // Include any other fonts here
     });

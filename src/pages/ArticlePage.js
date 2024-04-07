@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   },
   summary: {
     ...theme.fonts.summary,
-    fontSize: theme.fonts.summary.fontSize * SIZE_MULTIPLIER,
+    fontSize: theme.fonts.summary.fontSize * SIZE_MULTIPLIER * 0.9,
     lineHeight: theme.fonts.summary.lineHeight ? theme.fonts.summary.lineHeight * SIZE_MULTIPLIER : undefined, // Only scale lineHeight if it exists
     marginTop: theme.spacing.small,
   },
