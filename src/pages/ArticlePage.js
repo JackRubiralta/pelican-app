@@ -77,33 +77,44 @@ const ArticlePage = () => {
     styles.title,
     { marginTop: article.image.position === 'top' ? theme.spacing.small : (theme.spacing.large - ((theme.titleSizes.big.lineHeight- theme.titleSizes.big.fontSize) * SIZE_MULTIPLIER)) } // same as padding on sides
   ];
-  return (
-    <SafeAreaView style={{ flex: 1 }}> 
-      <ScrollView style={styles.container}>
-        {article.image.position === 'top' && renderMainImage('top')}
-        
-        <Text style={titleStyle}>{article.title.text}</Text>
-        <Text style={styles.author}>Published on {article.date} by {article.author}</Text>
+  // Inside your ArticlePage component
 
-        {(!article.image.position || article.image.position === 'bottom') && renderMainImage('bottom')}
+return (
+  <SafeAreaView style={{ flex: 1 }}> 
+    <ScrollView style={styles.container}>
+      {article.image.position === 'top' && renderMainImage('top')}
+      
+      <Text style={titleStyle}>{article.title.text}</Text>
+      <Text style={styles.author}>Published on {article.date} by {article.author}</Text>
 
-        <View style={styles.articleContent}>
-          {article.content.map((item, index) => (
-            item.type === 'paragraph' ? (
-              <Text key={index} style={styles.contentParagraph}>{item.text}</Text>
-            ) : item.type === 'image' && contentImageHeights[index] ? (
-              <Image
-                key={index}
-                source={{ uri: `${API_BASE_URL}${item.source}` }}
-                style={[styles.contentImage, { height: contentImageHeights[index] }]}
-                resizeMode="cover"
-              />
-            ) : null
-          ))} 
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
+      {(!article.image.position || article.image.position === 'bottom') && renderMainImage('bottom')}
+
+      <View style={styles.articleContent}>
+        {article.content.map((item, index) => {
+          const isLastItem = index === article.content.length - 1;
+          return item.type === 'paragraph' ? (
+            <Text key={index} style={[
+              styles.contentParagraph, 
+              isLastItem ? {marginBottom: (theme.spacing.large - (theme.fonts.content.lineHeight - theme.fonts.content.fontSize))} : {}
+            ]}>{item.text}</Text>
+          ) : item.type === 'image' && contentImageHeights[index] ? (
+            <Image
+              key={index}
+              source={{ uri: `${API_BASE_URL}${item.source}` }}
+              style={[
+                styles.contentImage, 
+                { height: contentImageHeights[index] }, 
+                isLastItem ? {marginBottom: theme.spacing.large} : {}
+              ]}
+              resizeMode="cover"
+            />
+          ) : null;
+        })} 
+      </View>
+    </ScrollView>
+  </SafeAreaView>
+);
+
 };
 
 
@@ -146,4 +157,6 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.medium,
   },
 });
+
+
 export default ArticlePage;

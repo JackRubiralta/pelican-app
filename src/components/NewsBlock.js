@@ -37,6 +37,8 @@ const NewsBlock = ({ article }) => {
   };
   const renderImage = (position) => (
     image && image.show && (
+      <TouchableOpacity onPress={navigateToArticle}>
+
       <Image
         style={[
           styles.image,
@@ -45,6 +47,7 @@ const NewsBlock = ({ article }) => {
         ]}
         source={{ uri: imageUrl }}
       />
+      </TouchableOpacity>
     )
   );
 
