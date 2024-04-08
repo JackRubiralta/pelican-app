@@ -37,7 +37,6 @@ const NewsBlock = ({ article }) => {
   };
   const renderImage = (position) => (
     image && image.show && (
-      <TouchableOpacity onPress={navigateToArticle}>
 
       <Image
         style={[
@@ -47,7 +46,6 @@ const NewsBlock = ({ article }) => {
         ]}
         source={{ uri: imageUrl }}
       />
-      </TouchableOpacity>
     )
   );
 
@@ -59,13 +57,15 @@ const NewsBlock = ({ article }) => {
 
   return (
     <View style={styles.storyWrapper}>
+      <TouchableOpacity onPress={navigateToArticle}>
       {image.position === 'top' && renderImage('top')}
-      <TouchableOpacity style={styles.storyContent} onPress={navigateToArticle}>
+      <View style={styles.storyContent}>
         <Text style={titleStyle}>{title.text}</Text>
         {summary && summary.show && <Text style={styles.summary}>{summary.content}</Text>}
         <Text style={[styles.author, { marginTop: theme.spacing.small }]}>By {author}</Text>
-      </TouchableOpacity>
+      </View>
       {image.position === 'bottom' && renderImage('bottom')}
+      </TouchableOpacity>
     </View>
   );
 };

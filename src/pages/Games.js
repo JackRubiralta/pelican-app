@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+//import SpellingBeeGame from './SpellingBee'; // Assuming GameScreen is the default export from SpellingBee
 
 const GamesPage = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.messageText}>Not implemented yet. App by Jack Rubiralta</Text>
+      <Text>Not implemented yet. App by Jack Rubiralta </Text>
+      {/* Additional UI elements can be added here if necessary */}
     </View>
   );
 };
@@ -16,10 +18,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
   },
-  messageText: {
-    color: 'black', 
-    textAlign: 'center',
-  },
+  // Other styles...
 });
 
 export default GamesPage;
