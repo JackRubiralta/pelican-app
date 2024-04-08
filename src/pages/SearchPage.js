@@ -57,7 +57,7 @@ const SearchPage = () => {
   });
   // Modify article data
   articles.forEach(article => {
-    article.summary.show = true;
+    article.summary.show = false;
     article.image.show = false;
     article.title.size = 'medium';
   });

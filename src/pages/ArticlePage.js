@@ -67,7 +67,7 @@ const ArticlePage = () => {
     <SafeAreaView style={{ flex: 1 }}> 
     <ScrollView style={styles.container}>
     <Text style={styles.title}>{article.title.text}</Text>
-    {article.summary.content && <Text style={styles.summary}>{article.summary.content}</Text>}
+    {/*{article.summary.content && <Text style={styles.summary}>{article.summary.content}</Text>} */}
 
     {/* Move the author information above the main image */}
     <Text style={styles.author}>Published on {article.date} by {article.author}</Text>

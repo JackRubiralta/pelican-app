@@ -2,14 +2,14 @@
 export const theme = {
     fonts: {
       title: {
-        fontFamily: 'utm-times-regular', // change this font
+        fontFamily: 'utm-times-bold', // change this font
         //fontFamily: 'postoni-bold', // change this font
         // -bold
         color: '#1a1a1a',
       },
       summary: {
         fontFamily: 'georgia',
-        fontSize: 16,
+        fontSize: 15,
         lineHeight: 22,
         color: '#313131',
       },
