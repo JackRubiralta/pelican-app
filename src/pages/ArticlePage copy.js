@@ -12,13 +12,16 @@ const ArticlePage = () => {
   const [mainImageHeight, setMainImageHeight] = useState(null);
   const [contentImageHeights, setContentImageHeights] = useState({});
   const { article } = route.params; // Destructure directly to get the article object
-
+  console.log(article);
   useEffect(() => {
     const fetchArticle = async () => {
       try {
+        
+ 
         // Load main article image dimensions
+        
         if (article.image.source) {
-          Image.getSize(`${API_BASE_URL}${article.image.source}`, (width, height) => {
+         Image.getSize(`${API_BASE_URL}${article.image.source}`, (width, height) => {
             const screenWidth = Dimensions.get('window').width - 40;
             const scaleFactor = width / screenWidth;
             const imageHeight = height / scaleFactor;
@@ -43,6 +46,7 @@ const ArticlePage = () => {
             });
           }
         });
+
       } catch (error) {
         console.error("Failed to fetch article:", error);
         setError('Failed to load the article');
@@ -59,51 +63,42 @@ const ArticlePage = () => {
     return <View style={styles.center}><ActivityIndicator size="large" color="#0000ff" /></View>;
   }
 
-  // Function to render the main image
-  const renderMainImage = (position) => (
-    article.image && article.image.source && mainImageHeight && (
-      <Image
-        source={{ uri: `${API_BASE_URL}${article.image.source}` }}
-        style={[styles.mainImage, { height: mainImageHeight }, 
-          position === 'bottom' ? { marginTop: theme.spacing.small } : { marginTop: theme.spacing.large } // same as padding on sides
-        ]} // Apply dynamic height
-        resizeMode="cover"
-      />
-    )
-  );
-
-
-  const titleStyle = [
-    styles.title,
-    { marginTop: article.image.position === 'top' ? theme.spacing.small : (theme.spacing.large - ((theme.titleSizes.big.lineHeight- theme.titleSizes.big.fontSize) * SIZE_MULTIPLIER)) } // same as padding on sides
-  ];
   return (
     <SafeAreaView style={{ flex: 1 }}> 
-      <ScrollView style={styles.container}>
-        {article.image.position === 'top' && renderMainImage('top')}
-        
-        <Text style={titleStyle}>{article.title.text}</Text>
-        <Text style={styles.author}>Published on {article.date} by {article.author}</Text>
+    <ScrollView style={styles.container}>
+    <Text style={styles.title}>{article.title.text}</Text>
+    {/*{article.summary.content && <Text style={styles.summary}>{article.summary.content}</Text>} */}
 
-        {(!article.image.position || article.image.position === 'bottom') && renderMainImage('bottom')}
+    {/* Move the author information above the main image */}
+    <Text style={styles.author}>Published on {article.date} by {article.author}</Text>
 
-        <View style={styles.articleContent}>
-          {article.content.map((item, index) => (
-            item.type === 'paragraph' ? (
-              <Text key={index} style={styles.contentParagraph}>{item.text}</Text>
-            ) : item.type === 'image' && contentImageHeights[index] ? (
-              <Image
-                key={index}
-                source={{ uri: `${API_BASE_URL}${item.source}` }}
-                style={[styles.contentImage, { height: contentImageHeights[index] }]}
-                resizeMode="cover"
-              />
-            ) : null
-          ))} 
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
+    {/* Conditional rendering for the main image */}
+    {article.image && article.image.source && mainImageHeight && (
+      <Image
+        source={{ uri: `${API_BASE_URL}${article.image.source}` }}
+        style={[styles.mainImage, { height: mainImageHeight }]} // Apply dynamic height
+        resizeMode="cover"
+      />
+    )}
+
+    <View style={styles.articleContent}>
+      {article.content.map((item, index) => (
+        item.type === 'paragraph' ? (
+          <Text key={index} style={styles.contentParagraph}>{item.text}</Text>
+        ) : item.type === 'image' && contentImageHeights[index] ? (
+          <Image
+            key={index}
+            source={{ uri: `${API_BASE_URL}${item.source}` }}
+            style={[styles.contentImage, { height: contentImageHeights[index] }]}
+            resizeMode="cover"
+          />
+        ) : null
+      ))}
+    </View>
+</ScrollView>
+</SafeAreaView>
+
+);
 };
 
 
