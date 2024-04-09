@@ -69,6 +69,8 @@ export const fetchArticleById = async (id) => {
 
 
 export const fetchSearchResults = async (query) => {
+
+
   try {
     const response = await fetch(`${API_BASE_URL}/search?query=${encodeURIComponent(query)}`);
     if (!response.ok) {

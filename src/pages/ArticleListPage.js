@@ -7,15 +7,17 @@ import {
   Animated,
   SafeAreaView,
   ScrollView,
-  Text,
 } from "react-native";
 import ArticleList from "../components/ArticleList"; // Adjust the import path as necessary
 import ErrorBox from "../components/ErrorBox"; // Adjust the import path as necessary
-import Header from "../components/Header"; // Adjust the import path as necessary
 
 const headerHeight = 60; // Assuming the header height is 60, adjust if necessary
 
-const ArticleListPage = ({ fetchArticlesFunction, pageTitle, headerComponent }) => {
+const ArticleListPage = ({
+  fetchArticlesFunction,
+  pageTitle,
+  headerComponent,
+}) => {
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -36,6 +38,7 @@ const ArticleListPage = ({ fetchArticlesFunction, pageTitle, headerComponent }) 
       const data = await fetchArticlesFunction();
       setArticles(data);
     } catch (error) {
+
       setError(error.toString());
     }
     setIsLoading(false);
@@ -50,39 +53,6 @@ const ArticleListPage = ({ fetchArticlesFunction, pageTitle, headerComponent }) 
   useEffect(() => {
     fetchArticles();
   }, []);
-
-  if (isLoading && !refreshing) {
-    return (
-      <SafeAreaView style={[{ flex: 1 }, {backgroundColor: '#fff'}]}>
-         {headerComponent}
-         <ScrollView
-          // Style your ScrollView as needed
-          refreshControl={
-            <RefreshControl refreshing={true} />}>       
-        </ScrollView>
-
-      </SafeAreaView>
-    );
-  }
-
-  if (error) {
-    return (
-      <SafeAreaView style={[{ flex: 1 }, {backgroundColor: '#fff'}]}>
-          {headerComponent}
-
-
-        <ScrollView
-          // Style your ScrollView as needed
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        >
-          {/* Display the ErrorBox if there's an error */}
-          {error && <ErrorBox errorMessage={error} />}
-        </ScrollView>
-      </SafeAreaView>
-    );
-  }
 
   return (
     <View style={styles.container}>
@@ -104,13 +74,38 @@ const ArticleListPage = ({ fetchArticlesFunction, pageTitle, headerComponent }) 
         </Animated.View>
       )}
 
-      <ArticleList
-        articles={articles}
-        refreshing={refreshing}
-        onRefresh={onRefresh}
-        scrollY={scrollY}
-        headerHeight={headerHeight}
-      />
+      {isLoading && !refreshing ? (
+        <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
+          <View style={{ height: 60 }}></View>
+
+          <ScrollView
+            // Style your ScrollView as needed
+            refreshControl={<RefreshControl refreshing={true} />}
+          ></ScrollView>
+        </SafeAreaView>
+      ) : error ? (
+        <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
+          <View style={{ height: 60 }}></View>
+
+          <ScrollView
+            // Style your ScrollView as needed
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          >
+            {/* Display the ErrorBox if there's an error */}
+            {error && <ErrorBox errorMessage={error} />}
+          </ScrollView>
+        </SafeAreaView>
+      ) : (
+        <ArticleList
+          articles={articles}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          scrollY={scrollY}
+          headerHeight={headerHeight}
+        />
+      )}
     </View>
   );
 };
@@ -129,9 +124,8 @@ const styles = StyleSheet.create({
     height: headerHeight,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f8f8f8", // Adjust the background color as needed
+    backgroundColor: "#f8f8f8",
   },
-  // Add any other style you might need here
 });
 
 export default ArticleListPage;
