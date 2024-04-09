@@ -1,12 +1,11 @@
 import React from 'react';
 import { FlatList } from 'react-native';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { RefreshControl, Animated, StyleSheet } from 'react-native';
 
 import NewsBlock from './NewsBlock'; // Adjust the import path as necessary
 import NewsSeperator from './NewsSeperator'; // Import the new NewsSeperator component
-
-// Define your ArticleList component
-const ArticleList = ({ articles, refreshControl, onScroll   }) => {
+const ArticleList = ({ articles, refreshing, onRefresh, scrollY, headerHeight }) => {
   if (!articles || articles.length === 0) {
     return (
       <View style={styles.centeredView}>
@@ -14,19 +13,26 @@ const ArticleList = ({ articles, refreshControl, onScroll   }) => {
       </View>
     );
   }
+
   return (
-    <FlatList
+    <Animated.FlatList
       data={articles}
       keyExtractor={(item) => item.id.toString()}
       renderItem={({ item }) => <NewsBlock article={item} />}
+      contentContainerStyle={{ paddingTop: headerHeight }}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+      onScroll={Animated.event(
+        [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+        { useNativeDriver: true } // Leveraging native driver for performance
+      )}
+      scrollEventThrottle={16} // Good default value for smooth scrolling
       ItemSeparatorComponent={NewsSeperator}
-      style={styles.listBackground}
-      refreshControl={refreshControl}
-      onScroll={onScroll} // Add this to handle custom scroll logic
-      scrollEventThrottle={16} // Optional but recommended for performance
     />
   );
 };
+
 const styles = StyleSheet.create({
   listBackground: {
     backgroundColor: '#fff', // Sets the background color of the list to white
@@ -38,4 +44,5 @@ const styles = StyleSheet.create({
     padding: 20, // Add padding for aesthetic spacing
   },
 });
+
 export default ArticleList;
