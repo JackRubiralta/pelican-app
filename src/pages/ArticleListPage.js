@@ -38,7 +38,6 @@ const ArticleListPage = ({
       const data = await fetchArticlesFunction();
       setArticles(data);
     } catch (error) {
-
       setError(error.toString());
     }
     setIsLoading(false);

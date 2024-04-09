@@ -49,10 +49,10 @@ const SearchPage = ({}) => {
       setArticles([]);
       setError(null);
       setIsLoading(false);
+      setRefreshing(false);
       return;
     }
     setIsLoading(true);
-    setError(null);
     try {
       const data = await fetchSearchResults(query);
       data.forEach((article) => {
@@ -111,7 +111,7 @@ const SearchPage = ({}) => {
             refreshControl={<RefreshControl refreshing={true} />}
           ></ScrollView>
         </SafeAreaView>
-      ) : error ? (
+      ) : error || articles.length === 0? (
         <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
           <View style={{ height: 60 }}></View>
 
@@ -128,10 +128,11 @@ const SearchPage = ({}) => {
       ) : (
         <ArticleList
           articles={articles}
-          refreshing={refreshing}
-          onRefresh={onRefresh}
+          //refreshing={refreshing}
+          //onRefresh={onRefresh}
           scrollY={scrollY}
           headerHeight={headerHeight}
+          refreshControl= {null}
         />
       )}
     </View>

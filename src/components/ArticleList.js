@@ -1,11 +1,17 @@
-import React from 'react';
-import { FlatList } from 'react-native';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { RefreshControl, Animated, StyleSheet } from 'react-native';
+import React from "react";
+import { FlatList } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
+import { RefreshControl, Animated, StyleSheet } from "react-native";
 
-import NewsBlock from './NewsBlock'; // Adjust the import path as necessary
-import NewsSeperator from './NewsSeperator'; // Import the new NewsSeperator component
-const ArticleList = ({ articles, refreshing, onRefresh, scrollY, headerHeight }) => {
+import NewsBlock from "./NewsBlock"; // Adjust the import path as necessary
+import NewsSeperator from "./NewsSeperator"; // Import the new NewsSeperator component
+const ArticleList = ({
+  articles,
+  refreshing,
+  onRefresh,
+  scrollY,
+  headerHeight,
+}) => {
   if (!articles || articles.length === 0) {
     return (
       <View style={styles.centeredView}>
@@ -21,7 +27,11 @@ const ArticleList = ({ articles, refreshing, onRefresh, scrollY, headerHeight })
       renderItem={({ item }) => <NewsBlock article={item} />}
       contentContainerStyle={{ paddingTop: headerHeight }}
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          progressViewOffset={headerHeight}
+        />
       }
       onScroll={Animated.event(
         [{ nativeEvent: { contentOffset: { y: scrollY } } }],
@@ -35,12 +45,12 @@ const ArticleList = ({ articles, refreshing, onRefresh, scrollY, headerHeight })
 
 const styles = StyleSheet.create({
   listBackground: {
-    backgroundColor: '#fff', // Sets the background color of the list to white
+    backgroundColor: "#fff", // Sets the background color of the list to white
   },
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20, // Add padding for aesthetic spacing
   },
 });
