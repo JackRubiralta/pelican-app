@@ -15,7 +15,7 @@ import Header from "../components/Header"; // Adjust the import path as necessar
 
 const headerHeight = 60; // Assuming the header height is 60, adjust if necessary
 
-const ArticleListPage = ({ fetchArticlesFunction, pageTitle }) => {
+const ArticleListPage = ({ fetchArticlesFunction, pageTitle, headerComponent }) => {
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -54,7 +54,7 @@ const ArticleListPage = ({ fetchArticlesFunction, pageTitle }) => {
   if (isLoading && !refreshing) {
     return (
       <SafeAreaView style={[{ flex: 1 }, {backgroundColor: '#fff'}]}>
-         <Header title={pageTitle} />
+         {headerComponent}
          <ScrollView
           // Style your ScrollView as needed
           refreshControl={
@@ -68,7 +68,8 @@ const ArticleListPage = ({ fetchArticlesFunction, pageTitle }) => {
   if (error) {
     return (
       <SafeAreaView style={[{ flex: 1 }, {backgroundColor: '#fff'}]}>
-        <Header title={pageTitle} />
+          {headerComponent}
+
 
         <ScrollView
           // Style your ScrollView as needed
@@ -85,36 +86,30 @@ const ArticleListPage = ({ fetchArticlesFunction, pageTitle }) => {
 
   return (
     <View style={styles.container}>
-      <Animated.View
-        style={[
-          styles.header,
-          {
-            transform: [
-              {
-                translateY: scrollY.interpolate({
-                  inputRange: [0, headerHeight],
-                  outputRange: [0, -headerHeight],
-                  extrapolate: "clamp",
-                }),
-              },
-            ],
-            opacity: scrollY.interpolate({
-              inputRange: [0, headerHeight],
-              outputRange: [1, 0],
-              extrapolate: "clamp",
-            }),
-          },
-        ]}
-      >
-        <Header title={pageTitle} />
-      </Animated.View>
+      {headerComponent && (
+        <Animated.View
+          style={[
+            styles.header,
+            {
+              transform: [{ translateY: headerTranslateY }],
+              opacity: scrollY.interpolate({
+                inputRange: [0, headerHeight],
+                outputRange: [1, 0],
+                extrapolate: "clamp",
+              }),
+            },
+          ]}
+        >
+          {headerComponent}
+        </Animated.View>
+      )}
 
       <ArticleList
         articles={articles}
         refreshing={refreshing}
         onRefresh={onRefresh}
         scrollY={scrollY}
-        headerHeight={60} // Assuming a fixed header height of 60 pixels
+        headerHeight={headerHeight}
       />
     </View>
   );

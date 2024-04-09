@@ -8,7 +8,8 @@ npm rebuild node-sass
 eas build --platform android --profile preview
 
 TODO
-- Fix scroll bug with hiding header
+- Make search page use the ArticleListPage base
+- Make sure loading indicator is under the header when reloading
 - Add images on the side
 - Add some SPS branding
 - Fix the logo image to fit 
