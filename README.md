@@ -8,9 +8,6 @@ npm rebuild node-sass
 eas build --platform android --profile preview
 
 TODO
-- Make search page use the ArticleListPage base
-- Make sure loading indicator is under the header when reloading
-- Add images on the side
+- Add images on the side option
 - Add some SPS branding
 - Fix the logo image to fit 
-- 
