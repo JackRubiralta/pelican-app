@@ -8,6 +8,8 @@ npm rebuild node-sass
 eas build --platform android --profile preview
 
 TODO
-- Fix line spacing issues with margin and padding for summary and title for news blocks and start of article
+- Fix scroll bug with hiding header
+- Add images on the side
 - Add some SPS branding
+- Fix the logo image to fit 
 - 
