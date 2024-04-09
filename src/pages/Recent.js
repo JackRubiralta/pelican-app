@@ -74,7 +74,17 @@ const Recent = () => {
         {isLoading && !refreshing ? (
           <LoadingIndicator />
         ) : error ? (
-          <ErrorBox errorMessage={error} />
+          <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView
+        // Style your ScrollView as needed
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        {/* Display the ErrorBox if there's an error */}
+        {error && <ErrorBox errorMessage={error} />}
+      </ScrollView>
+    </SafeAreaView>
         ) : (
           <ArticleList
             articles={articles}

@@ -5,6 +5,7 @@ import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import HomeTabs from './src/navigation/HomeTabs'; // Adjust the path as necessary
 import ArticleTabs from './src/navigation/ArticleTabs'; // Adjust the path as necessary
+import GamesTabs from './src/navigation/GamesTabs'; // Adjust the path as necessary
 
 const Stack = createNativeStackNavigator();
 
@@ -43,12 +44,14 @@ const App = () => {
       />
     );
   }
-
+ 
   return (
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeTabs} options={{ headerShown: false }} />
         <Stack.Screen name="ArticlePage" component={ArticleTabs} options={{ headerShown: false }} />
+        <Stack.Screen name="GamesTabs" component={GamesTabs} options={{ headerShown: false }} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

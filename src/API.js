@@ -86,3 +86,5 @@ export const fetchSearchResults = async (query) => {
   }
   
 };
+
+
