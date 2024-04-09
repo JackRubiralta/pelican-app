@@ -10,4 +10,3 @@ eas build --platform android --profile preview
 TODO
 - Add images on the side option
 - Add some SPS branding
-- Fix the logo image to fit 
