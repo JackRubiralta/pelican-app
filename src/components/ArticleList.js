@@ -27,11 +27,13 @@ const ArticleList = ({
       renderItem={({ item }) => <NewsBlock article={item} />}
       contentContainerStyle={{ paddingTop: headerHeight }}
       refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-          progressViewOffset={headerHeight}
-        />
+        onRefresh ? (
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            progressViewOffset={headerHeight}
+          />
+        ) : null
       }
       onScroll={Animated.event(
         [{ nativeEvent: { contentOffset: { y: scrollY } } }],

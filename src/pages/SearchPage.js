@@ -85,11 +85,7 @@ const SearchPage = ({}) => {
             styles.header,
             {
               transform: [{ translateY: headerTranslateY }],
-              opacity: scrollY.interpolate({
-                inputRange: [0, headerHeight],
-                outputRange: [1, 0],
-                extrapolate: "clamp",
-              }),
+              
             },
           ]}
         >
@@ -128,11 +124,12 @@ const SearchPage = ({}) => {
       ) : (
         <ArticleList
           articles={articles}
-          //refreshing={refreshing}
-          //onRefresh={onRefresh}
+          refreshing={false}
+          onRefresh={null}
           scrollY={scrollY}
           headerHeight={headerHeight}
-          refreshControl= {null}
+          refreshControl={null}
+        
         />
       )}
     </View>

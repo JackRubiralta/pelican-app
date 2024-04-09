@@ -61,11 +61,7 @@ const ArticleListPage = ({
             styles.header,
             {
               transform: [{ translateY: headerTranslateY }],
-              opacity: scrollY.interpolate({
-                inputRange: [0, headerHeight],
-                outputRange: [1, 0],
-                extrapolate: "clamp",
-              }),
+              
             },
           ]}
         >
