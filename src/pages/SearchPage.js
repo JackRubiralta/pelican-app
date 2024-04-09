@@ -98,7 +98,17 @@ const SearchPage = () => {
   {isLoading && !refreshing ? (
     <LoadingIndicator />
   ) : error ? (
-    <ErrorBox errorMessage={error}/>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView
+        // Style your ScrollView as needed
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        {/* Display the ErrorBox if there's an error */}
+        {error && <ErrorBox errorMessage={error} />}
+      </ScrollView>
+    </SafeAreaView>
   ) : articles.length === 0 ? (
     // Prompt for search if there are no articles
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
