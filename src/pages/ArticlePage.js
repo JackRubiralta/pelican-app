@@ -4,14 +4,27 @@ import { useRoute, useNavigation } from '@react-navigation/native';
 import { fetchArticleById, API_BASE_URL } from '../API';
 import { SafeAreaView } from 'react-native';
 import { theme } from '../theme'; // Adjust the import path to where you've saved theme.js
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
 const ArticlePage = () => {
-  const navigation = useNavigation();
   const route = useRoute();
   const [error, setError] = useState('');
   const [mainImageHeight, setMainImageHeight] = useState(null);
   const [contentImageHeights, setContentImageHeights] = useState({});
   const { article } = route.params; // Destructure directly to get the article object
+  const navigation = useNavigation();
+
+  const onSwipeRight = (gestureState) => {
+   
+      navigation.navigate('Home');
+   
+  
+  }
+
+  const swipe_config = {
+    velocityThreshold: 0.22,
+    directionalOffsetThreshold: 100
+  };
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -81,6 +94,10 @@ const ArticlePage = () => {
 
 return (
   <SafeAreaView style={{ flex: 1 }}> 
+   <GestureRecognizer
+   onSwipeRight={(state) => onSwipeRight(state)}
+   config={swipe_config}
+   >
     <ScrollView style={styles.container}>
       {article.image.position === 'top' && renderMainImage('top')}
       
@@ -112,6 +129,7 @@ return (
         })} 
       </View>
     </ScrollView>
+    </GestureRecognizer>
   </SafeAreaView>
 );
 
