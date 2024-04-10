@@ -45,12 +45,22 @@ export const issue11 = [
     "Welcoming prospective students on spring visit days",
     // i have no idea, just 
     
-    /// have spotlight section
-    /// holdidays section
+    // have spotlight section
+    // holidays section
     // campus events section 
 
     //
   ]
   
+]
+
+
+[
+    "Politics Update: trump and biden secure enough delegates"
+    "What is new about the digital sat",
+    "Welcoming Students on Spring Revisit Days",
+    "Tips for your spring promposal!"
+    "Letter from the editors"
+    "Recent news with the "
 ]
 ```
