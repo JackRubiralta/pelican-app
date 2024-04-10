@@ -22,4 +22,4 @@ TODO
 - - News, Student Life, Arts, Athletics: each one is a block 
 - - Athletics page is sports games and scores maybe athlete of the week and maybe articles 
 - - Incase you missed it, from previous issue
-- - have meeting with someone on how to do it, look at the new york times front page as example
+- - have meeting with someone on how to do it, look at the new york times front page as example: opinions, news, art idk
