@@ -23,3 +23,15 @@ TODO
 - - Athletics page is sports games and scores maybe athlete of the week and maybe articles 
 - - Incase you missed it, from previous issue
 - - have meeting with someone on how to do it, look at the new york times front page as example: opinions, news, art idk
+
+have athletics page with upcoming and previous games and use to copy articles using api
+https://athletics.sps.edu/
+
+
+Priority:
+- Add quotes in articles as option 
+- Add indentation in articles
+- Meeting about formatting front page and also athletics 
+- Work on the front page format and athletics
+- In data base have each one be an issue, maybe create a custom gpt to convert these into issues
+ 
