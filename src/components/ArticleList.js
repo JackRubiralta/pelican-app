@@ -20,6 +20,13 @@ const ArticleList = ({
     );
   }
 
+
+  // parse the articles array
+  // into the different sections
+  // articles = ["section_name": [ ... list of the articles data ]]
+  // now have a componet called NewsSection which is the news blocks for the articles in those section
+  // but instead each article is seprated by a smaller NewsSeperator 
+  // then belovew instead have it display these article section blocks
   return (
     <Animated.FlatList
       data={articles}

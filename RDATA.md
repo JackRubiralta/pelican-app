@@ -26,65 +26,83 @@
 
 # Issue 10
 
-```js
+```javascript
 const issue_10 = {
 
     news: [ // these could have it own block
         "Unpacking Super Bowl Sunday 2024",
         "SPS Celebrates Black History Month",
-        "Two SPS Debaters Qualify for Worlds",
         "SPS Students Celebrate the Lunar New Year"
+    ],
+    spotlight: [ // only one
+            "Two SPS Debaters Qualify for Worlds"
     ]
     info: [ // tells about something: informs
         ""
-    ]
+    ],
     letters: [
         "Letter from the Editors",
-    ]
+    ],
     voices: [
         "A Day in the Life: Two Days at Deerfield Academy",
         "What is it Like Being a Teaching Fellow?",
-    ]
+        "Regrets Column: Mr. Gordon and Cole Edwards",
+
+    ],
     styles: [ // its own
         "Style Column: Mr. Snead"
-    ]
+    ],
     people: [
         "Dynamic Duos: Parker Hanson and Lulu Mangriotis",
         "Sam 'Safety Sam' Keach",
-        "Teacher of the Issue: Mrs. Edwards", // also could have its own category 
-    ]
+        "Teacher of the Issue: Mrs. Edwards", // also could have its own category
+    ],
     opinion: [
         "The Post vs. Tucker's: Concord's Breakfast Debate",
         "What is the Best Type of Chapel Program?",
-    ]
+    ],
     guides: [ // guides and tips
         "The Guide to a Productive and Relaxing Sunday at SPS",
         "A Guide to Creating Outfits for SPS Dances",
         "Some Favorite SPS Trails",
-    ]
+    ],
     clubs: [
         "Funkdefied: SPS's All-Girls Hip-Hop Dance Group",
         "Introducing Yoga Club",
         "Introducing the Knitting Club",
-    ]
-    misc: [
         "Behind the Scenes of SNL",
         "The New Faces of SNL",
     ]
+    misc: [
+
+    ],
     archives: [
         "SPS Archives Column: Armour House",
-    ]
-    regrets: [
-        "Regrets Column: Mr. Gordon and Cole Edwards",
-    ]
+    ],
+
     theater: [
         "Theater Column: Guest Speaker Will Nunziata"
-    ]
+    ],
     arts: [
         "SPS Comic",
         "Choose your own path type stuff",
-    ]
+    ],
     // add some more sections / groups
 }
 ```
 
+```
+//Required ones are:
+spotlight
+news
+voices
+guides
+opinion
+archives
+people // have main then could have side images
+letters
+style
+activities (/ clubs)
+arts
+
+```
