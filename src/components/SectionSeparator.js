@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
     textAlign: "left",
     textTransform: "uppercase",
     fontFamily: "utm-times-bold",
-    fontWeight: "bold",
     letterSpacing: 0.7,
   },
 });
