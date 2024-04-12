@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     fontSize: 11.3,
     textAlign: "left",
     textTransform: "uppercase",
-    fontFamily: "nomad",
+    fontFamily: "utm-times-bold",
     fontWeight: "bold",
     letterSpacing: 0.7,
   },
