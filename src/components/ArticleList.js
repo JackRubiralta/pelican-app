@@ -22,7 +22,7 @@ const ArticleList = ({
 
   // Assuming 'articles' is now an object with section names as keys
   const sections = Object.keys(articles);
-  
+
   return (
     <Animated.FlatList
       showsVerticalScrollIndicator={false}
@@ -31,6 +31,8 @@ const ArticleList = ({
       keyExtractor={(item, index) => item + index.toString()}
       renderItem={({ item, index }) => (
         <View>
+          {index === 0 && <View style={{ height: theme.spacing.medium }} />}
+
           {item !== "search" && (
             <SectionSeparator
               sectionName={item}
@@ -38,6 +40,9 @@ const ArticleList = ({
                 index === 0 ? { marginTop: 0 } : { marginTop: "default value" }
               }
             />
+          )}
+          {index === sections.length - 1 && (
+            <View style={{ height: theme.spacing.medium }} />
           )}
 
           <NewsSection sectionTitle={item} articles={articles[item]} />

@@ -19,6 +19,8 @@ const icons = {
 function HomeTabs() {
   return (
     <Tab.Navigator
+    initialRouteName="Recent"
+
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => {
           // Use focused state to dynamically set the icon color
@@ -30,7 +32,10 @@ function HomeTabs() {
             />
           );
         },
-        
+        header: () => {
+          //const title = route.name;
+          //return <Header title={title} />;
+        },
         tabBarLabel: () => null, // Hides the tab bar label
       })}
       tabBarOptions={{
