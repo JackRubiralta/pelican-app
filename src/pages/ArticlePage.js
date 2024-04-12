@@ -163,8 +163,11 @@ const ArticlePage = () => {
                   return (
                     <View
                       key={index}
-                      style={
+                      style={[
+                        styles.contentImage,
+
                         isLastItem ? { marginBottom: theme.spacing.large } : {}
+                      ]
                       }
                     >
                       <Photos imageInfo={item} />
