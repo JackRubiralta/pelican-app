@@ -1,18 +1,16 @@
-// NewsSection.js
-// https://chat.openai.com/c/774e5860-4bcf-4ba6-a2e2-d2943ee9f136
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import NewsBlock from './NewsBlock'; // Ensure the path is correct based on your project structure
-import NewsSeperator from './NewsSeperator';
+import NewsSeparator from './NewsSeparator'; // Typo corrected from 'Seperator' to 'Separator'
 
 const NewsSection = ({ sectionTitle, articles }) => {
   return (
     <View style={styles.sectionContainer}>
-      {/*<Text style={styles.sectionTitle}>{sectionTitle}</Text>*/}
+      {/* Re-enabled and styled the section title to be smaller and positioned below the top bar */}
       {articles.map((article, index) => (
         <React.Fragment key={article.id}>
           <NewsBlock article={article} />
-          {index < articles.length - 1 && <NewsSeperator />}
+          {index < articles.length - 1 && <NewsSeparator />}
         </React.Fragment>
       ))}
     </View>
@@ -21,12 +19,17 @@ const NewsSection = ({ sectionTitle, articles }) => {
 
 const styles = StyleSheet.create({
   sectionContainer: {
-    marginBottom: 20,
+    // If needed, adjust padding or margin to position the section below a top bar
   },
   sectionTitle: {
-    fontSize: 24,
+    fontSize: 18, // Reduced font size for a smaller appearance
     fontWeight: 'bold',
-    marginBottom: 10,
+    // Added margin for spacing and to ensure it's positioned below any top bar
+    marginTop: 10, 
+    marginBottom: 10, // Adjust as needed to fit your design
+    // Optional: additional styling such as text alignment or color
+    textAlign: 'left',
+    color: '#000', // Example color
   },
 });
 

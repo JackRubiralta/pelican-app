@@ -55,7 +55,7 @@ const SearchPage = ({}) => {
     setIsLoading(true);
     try {
       const data = await fetchSearchResults(query);
-      data.forEach((article) => {
+      data["search"].forEach((article) => {
         article.summary.show = false;
         article.image.show = false;
         article.title.size = "medium";
@@ -85,7 +85,6 @@ const SearchPage = ({}) => {
             styles.header,
             {
               transform: [{ translateY: headerTranslateY }],
-              
             },
           ]}
         >
@@ -95,7 +94,9 @@ const SearchPage = ({}) => {
 
       {query.length === 0 ? (
         // Your UI component or message indicating that no query has been entered
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
           <Text>Please enter a query to search for articles.</Text>
         </View>
       ) : isLoading && !refreshing ? (
@@ -107,7 +108,7 @@ const SearchPage = ({}) => {
             refreshControl={<RefreshControl refreshing={true} />}
           ></ScrollView>
         </SafeAreaView>
-      ) : error || articles.length === 0? (
+      ) : error || articles.length === 0 ? (
         <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
           <View style={{ height: 60 }}></View>
 
@@ -129,7 +130,6 @@ const SearchPage = ({}) => {
           scrollY={scrollY}
           headerHeight={headerHeight}
           refreshControl={null}
-        
         />
       )}
     </View>
@@ -174,10 +174,11 @@ const styles = StyleSheet.create({
     color: "#1c1c1c", // Dark color for typed text
     fontFamily: "georgia",
     letterSpacing: 0.3,
-  }, infoMessage: {
+  },
+  infoMessage: {
     margin: 20,
-    textAlign: 'center',
-    color: 'gray',
+    textAlign: "center",
+    color: "gray",
   },
 });
 
