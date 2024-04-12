@@ -24,6 +24,8 @@ Priority:
 
 - Add quotes in articles as option
 - Add indentation in articles
-- Meeting about formatting front page and also athletics
-- Work on the front page format and athletics
-- In data base have each one be an issue, maybe create a custom gpt to convert these into issues
+- add bold and italic to articles
+- then add side image option
+
+- add info section and choose section order
+- change home page header

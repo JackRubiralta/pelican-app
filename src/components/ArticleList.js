@@ -35,7 +35,7 @@ const ArticleList = ({
             <SectionSeparator
               sectionName={item}
               style={
-                index === 0 ? { marginTop: 0 } : { marginTop: "default value" }
+                index === 0 ? { marginTop: theme.spacing.medium } : { marginTop: "default value" }
               }
             />
           )}
@@ -44,7 +44,7 @@ const ArticleList = ({
         </View>
       )}
       contentContainerStyle={{
-        paddingTop: headerHeight + theme.spacing.medium,
+        paddingTop: headerHeight,
         paddingBottom: theme.spacing.medium,
       }}
       refreshControl={
