@@ -41,11 +41,13 @@ const ArticleList = ({
               }
             />
           )}
+
+        
+
+          <NewsSection sectionTitle={item} articles={articles[item]} />
           {index === sections.length - 1 && (
             <View style={{ height: theme.spacing.medium }} />
           )}
-
-          <NewsSection sectionTitle={item} articles={articles[item]} />
         </View>
       )}
       contentContainerStyle={{
@@ -75,6 +77,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
+    paddingTop: 0,
   },
 });
 
