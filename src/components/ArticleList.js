@@ -31,12 +31,15 @@ const ArticleList = ({
       keyExtractor={(item, index) => item + index.toString()}
       renderItem={({ item, index }) => (
         <View>
-          <SectionSeparator
-            sectionName={item}
-            style={
-              index === 0 ? { marginTop: 0 } : { marginTop: "default value" }
-            }
-          />
+          {item !== "search" && (
+            <SectionSeparator
+              sectionName={item}
+              style={
+                index === 0 ? { marginTop: 0 } : { marginTop: "default value" }
+              }
+            />
+          )}
+
           <NewsSection sectionTitle={item} articles={articles[item]} />
         </View>
       )}
