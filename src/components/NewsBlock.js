@@ -18,7 +18,8 @@ const NewsBlock = ({ article }) => {
   // Adjust marginTop based on image position for the title
   const titleStyle = [
     styles[`${title.size}Title`],
-    { marginTop: image.position === 'top' ? theme.spacing.small : 0 }
+    { marginTop: (image.show && image.position === 'top') ? theme.spacing.small : 0 }
+
   ];
  return (
   <View style={styles.storyWrapper}>

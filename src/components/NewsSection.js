@@ -5,11 +5,16 @@ import NewsSeparator from './NewsSeparator'; // Typo corrected from 'Seperator' 
 
 const NewsSection = ({ sectionTitle, articles }) => {
   return (
+    
     <View style={styles.sectionContainer}>
       {/* Re-enabled and styled the section title to be smaller and positioned below the top bar */}
       {articles.map((article, index) => (
         <React.Fragment key={article.id}>
-          <NewsBlock article={article} />
+          {/* Conditional rendering based on section title */}
+         
+            <NewsBlock article={article} />
+          
+          {/* Render separator except after the last article */}
           {index < articles.length - 1 && <NewsSeparator />}
         </React.Fragment>
       ))}

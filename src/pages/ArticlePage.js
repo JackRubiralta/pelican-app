@@ -51,9 +51,9 @@ const ArticlePage = () => {
       // Regular expressions to find bold and italic text
       const boldPattern = /\\\*(.*?)\\\*/g; // Corrected regex for bold
       const italicPattern = /\\i(.*?)\\i/g; // Correct regex for italic
-  
+
       let segments = []; // This will hold text segments with styles
-  
+
       // Function to push text segments
       const pushSegment = (content, style) => {
         segments.push(
@@ -62,43 +62,41 @@ const ArticlePage = () => {
           </Text>
         );
       };
-  
+
       // Merge all matches and sort by index
-      let allMatches = [...text.matchAll(boldPattern), ...text.matchAll(italicPattern)];
+      let allMatches = [
+        ...text.matchAll(boldPattern),
+        ...text.matchAll(italicPattern),
+      ];
       allMatches.sort((a, b) => a.index - b.index);
-  
+
       let lastIndex = 0;
-  
-      allMatches.forEach(match => {
+
+      allMatches.forEach((match) => {
         // Text before the match
         const textBefore = text.substring(lastIndex, match.index);
         if (textBefore) pushSegment(textBefore, styles);
-  
+
         // Styled text
         const styledText = match[1]; // Captured group
-        const newStyles = {...styles}; // Clone current styles
-        if (match[0].startsWith('\\*')) newStyles.fontWeight = 'bold'; // Apply bold
-        if (match[0].startsWith('\\i')) newStyles.fontStyle = 'italic'; // Apply italic
-  
+        const newStyles = { ...styles }; // Clone current styles
+        if (match[0].startsWith("\\*")) newStyles.fontWeight = "bold"; // Apply bold
+        if (match[0].startsWith("\\i")) newStyles.fontStyle = "italic"; // Apply italic
+
         pushSegment(styledText, newStyles);
-  
+
         lastIndex = match.index + match[0].length; // Update last index after current match
       });
-  
+
       // Remaining text after the last match
       const remainingText = text.substring(lastIndex);
       if (remainingText) pushSegment(remainingText, styles);
-  
+
       return segments;
     };
-  
-    return (
-      <Text>
-        {parseText(text)}
-      </Text>
-    );
+
+    return <Text>{parseText(text)}</Text>;
   };
-  
 
   const renderMainImage = (position) =>
     article.image &&
@@ -129,12 +127,11 @@ const ArticlePage = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#ffff" }}>
       <ScrollView style={styles.container}>
-        <GestureRecognizer
-          onSwipeRight={onSwipeRight}
-          config={swipe_config}
-        >
+        <GestureRecognizer onSwipeRight={onSwipeRight} config={swipe_config}>
           {article.image.position === "top" && renderMainImage("top")}
-          <Text style={titleStyle}>{renderFormattedText(article.title.text)}</Text>
+          <Text style={titleStyle}>
+            {renderFormattedText(article.title.text)}
+          </Text>
           <Text style={styles.author}>
             Published on {article.date} by {article.author}
           </Text>
@@ -166,12 +163,24 @@ const ArticlePage = () => {
                       style={[
                         styles.contentImage,
 
-                        isLastItem ? { marginBottom: theme.spacing.large } : {}
-                      ]
-                      }
+                        isLastItem ? { marginBottom: theme.spacing.large } : {},
+                      ]}
                     >
                       <Photos imageInfo={item} />
                     </View>
+                  );
+                case "list":
+                  return (
+                    <View key={index} style={styles.listContainer}>
+                    {item.items.map((listItem, listItemIndex) => (
+                      <View key={listItemIndex} style={styles.listItem}>
+                        <Text style={styles.bulletPoint}>  •  </Text>
+                        <Text style={styles.listItemText}>
+                          {renderFormattedText(listItem)}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
                   );
 
                 case "header":
@@ -203,6 +212,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: theme.spacing.large,
     paddingBottom: 0,
+    paddingTop: 0,
     backgroundColor: theme.colors.background,
   },
   title: {
@@ -219,6 +229,21 @@ const styles = StyleSheet.create({
       : undefined, // Only scale lineHeight if it exists
     marginTop: theme.spacing.small,
   },
+  listContainer: {
+    marginTop: theme.spacing.medium,
+  },
+  listItem: {
+    flexDirection: "row",
+    alignItems: "flex-start", // Align items to start to handle multiline text alignment
+  },
+  bulletPoint: {
+    fontSize: theme.fonts.content.fontSize, // Match font size of list item text or as desired
+  },
+  listItemText: {
+    flex: 1, // Takes full width minus bullet point, allowing for proper wrapping of text
+    ...theme.fonts.content, // Inherits the content font style including 'Georgia'
+  },
+
   author: {
     ...theme.fonts.author,
     fontSize: theme.fonts.author.fontSize * SIZE_MULTIPLIER,
@@ -247,10 +272,10 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.medium,
   },
   bold: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   italic: {
-    fontStyle: 'italic',
+    fontStyle: "italic",
   },
 });
 

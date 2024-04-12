@@ -14,20 +14,19 @@ const SectionSeparator = ({ sectionName, style }) => (
 const styles = StyleSheet.create({
   separatorContainer: {
     alignSelf: "center",
-    marginVertical: theme.spacing.large + 7,
+    marginVertical: theme.spacing.large + 7 + 3,
 
-    marginBottom: 4.4,
+    marginBottom: 5,
     width: "90%",
   },
   separator: {
     height: 2.4,
     backgroundColor: "#303030",
-    marginTop: 3,
-    marginBottom: 3,
     width: "100%",
   },
   textContainer: {
     // Using flexbox to center the text both horizontally and vertically
+    marginTop: 3,
     display: "flex",
     justifyContent: "left", // Centers the child components along the main axis (for vertical box, this is horizontally)
     alignItems: "left", // Centers the child components along the cross axis (for vertical box, this is vertically)

@@ -22,7 +22,7 @@ const ArticleList = ({
 
   // Assuming 'articles' is now an object with section names as keys
   const sections = Object.keys(articles);
-
+  
   return (
     <Animated.FlatList
       showsVerticalScrollIndicator={false}
@@ -35,7 +35,7 @@ const ArticleList = ({
             <SectionSeparator
               sectionName={item}
               style={
-                index === 0 ? { marginTop: theme.spacing.medium } : { marginTop: "default value" }
+                index === 0 ? { marginTop: 0 } : { marginTop: "default value" }
               }
             />
           )}
@@ -45,7 +45,6 @@ const ArticleList = ({
       )}
       contentContainerStyle={{
         paddingTop: headerHeight,
-        paddingBottom: theme.spacing.medium,
       }}
       refreshControl={
         onRefresh ? (

@@ -24,8 +24,11 @@ Priority:
 
 - Add quotes in articles as option
 - Add indentation in articles
-- add bold and italic to articles
 - then add side image option
 
 - add info section and choose section order
 - change home page header
+- add padding below header
+
+      style={{paddingBottom: theme.spacing.small, paddingTop: theme.spacing.small}}
+// add padingin to pages top and bottom

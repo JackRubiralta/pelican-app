@@ -6,35 +6,6 @@ function sortArticlesByDate(articles) {
   return articles.sort((a, b) => new Date(b.date) - new Date(a.date));
 }
 
-export const fetchCrosswordData = async () => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/crossword`);
-    if (!response.ok) {
-      throw new Error("Network response was not ok.");
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Failed to fetch crossword data:", error);
-    throw error; // Rethrow so callers can handle errors.
-  }
-};
-
-// Fetch athletics articles
-export const fetchAthleticsArticles = async () => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/sports`);
-    if (!response.ok) {
-      throw new Error("Network response was not ok.");
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Failed to fetch athletics articles:", error);
-    throw error; // Rethrow so callers can handle errors.
-  }
-};
-
 export const fetchArticleById = async (id) => {
   try {
     const response = await fetch(`${API_BASE_URL}/articles/${id}`);
@@ -61,7 +32,7 @@ export const fetchSearchResults = async (query) => {
     const data = await response.json();
     console.log(data);
 
-    return {"search": sortArticlesByDate(data)};
+    return { search: sortArticlesByDate(data) };
   } catch (error) {
     console.log(error);
     console.error(
@@ -85,4 +56,3 @@ export const fetchCurrentIssue = async () => {
     throw error; // Rethrow so callers can handle errors.
   }
 };
-
