@@ -112,6 +112,10 @@ const ArticlePage = () => {
       </View>
     );
 
+  if (article.image?.position === "side") {
+      article.image.position = "bottom"
+  }
+
   const titleStyle = [
     styles.title,
     {
