@@ -18,6 +18,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff', // or any color you want
     borderBottomWidth: 1,
+    margin: 0,
+    padding: 0,
     borderBottomColor: '#dedede',
     // Add shadow or elevation if you want
   },

@@ -1,9 +1,8 @@
-// ArticleList.js
-import React from "react";
+import React, { useRef } from "react";
 import { View, Text, Animated, StyleSheet, RefreshControl } from "react-native";
-import NewsSection from "./NewsSection"; // Adjust the import path as necessary
-import SectionSeparator from "./SectionSeparator"; // Make sure this path is correct
-import { theme } from "../theme"; // Adjust the import path to where you've saved theme.js
+import NewsSection from "./NewsSection";
+import SectionSeparator from "./SectionSeparator";
+import { theme } from "../theme";
 
 const ArticleList = ({
   articles,
@@ -12,6 +11,8 @@ const ArticleList = ({
   scrollY,
   headerHeight,
 }) => {
+  const flatListRef = useRef(null);
+
   if (!articles || articles.length === 0) {
     return (
       <View style={styles.centeredView}>
@@ -20,11 +21,12 @@ const ArticleList = ({
     );
   }
 
-  // Assuming 'articles' is now an object with section names as keys
   const sections = Object.keys(articles);
 
   return (
     <Animated.FlatList
+      ref={flatListRef}
+      scrollToOverflowEnabled={true}
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
       data={sections}
@@ -37,12 +39,10 @@ const ArticleList = ({
             <SectionSeparator
               sectionName={item}
               style={
-                index === 0 ? { marginTop: 0 } : { marginTop: "default value" }
+                index === 0 ? { marginTop: 0 } : { marginTop: theme.spacing.medium }
               }
             />
           )}
-
-        
 
           <NewsSection sectionTitle={item} articles={articles[item]} />
           {index === sections.length - 1 && (
@@ -64,7 +64,15 @@ const ArticleList = ({
       }
       onScroll={Animated.event(
         [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-        { useNativeDriver: true }
+        {
+          useNativeDriver: true,
+          listener: event => {
+            const offsetY = event.nativeEvent.contentOffset.y;
+            if (offsetY < 0) {
+              flatListRef.current?.scrollToOffset({ offset: 0, animated: false });
+            }
+          },
+        }
       )}
       scrollEventThrottle={16}
     />

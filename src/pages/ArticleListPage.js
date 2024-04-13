@@ -24,8 +24,16 @@ const ArticleListPage = ({
   const [refreshing, setRefreshing] = useState(false);
   const scrollY = new Animated.Value(0);
 
+  // Clamping the initial negative values to zero
+  const scrollYPositive = scrollY.interpolate({
+    inputRange: [-1, 0],
+    outputRange: [0, 0],
+    extrapolateRight: 'identity'
+  });
+
   const scrollYClamped = Animated.diffClamp(scrollY, 0, headerHeight);
-  const headerTranslateY = scrollYClamped.interpolate({
+
+  const headerTranslateY = Animated.diffClamp(scrollYPositive, 0, headerHeight).interpolate({
     inputRange: [0, headerHeight],
     outputRange: [0, -headerHeight],
     extrapolate: "clamp",
@@ -61,7 +69,6 @@ const ArticleListPage = ({
             styles.header,
             {
               transform: [{ translateY: headerTranslateY }],
-              
             },
           ]}
         >
@@ -72,7 +79,6 @@ const ArticleListPage = ({
       {isLoading && !refreshing ? (
         <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
           <View style={{ height: 60 }}></View>
-
           <ScrollView
             // Style your ScrollView as needed
             refreshControl={<RefreshControl refreshing={true} />}
@@ -81,14 +87,12 @@ const ArticleListPage = ({
       ) : error ? (
         <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
           <View style={{ height: 60 }}></View>
-
           <ScrollView
             // Style your ScrollView as needed
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
           >
-            {/* Display the ErrorBox if there's an error */}
             {error && <ErrorBox errorMessage={error} />}
           </ScrollView>
         </SafeAreaView>
