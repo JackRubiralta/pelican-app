@@ -25,8 +25,16 @@ const SearchPage = ({}) => {
 
   const scrollY = new Animated.Value(0);
 
+  // Clamping the initial negative values to zero
+  const scrollYPositive = scrollY.interpolate({
+    inputRange: [-1, 0],
+    outputRange: [0, 0],
+    extrapolateRight: 'identity'
+  });
+
   const scrollYClamped = Animated.diffClamp(scrollY, 0, headerHeight);
-  const headerTranslateY = scrollYClamped.interpolate({
+
+  const headerTranslateY = Animated.diffClamp(scrollYPositive, 0, headerHeight).interpolate({
     inputRange: [0, headerHeight],
     outputRange: [0, -headerHeight],
     extrapolate: "clamp",
@@ -42,7 +50,7 @@ const SearchPage = ({}) => {
         onChangeText={(text) => setQuery(text)}
         // You've already set a darker color for when typing via the color property in your styles.searchBar
       />
-    </View>
+    </View> 
   );
   const fetchArticles = async () => {
     if (query.length === 0) {

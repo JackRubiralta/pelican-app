@@ -104,7 +104,7 @@ const ArticleListPage = ({
           scrollY={scrollY}
           headerHeight={headerHeight}
         />
-      )}
+      )} 
     </View>
   );
 };
