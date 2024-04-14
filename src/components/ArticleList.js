@@ -39,7 +39,7 @@ const ArticleList = ({
             <SectionSeparator
               sectionName={item}
               style={
-                index === 0 ? { marginTop: 0 } : { marginTop: theme.spacing.medium }
+                index === 0 ? { marginTop: 0 } : { marginTop: theme.spacing.large + 5 }
               }
             />
           )}
