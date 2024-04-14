@@ -108,7 +108,7 @@ const ArticlePage = () => {
             : { marginTop: theme.spacing.large }
         }
       >
-        <Photos imageInfo={article.image} />
+        <Photos imageInfo={article.image} showCaption={true} />
       </View>
     );
 
@@ -153,7 +153,7 @@ const ArticlePage = () => {
                       key={index}
                       style={[
                         styles.contentParagraph,
-                        isLastItem ? { marginBottom: theme.spacing.large } : {},
+                        isLastItem ? { marginBottom: theme.spacing.medium } : {},
                       ]}
                     >
                       {renderFormattedText(item.text)}
@@ -167,7 +167,7 @@ const ArticlePage = () => {
                       style={[
                         styles.contentImage,
 
-                        isLastItem ? { marginBottom: theme.spacing.large } : {},
+                        isLastItem ? { marginBottom: theme.spacing.medium } : {},
                       ]}
                     >
                       <Photos imageInfo={item} />
@@ -193,7 +193,7 @@ const ArticlePage = () => {
                       key={index}
                       style={[
                         styles.contentHeader,
-                        isLastItem ? { marginBottom: theme.spacing.large } : {},
+                        isLastItem ? { marginBottom: theme.spacing.medium } : {},
                       ]}
                     >
                       {renderFormattedText(item.text)}

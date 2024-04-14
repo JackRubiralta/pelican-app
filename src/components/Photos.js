@@ -1,13 +1,17 @@
 // Photos.js
 import React, { useState, useEffect } from "react";
-import { Image, Dimensions } from "react-native";
+import { Image, Dimensions, StyleSheet, Text, View } from "react-native";
 import { API_BASE_URL } from "../API"; // Adjust the import path as needed
-const Photos = ({ imageInfo, isSquare = false }) => {
+import { theme } from "../theme"; // Adjust the import path to where you've saved theme.js
+const Photos = ({ imageInfo, isSquare = false, showCaption = false }) => {
   const [imageHeight, setImageHeight] = useState(200); // Default height
-  const imageUrl = imageInfo ? `${API_BASE_URL}/images/${imageInfo.source}` : null;
+  const imageUrl = imageInfo
+    ? `${API_BASE_URL}/images/${imageInfo.source}`
+    : null;
 
   useEffect(() => {
-    if (imageUrl && !isSquare) { // Only adjust height if not square
+    if (imageUrl && !isSquare) {
+      // Only adjust height if not square
       Image.getSize(
         imageUrl,
         (width, height) => {
@@ -26,12 +30,13 @@ const Photos = ({ imageInfo, isSquare = false }) => {
   if (!imageInfo) {
     return null;
   }
-
+  console.log(imageInfo.caption); // this works
   if (isSquare) {
-    return ( // Ensure return statement is here
+    return (
+      // Ensure return statement is here
       <Image
         style={{
-          width: '100%', // Set both width and height to the same value
+          width: "100%", // Set both width and height to the same value
           aspectRatio: 1,
         }}
         source={{ uri: imageUrl }} // Ensure you use imageUrl here
@@ -40,11 +45,24 @@ const Photos = ({ imageInfo, isSquare = false }) => {
   }
 
   return (
-    <Image
-      style={{ height: imageHeight, width: "100%" }}
-      source={{ uri: imageUrl }}
-    />
+    <View>
+      <Image
+        style={{ height: imageHeight, width: "100%" }}
+        source={{ uri: imageUrl }}
+      />
+      {showCaption && <Text style={styles.caption}>{imageInfo.caption}</Text>}
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  caption: {
+    ...theme.fonts.author,
+    marginTop: theme.spacing.small - 6.5,
+    fontSize: 9.5,
+    color: '#323232',
+
+  },
+});
 
 export default Photos;
