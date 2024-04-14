@@ -113,7 +113,7 @@ const ArticlePage = () => {
     );
 
   if (article.image?.position === "side") {
-      article.image.position = "bottom"
+    article.image.position = "bottom";
   }
 
   const titleStyle = [
@@ -153,7 +153,9 @@ const ArticlePage = () => {
                       key={index}
                       style={[
                         styles.contentParagraph,
-                        isLastItem ? { marginBottom: theme.spacing.medium } : {},
+                        isLastItem
+                          ? { marginBottom: theme.spacing.medium }
+                          : {},
                       ]}
                     >
                       {renderFormattedText(item.text)}
@@ -167,24 +169,26 @@ const ArticlePage = () => {
                       style={[
                         styles.contentImage,
 
-                        isLastItem ? { marginBottom: theme.spacing.medium } : {},
+                        isLastItem
+                          ? { marginBottom: theme.spacing.medium }
+                          : {},
                       ]}
                     >
-                      <Photos imageInfo={item} />
+                      <Photos imageInfo={item} showCaption={true} />
                     </View>
                   );
                 case "list":
                   return (
                     <View key={index} style={styles.listContainer}>
-                    {item.items.map((listItem, listItemIndex) => (
-                      <View key={listItemIndex} style={styles.listItem}>
-                        <Text style={styles.bulletPoint}>  •  </Text>
-                        <Text style={styles.listItemText}>
-                          {renderFormattedText(listItem)}
-                        </Text>
-                      </View>
-                    ))}
-                  </View>
+                      {item.items.map((listItem, listItemIndex) => (
+                        <View key={listItemIndex} style={styles.listItem}>
+                          <Text style={styles.bulletPoint}> • </Text>
+                          <Text style={styles.listItemText}>
+                            {renderFormattedText(listItem)}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
                   );
 
                 case "header":
@@ -193,13 +197,33 @@ const ArticlePage = () => {
                       key={index}
                       style={[
                         styles.contentHeader,
-                        isLastItem ? { marginBottom: theme.spacing.medium } : {},
+                        isLastItem
+                          ? { marginBottom: theme.spacing.medium }
+                          : {},
                       ]}
                     >
                       {renderFormattedText(item.text)}
                     </Text>
                   );
+                case "quote":
+                  return (
+                    <View style={styles.contentQuoteContainer}>
+                      <View style={[styles.quoteSeparator]} />{" "}
+                      <Text
+                        key={index}
+                        style={[
+                          styles.contentQuote,
+                          isLastItem
+                            ? { marginBottom: theme.spacing.medium }
+                            : {},
+                        ]}
+                      >
+                        {renderFormattedText(item.text)}
+                      </Text>
+                      <View style={[styles.quoteSeparator, {marginTop: 0, marginBottom: 5}]} />{" "}
 
+                    </View>
+                  );
                 default:
                   return null;
               }
@@ -250,7 +274,7 @@ const styles = StyleSheet.create({
 
   author: {
     ...theme.fonts.author,
-    fontSize: theme.fonts.author.fontSize * SIZE_MULTIPLIER,
+    fontSize: theme.fonts.author.fontSize * SIZE_MULTIPLIER - 0.15,
     lineHeight: theme.fonts.author.lineHeight
       ? theme.fonts.author.lineHeight * SIZE_MULTIPLIER
       : undefined, // Only scale lineHeight if it exists
@@ -264,6 +288,29 @@ const styles = StyleSheet.create({
   contentParagraph: {
     ...theme.fonts.content,
     marginTop: theme.spacing.medium,
+  },
+  contentQuoteContainer: {
+    width: '80%',
+    alignItems: 'center', // Changed from 'alignContent' to 'alignItems' for horizontal alignment
+    justifyContent: 'center', // Added for vertical alignment
+    alignSelf: 'center',
+    textAlign: 'center',
+
+  },
+  contentQuote: {
+    ...theme.fonts.content,
+    marginTop: theme.spacing.small,
+    marginBottom: theme.spacing.small,
+    fontSize: 21,
+    paddingHorizontal: 25, 
+    textAlign: 'center',
+  },
+  quoteSeparator: {
+    height: 2,
+    backgroundColor: '#303030',
+    alignSelf: 'center',
+    marginTop: theme.spacing.medium + 5,
+    width: '90%', // Set a specific width or keep it 'auto' if you prefer it to be based on content
   },
   contentHeader: {
     ...theme.fonts.content,

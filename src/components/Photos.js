@@ -30,7 +30,6 @@ const Photos = ({ imageInfo, isSquare = false, showCaption = false }) => {
   if (!imageInfo) {
     return null;
   }
-  console.log(imageInfo.caption); // this works
   if (isSquare) {
     return (
       // Ensure return statement is here
@@ -58,9 +57,9 @@ const Photos = ({ imageInfo, isSquare = false, showCaption = false }) => {
 const styles = StyleSheet.create({
   caption: {
     ...theme.fonts.author,
-    marginTop: theme.spacing.small - 6.5,
-    fontSize: 9.5,
-    color: '#323232',
+    marginTop: theme.spacing.small - 5,
+    fontSize: 10.5,
+    color: '#373737',
 
   },
 });
