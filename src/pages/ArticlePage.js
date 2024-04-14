@@ -208,11 +208,8 @@ const ArticlePage = () => {
                 case "quote":
                   return (
                     <View style={styles.contentQuoteContainer} key={index}>
-                      <View style={[styles.quoteSeparator]} />{" "}
-                      <Text
-                        
-                        style={styles.contentQuote}
-                      >
+                      <View style={[styles.quoteSeparator]} />
+                      <Text style={styles.contentQuote}>
                         {renderFormattedText(item.text)}
                       </Text>
                       <View
@@ -220,8 +217,9 @@ const ArticlePage = () => {
                           styles.quoteSeparator,
                           { marginTop: 0, marginBottom: 5 },
                         ]}
-                      />{" "}
+                      />
                     </View>
+                                    
                   );
                 default:
                   return null;
