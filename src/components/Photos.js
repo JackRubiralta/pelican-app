@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     ...theme.fonts.author,
     marginTop: theme.spacing.small - 5,
     fontSize: 10.5,
-    color: '#373737',
+    color: '#474747',
 
   },
 });

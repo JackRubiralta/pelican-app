@@ -139,7 +139,7 @@ const ArticlePage = () => {
           <Text style={styles.author}>
             Published on {article.date} by {article.author}
           </Text>
-          {(!article.image.position || article.image.position === "bottom") &&
+          {(article.image.position === "bottom") &&
             renderMainImage("bottom")}
 
           <View style={styles.articleContent}>
@@ -207,21 +207,22 @@ const ArticlePage = () => {
                   );
                 case "quote":
                   return (
-                    <View style={styles.contentQuoteContainer}>
+                    <View style={styles.contentQuoteContainer} key={index}>
                       <View style={[styles.quoteSeparator]} />{" "}
                       <Text
-                        key={index}
+                        
                         style={[
                           styles.contentQuote,
-                          isLastItem
-                            ? { marginBottom: theme.spacing.medium }
-                            : {},
                         ]}
                       >
                         {renderFormattedText(item.text)}
                       </Text>
-                      <View style={[styles.quoteSeparator, {marginTop: 0, marginBottom: 5}]} />{" "}
-
+                      <View
+                        style={[
+                          styles.quoteSeparator,
+                          { marginTop: 0, marginBottom: 5 },
+                        ]}
+                      />{" "}
                     </View>
                   );
                 default:
@@ -274,7 +275,7 @@ const styles = StyleSheet.create({
 
   author: {
     ...theme.fonts.author,
-    fontSize: theme.fonts.author.fontSize * SIZE_MULTIPLIER - 0.15,
+    fontSize: theme.fonts.author.fontSize * SIZE_MULTIPLIER - 0.01,
     lineHeight: theme.fonts.author.lineHeight
       ? theme.fonts.author.lineHeight * SIZE_MULTIPLIER
       : undefined, // Only scale lineHeight if it exists
@@ -290,27 +291,26 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.medium,
   },
   contentQuoteContainer: {
-    width: '80%',
-    alignItems: 'center', // Changed from 'alignContent' to 'alignItems' for horizontal alignment
-    justifyContent: 'center', // Added for vertical alignment
-    alignSelf: 'center',
-    textAlign: 'center',
-
+    width: "80%",
+    alignItems: "center", // Changed from 'alignContent' to 'alignItems' for horizontal alignment
+    justifyContent: "center", // Added for vertical alignment
+    alignSelf: "center",
+    textAlign: "center",
   },
   contentQuote: {
     ...theme.fonts.content,
     marginTop: theme.spacing.small,
     marginBottom: theme.spacing.small,
     fontSize: 21,
-    paddingHorizontal: 25, 
-    textAlign: 'center',
+    paddingHorizontal: 25,
+    textAlign: "center",
   },
   quoteSeparator: {
     height: 2,
-    backgroundColor: '#303030',
-    alignSelf: 'center',
+    backgroundColor: "#303030",
+    alignSelf: "center",
     marginTop: theme.spacing.medium + 5,
-    width: '90%', // Set a specific width or keep it 'auto' if you prefer it to be based on content
+    width: "90%", // Set a specific width or keep it 'auto' if you prefer it to be based on content
   },
   contentHeader: {
     ...theme.fonts.content,
