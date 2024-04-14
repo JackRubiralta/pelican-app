@@ -19,15 +19,7 @@ const App = () => {
        'nyt-franklin': require('./assets/fonts/nyt-franklin.ttf'),
        'nyt-cheltenham-normal': require('./assets/fonts/nyt-cheltenham-normal.ttf'),
        // Fraunces fonts
-       'fraunces-black': require('./assets/fonts/Fraunces-Black.ttf'),
-       'fraunces-bold': require('./assets/fonts/Fraunces-Bold.ttf'),
-       'fraunces-extra-bold': require('./assets/fonts/Fraunces-ExtraBold.ttf'),
-       'fraunces-extra-light': require('./assets/fonts/Fraunces-ExtraLight.ttf'),
-       'fraunces-light': require('./assets/fonts/Fraunces-Light.ttf'),
-       'fraunces-medium': require('./assets/fonts/Fraunces-Medium.ttf'),
-       'fraunces-regular': require('./assets/fonts/Fraunces-Regular.ttf'),
-       'fraunces-semi-bold': require('./assets/fonts/Fraunces-SemiBold.ttf'),
-       'fraunces-thin': require('./assets/fonts/Fraunces-Thin.ttf'),
+    
        'utm-times-bold': require('./assets/fonts/UTMTimesBold.ttf'),
        'utm-times-regular': require('./assets/fonts/UTMTimesRegular.ttf'),
 
