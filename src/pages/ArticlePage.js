@@ -211,9 +211,9 @@ const ArticlePage = () => {
                       <View style={[styles.quoteSeparator]} />{" "}
                       <Text
                         
-                        style={[
+                        style={
                           styles.contentQuote,
-                        ]}
+                        }
                       >
                         {renderFormattedText(item.text)}
                       </Text>
