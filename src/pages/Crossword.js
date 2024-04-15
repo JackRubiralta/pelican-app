@@ -106,11 +106,19 @@ const Crossword = () => {
     setBoxInFocus(null); // Clear box focus
     setFocusDirection(null);
   };
+  const keysAreEqual = (obj1, obj2) => {
+    const obj1Keys = Object.keys(obj1).sort();
+    const obj2Keys = Object.keys(obj2).sort();
+    return JSON.stringify(obj1Keys) === JSON.stringify(obj2Keys);
+  };
   const loadUserInputs = async () => {
     try {
       const savedInputs = await AsyncStorage.getItem("crosswordInputs");
       if (savedInputs) {
         setUserInputs(JSON.parse(savedInputs));
+        if (!keysAreEqual(generateUserInputs(GRID_DATA), userInputs)) {
+          setUserInputs(generateUserInputs(GRID_DATA));
+        } 
       } else {
         setUserInputs(generateUserInputs(GRID_DATA));
       }
@@ -139,18 +147,16 @@ const Crossword = () => {
         });
 
         setGRID_DATA(gridData); // Set the grid data
-        if (userInputs != '') {
-          loadUserInputs();
 
-        } else {
-        setUserInputs(generateUserInputs(gridData)); // Generate user inputs based on grid data
-        saveUserInputs();
-      }
+        loadUserInputs();
         const keyboardDidHideListener = Keyboard.addListener(
           "keyboardDidHide",
           resetFocusAndHighlight
         );
-        
+        if (userInputs != '') {
+         
+
+        }
         return () => {
           // Clean up the listener when the component unmounts
           keyboardDidHideListener.remove();
@@ -234,6 +240,7 @@ const Crossword = () => {
       }
     });
     setUserInputs(newInputs); // Update state to show all answers
+    saveUserInputs()
     setCorrectness({}); // Optionally clear correctness state if you don't want to validate after revealing answers
   };
 
