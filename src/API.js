@@ -56,3 +56,18 @@ export const fetchCurrentIssue = async () => {
     throw error; // Rethrow so callers can handle errors.
   }
 };
+
+
+export const fetchCrossword = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/current_crossword`);
+    if (!response.ok) {
+      throw new Error("Network response was not ok.");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch data for current crossword:", error);
+    throw error; // Rethrow so callers can handle errors.
+  }
+};

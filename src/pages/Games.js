@@ -1,35 +1,8 @@
-
-
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-
-const GamesPage = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.messageText}>Not implemented yet. App by Jack Rubiralta</Text>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  messageText: {
-    color: 'black',
-    textAlign: 'center',
-  },
-});
-
-export default GamesPage;
-/*
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import Header from '../components/Header'; // Ensure this path matches your project structure
+import { theme } from "../theme";
 
 const GamesPage = () => {
   const navigation = useNavigation();
@@ -40,22 +13,31 @@ const GamesPage = () => {
     });
   };
 
+  const navigateToCrossword = () => {
+    navigation.navigate('GamesTabs', {
+      screen: 'Crossword',
+    });
+  };
+
   return (
     <View style={[{backgroundColor: '#ffff'}, { flex: 1}]}>
       <Header title="Games" />
-    
-    <View style={styles.container}>
-      
-
-      <View style={styles.contentContainer}>
+      <View style={styles.container}>
+        <View style={{height: 20}}></View>
         <TouchableOpacity 
-          style={styles.spellingBeeBox} 
+          style={styles.gameButton} 
           onPress={navigateToSpellingBee}
         >
-          <Text style={styles.boxText}>Spelling Bee</Text>
+          <Text style={styles.buttonText}>Play Spelling Bee</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity 
+          style={styles.gameButton} 
+          onPress={navigateToCrossword}
+        >
+          <Text style={styles.buttonText}>Play Crossword</Text>
         </TouchableOpacity>
       </View>
-    </View>
     </View>
   );
 };
@@ -64,28 +46,32 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'top',
     padding: 20,
+    paddingTop: 0,
     backgroundColor: '#ffff',
   },
-  contentContainer: {
-    marginTop: 60, // Adjust based on your header's height to ensure content does not overlap with the header
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
+  gameButton: {
+    width: '100%', // Ensures the button stretches across the whole container width
+    backgroundColor: '#E8E8E8', // Light grey background
+    paddingVertical: 20, // Increased padding for a taller button
+    paddingHorizontal: 20,
+    borderRadius: 10, // Rounded corners for a smoother look
+    marginVertical: 20, // Increases space between buttons
+    marginTop: 0,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+    elevation: 6,
   },
-  spellingBeeBox: {
-    borderWidth: 2, // Defines the thickness of the border
-    borderColor: '#007BFF', // A pleasant blue shade for the border
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 4, // Slightly rounded corners for a refined look
-  },
-  boxText: {
-    color: '#007BFF', // Matching the border color for consistency
-    fontSize: 18, // Reasonable font size for readability
-    textAlign: 'center', // Ensures the text is centered within the box
+  buttonText: {
+    fontSize: 24, // Larger font size for better visibility and touch
+    fontWeight: 'bold',
+    color: '#333333',
+    textAlign: 'center',
+    textTransform: 'uppercase',
   },
 });
 
 export default GamesPage;
-*/

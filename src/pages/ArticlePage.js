@@ -105,7 +105,7 @@ const ArticlePage = () => {
         style={
           position === "bottom"
             ? { marginTop: theme.spacing.small }
-            : { marginTop: theme.spacing.large }
+            : { marginTop: theme.spacing.medium *SIZE_MULTIPLIER }
         }
       >
         <Photos imageInfo={article.image} showCaption={true} />
@@ -122,8 +122,7 @@ const ArticlePage = () => {
       marginTop:
         article.image.position === "top"
           ? theme.spacing.small
-          : theme.spacing.large -
-            (theme.titleSizes.big.lineHeight - theme.titleSizes.big.fontSize) *
+          : theme.spacing.medium *
               SIZE_MULTIPLIER,
     },
   ];
