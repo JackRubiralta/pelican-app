@@ -99,7 +99,7 @@ const Crossword = () => {
   const [GRID_DATA, setGRID_DATA] = useState([]);
   const [userInputs, setUserInputs] = useState({});
   const [temp, setTemp] = useState(false);
-
+  const scrollViewRef = useRef(null);
   const resetFocusAndHighlight = () => {
     setActiveClue(null);
     setActiveClueBoxes([]); // Clear active clue boxes
@@ -204,6 +204,9 @@ const Crossword = () => {
   }
 
   const handleClueSelection = (clueKey) => {
+    // make it scroll all the way to the top
+    scrollViewRef.current.scrollTo({ y: 0, animated: true }); // Scroll to the top of the ScrollView
+
     setActiveClueBoxes(CLUE_DATA[clueKey].boxes);
     setActiveClue(clueKey);
     setBoxInFocus(CLUE_DATA[clueKey].boxes[0]);
@@ -220,7 +223,6 @@ const Crossword = () => {
 
     setUserInputs((prevInputs) => {
       const updatedInputs = { ...prevInputs, [id]: newText };
-      saveUserInputs(updatedInputs); // Save after updating
       return updatedInputs;
     });
 
@@ -231,6 +233,7 @@ const Crossword = () => {
       const nextBoxRef = GRID_DATA.find((c) => c.id === nextBoxId).ref;
       nextBoxRef.current.focus();
     }
+    saveUserInputs();
   };
   const revealAnswers = () => {
     const newInputs = { ...userInputs };
@@ -287,6 +290,7 @@ const Crossword = () => {
               handleInputChange(cell.id, text);
               // Update the cell's letter in your state or context if you're managing the grid data dynamically (this is not shown here)
               // Move focus to the next box in activeClueBoxes
+              if ( text != '') {
               const currentIndex = activeClueBoxes.indexOf(cell.id);
               if (
                 currentIndex !== -1 &&
@@ -300,6 +304,7 @@ const Crossword = () => {
                 nextBoxRef.current.focus();
               }
             }}
+          }
             onFocus={() => {
               if (activeClueBoxes.includes(cell.id)) {
                 // If the focused box is part of the currently active clue, keep everything as is
@@ -359,7 +364,7 @@ const Crossword = () => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
     >
-      <ScrollView>
+      <ScrollView ref={scrollViewRef}>
         <Header title="Crossword" />
 
         <View style={styles.container}>
