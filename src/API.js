@@ -87,3 +87,18 @@ export const fetchCrossword = async () => {
     throw error; // Rethrow so callers can handle errors.
   }
 };
+
+export const fetchConnections = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/current_connections`);
+    if (!response.ok) {
+      throw new Error("Network response was not ok.");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch current connections:", error);
+    throw error; // Rethrow so callers can handle errors.
+  }
+};
+

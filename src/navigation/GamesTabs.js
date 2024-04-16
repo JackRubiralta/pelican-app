@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
 import SpellingBeeGame from "../pages/SpellingBee";
 import Crossword from "../pages/Crossword";
+import Connections from "../pages/Connections";
 
 const Tab = createBottomTabNavigator();
 const backIcon = require("../../assets/back.png"); // Adjust the path as necessary
@@ -45,6 +46,15 @@ function GamesTabs() {
       <Tab.Screen
         name="Crossword"
         component={Crossword}
+        options={{
+          tabBarButton: () => null,
+          headerShown: false,
+        }}
+      />
+
+<Tab.Screen
+        name="Connections"
+        component={Connections}
         options={{
           tabBarButton: () => null,
           headerShown: false,

@@ -19,6 +19,12 @@ const GamesPage = () => {
     });
   };
 
+  const navigateToConnections = () => {
+    navigation.navigate('GamesTabs', {
+      screen: 'Connections',
+    });
+  };
+
   return (
     <View style={[{backgroundColor: '#ffff'}, { flex: 1}]}>
       <Header title="Games" />
@@ -36,6 +42,14 @@ const GamesPage = () => {
           onPress={navigateToCrossword}
         >
           <Text style={styles.buttonText}>Play Crossword</Text>
+        </TouchableOpacity>
+
+
+        <TouchableOpacity 
+          style={styles.gameButton} 
+          onPress={navigateToConnections}
+        >
+          <Text style={styles.buttonText}>Play Connections</Text>
         </TouchableOpacity>
       </View>
     </View>

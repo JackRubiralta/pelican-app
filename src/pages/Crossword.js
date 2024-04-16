@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef,useCallback  } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -13,7 +13,6 @@ import {
   Keyboard, // Import the Keyboard module
   SafeAreaView,
   RefreshControl,
-
 } from "react-native";
 import { fetchCrossword } from "../API";
 import { theme } from "../theme";
@@ -100,11 +99,11 @@ const Crossword = () => {
   const [CLUE_DATA, setCLUE_DATA] = useState(null);
   const [GRID_DATA, setGRID_DATA] = useState([]);
   const [userInputs, setUserInputs] = useState({});
-  const [temp, setTemp] = useState(false);
   const scrollViewRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
   const resetFocusAndHighlight = () => {
     setActiveClue(null);
@@ -113,38 +112,64 @@ const Crossword = () => {
     setFocusDirection(null);
   };
 
- 
-
   const keysAreEqual = (obj1, obj2) => {
     const obj1Keys = Object.keys(obj1).sort();
     const obj2Keys = Object.keys(obj2).sort();
     return JSON.stringify(obj1Keys) === JSON.stringify(obj2Keys);
   };
   const loadUserInputs = async () => {
-  
-
     try {
       const savedInputs = await AsyncStorage.getItem("crosswordInputs");
       if (savedInputs) {
-        setUserInputs(JSON.parse(savedInputs));
+        await setUserInputs(JSON.parse(savedInputs));
         if (!keysAreEqual(generateUserInputs(GRID_DATA), userInputs)) {
-          setUserInputs(generateUserInputs(GRID_DATA));
-        } 
+          await setUserInputs(generateUserInputs(GRID_DATA));
+          await saveUserInputs(generateUserInputs(GRID_DATA));
+        }
       } else {
-        setUserInputs(generateUserInputs(GRID_DATA));
+        await setUserInputs(generateUserInputs(GRID_DATA));
+        await saveUserInputs(generateUserInputs(GRID_DATA));
       }
-    } catch (error) {
+    } catch (error) {}
+  };
+  const renderClueDetail = () => {
+    if (activeClue && CLUE_DATA && CLUE_DATA[activeClue]) {
+      return (
+        <View style={[styles.clueItem, styles.activeClue]}>
+          <Text style={[styles.clueItemNumber, {fontSize: 18.2}]}>
+            {CLUE_DATA[activeClue].number}.
+          </Text>
+          <Text style={[styles.clueItemText, {fontSize: 18.2}]}>{CLUE_DATA[activeClue].clue}</Text>
+        </View>
+      );
     }
+    return null; // Return null when no clue is active
   };
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => setIsKeyboardVisible(true)
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => setIsKeyboardVisible(false)
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
   // Save user inputs to storage
-  const saveUserInputs = async () => {
+  const saveUserInputs = async (input = userInputs) => {
     try {
-      await AsyncStorage.setItem("crosswordInputs", JSON.stringify(userInputs));
+      await AsyncStorage.setItem("crosswordInputs", JSON.stringify(input));
     } catch (error) {
       console.error("Failed to save user inputs:", error);
     }
   };
+
   const fetchAndProcessCrossword = async () => {
     setIsLoading(true);
     setError(null);
@@ -171,18 +196,12 @@ const Crossword = () => {
       };
     } catch (error) {
       setError(error.toString());
-
     }
     setIsLoading(false);
-
   };
   useEffect(() => {
-    
-
     fetchAndProcessCrossword();
   }, []);
-
-
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -210,9 +229,6 @@ const Crossword = () => {
     const firstBoxRef = GRID_DATA.find((cell) => cell.id === boxId).ref;
     firstBoxRef.current.focus();
   };
- 
-  
- 
 
   const handleClueSelection = (clueKey) => {
     // make it scroll all the way to the top
@@ -234,6 +250,7 @@ const Crossword = () => {
 
     setUserInputs((prevInputs) => {
       const updatedInputs = { ...prevInputs, [id]: newText };
+      saveUserInputs(updatedInputs);
       return updatedInputs;
     });
 
@@ -244,19 +261,36 @@ const Crossword = () => {
       const nextBoxRef = GRID_DATA.find((c) => c.id === nextBoxId).ref;
       nextBoxRef.current.focus();
     }
-    saveUserInputs();
   };
   const revealAnswers = () => {
-    const newInputs = { ...userInputs };
-    GRID_DATA.forEach((cell) => {
-      if (cell.letter) {
-        newInputs[cell.id] = cell.letter.toUpperCase();
-      }
-    });
-    setUserInputs(newInputs); // Update state to show all answers
-    saveUserInputs()
-    setCorrectness({}); // Optionally clear correctness state if you don't want to validate after revealing answers
+    Alert.alert(
+      "Reveal All Answers", // Title of the alert
+      "Are you sure you want to reveal all answers? This action cannot be undone.", // Message shown to the user
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { 
+          text: "Reveal", 
+          onPress: () => {
+            const newInputs = { ...userInputs };
+            GRID_DATA.forEach((cell) => {
+              if (cell.letter) {
+                newInputs[cell.id] = cell.letter.toUpperCase();
+              }
+            });
+            setUserInputs(newInputs); // Update state to show all answers
+            saveUserInputs(newInputs);
+            setCorrectness({}); // Optionally clear correctness state if you don't want to validate after revealing answers
+          }
+        }
+      ],
+      { cancelable: false } // This means the user must tap one of the buttons to dismiss the alert
+    );
   };
+  
 
   const renderClues = (direction) => {
     return (
@@ -267,7 +301,7 @@ const Crossword = () => {
             <TouchableOpacity
               key={key}
               onPress={() => handleClueSelection(key)}
-              style={[styles.clueItem, activeClue === key && styles.activeClue]}
+              style={[styles.clueItem, false && styles.activeClue]}
             >
               <Text style={styles.clueItemNumber}>{clue.number}.</Text>
               <Text style={styles.clueItemText}>{clue.clue}</Text>
@@ -296,26 +330,27 @@ const Crossword = () => {
             style={styles.boxInput}
             selection={cursorPositions[cell.id]} // Keep cursor to the right
             maxLength={2}
+            autoCompleteType="off"
+            keyboardType="default" // You can change this based on expected input
             value={userInputs[cell.id]} // Controlled component
             onChangeText={(text) => {
               handleInputChange(cell.id, text);
               // Update the cell's letter in your state or context if you're managing the grid data dynamically (this is not shown here)
               // Move focus to the next box in activeClueBoxes
-              if ( text != '') {
-              const currentIndex = activeClueBoxes.indexOf(cell.id);
-              if (
-                currentIndex !== -1 &&
-                currentIndex + 1 < activeClueBoxes.length
-              ) {
-                const nextBoxId = activeClueBoxes[currentIndex + 1];
-                const nextBoxRef = GRID_DATA.find(
-                  (c) => c.id === nextBoxId
-                ).ref;
-                setTemp(false);
-                nextBoxRef.current.focus();
+              if (text != "") {
+                const currentIndex = activeClueBoxes.indexOf(cell.id);
+                if (
+                  currentIndex !== -1 &&
+                  currentIndex + 1 < activeClueBoxes.length
+                ) {
+                  const nextBoxId = activeClueBoxes[currentIndex + 1];
+                  const nextBoxRef = GRID_DATA.find(
+                    (c) => c.id === nextBoxId
+                  ).ref;
+                  nextBoxRef.current.focus();
+                }
               }
             }}
-          }
             onFocus={() => {
               if (activeClueBoxes.includes(cell.id)) {
                 // If the focused box is part of the currently active clue, keep everything as is
@@ -361,13 +396,31 @@ const Crossword = () => {
   };
 
   const clearAnswers = () => {
-    const resetInputs = {};
-    Object.keys(userInputs).forEach((key) => {
-      resetInputs[key] = ""; // Set each input to an empty string
-    });
-    setUserInputs(resetInputs);
-    saveUserInputs(); // Save the reset state
+    Alert.alert(
+      "Clear All Answers", // Title of the alert
+      "Are you sure you want to clear all answers? This will remove all entered data.", // Message shown to the user
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Clear Cancelled"), // Optionally handle a cancel press
+          style: "cancel"
+        },
+        { 
+          text: "Clear", 
+          onPress: () => {
+            const resetInputs = {};
+            Object.keys(userInputs).forEach((key) => {
+              resetInputs[key] = ""; // Set each input to an empty string
+            });
+            setUserInputs(resetInputs);
+            saveUserInputs(resetInputs); // Save the reset state
+          }
+        }
+      ],
+      { cancelable: false } // This ensures the user must tap one of the buttons to dismiss the alert
+    );
   };
+  
   if (isLoading && !refreshing) {
     return (
       <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
@@ -384,14 +437,14 @@ const Crossword = () => {
       <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
         <Header title="Crossword" />
         <ScrollView
-            // Style your ScrollView as needed
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-          >
-            {/* Display the ErrorBox if there's an error */}
-            {error && <ErrorBox errorMessage={error} />}
-          </ScrollView>
+          // Style your ScrollView as needed
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
+          {/* Display the ErrorBox if there's an error */}
+          {error && <ErrorBox errorMessage={error} />}
+        </ScrollView>
       </SafeAreaView>
     );
   }
@@ -406,36 +459,41 @@ const Crossword = () => {
 
         <View style={styles.container}>
           <View style={{ height: theme.spacing.medium }}></View>
-
           <View style={styles.grid}>{renderGrid()}</View>
-
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              onPress={revealAnswers}
-              style={[styles.button, styles.revealButton]}
-            >
-              <Text style={styles.revealButtonText}>Reveal</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={checkAnswers}
-              style={[styles.button, styles.checkButton]}
-            >
-              <Text style={styles.checkButtonText}>Check</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={clearAnswers}
-              style={[styles.button, styles.clearButton]}
-            >
-              <Text style={styles.clearButtonText}>Clear</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.cluesContainer}>
-            <Text style={styles.clueHeader}>Across</Text>
-            {renderClues("across")}
-            <Text style={styles.clueHeader}>Down</Text>
-            {renderClues("down")}
-          </View>
+          <View style={{ height: theme.spacing.medium }}></View>
+          {isKeyboardVisible && renderClueDetail()} 
+          {true && ( // Show these only when keyboard is down
+            <>
+              <View style={styles.cluesContainer}>
+                <Text style={styles.clueHeader}>Across</Text>
+                {renderClues("across")}
+                <Text style={styles.clueHeader}>Down</Text>
+                {renderClues("down")}
+              </View>
+              <View style={{ height: theme.spacing.medium }}></View>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  onPress={revealAnswers}
+                  style={[styles.button, styles.revealButton]}
+                >
+                  <Text style={styles.revealButtonText}>Reveal</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={checkAnswers}
+                  style={[styles.button, styles.checkButton]}
+                >
+                  <Text style={styles.checkButtonText}>Check</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={clearAnswers}
+                  style={[styles.button, styles.clearButton]}
+                >
+                  <Text style={styles.clearButtonText}>Clear</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{ height: theme.spacing.medium }}></View>
+            </>
+          )}
           <View style={{ height: theme.spacing.medium }}></View>
         </View>
       </ScrollView>
