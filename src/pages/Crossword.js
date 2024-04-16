@@ -135,16 +135,26 @@ const Crossword = () => {
   const renderClueDetail = () => {
     if (activeClue && CLUE_DATA && CLUE_DATA[activeClue]) {
       return (
-        <View style={[styles.clueItem, styles.activeClue]}>
-          <Text style={[styles.clueItemNumber, {fontSize: 18.2}]}>
-            {CLUE_DATA[activeClue].number}.
+        <View style={[styles.clueItem, styles.activeClue, { justifyContent: 'center' }]}>
+          <Text style={[styles.clueItemText, { fontSize: 18.2, margin: 4, minHeight: 50}]}
+          // textAlign: 'center'
+          > 
+            {CLUE_DATA[activeClue].clue}
           </Text>
-          <Text style={[styles.clueItemText, {fontSize: 18.2}]}>{CLUE_DATA[activeClue].clue}</Text>
         </View>
       );
     }
-    return null; // Return null when no clue is active
+    return (
+      <View style={[styles.clueItem, styles.activeClue, { justifyContent: 'center' }]}>
+        <Text style={[styles.clueItemText, { fontSize: 18.2, color: 'transparent', margin: 4, minHeight: 50 }]}>
+          {' S\n S'}
+        </Text>
+      </View>
+    );
   };
+  
+  
+  
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -270,10 +280,10 @@ const Crossword = () => {
         {
           text: "Cancel",
           onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
+          style: "cancel",
         },
-        { 
-          text: "Reveal", 
+        {
+          text: "Reveal",
           onPress: () => {
             const newInputs = { ...userInputs };
             GRID_DATA.forEach((cell) => {
@@ -284,13 +294,12 @@ const Crossword = () => {
             setUserInputs(newInputs); // Update state to show all answers
             saveUserInputs(newInputs);
             setCorrectness({}); // Optionally clear correctness state if you don't want to validate after revealing answers
-          }
-        }
+          },
+        },
       ],
       { cancelable: false } // This means the user must tap one of the buttons to dismiss the alert
     );
   };
-  
 
   const renderClues = (direction) => {
     return (
@@ -403,10 +412,10 @@ const Crossword = () => {
         {
           text: "Cancel",
           onPress: () => console.log("Clear Cancelled"), // Optionally handle a cancel press
-          style: "cancel"
+          style: "cancel",
         },
-        { 
-          text: "Clear", 
+        {
+          text: "Clear",
           onPress: () => {
             const resetInputs = {};
             Object.keys(userInputs).forEach((key) => {
@@ -414,13 +423,13 @@ const Crossword = () => {
             });
             setUserInputs(resetInputs);
             saveUserInputs(resetInputs); // Save the reset state
-          }
-        }
+          },
+        },
       ],
       { cancelable: false } // This ensures the user must tap one of the buttons to dismiss the alert
     );
   };
-  
+
   if (isLoading && !refreshing) {
     return (
       <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
@@ -458,10 +467,15 @@ const Crossword = () => {
         <Header title="Crossword" />
 
         <View style={styles.container}>
+          
+         
           <View style={{ height: theme.spacing.medium }}></View>
+
           <View style={styles.grid}>{renderGrid()}</View>
           <View style={{ height: theme.spacing.medium }}></View>
-          {isKeyboardVisible && renderClueDetail()} 
+
+          {renderClueDetail()}
+          <View style={{ height: 0, marginBottom: -9 }}></View>
           {true && ( // Show these only when keyboard is down
             <>
               <View style={styles.cluesContainer}>
@@ -478,7 +492,7 @@ const Crossword = () => {
                 >
                   <Text style={styles.revealButtonText}>Reveal</Text>
                 </TouchableOpacity>
-                <TouchableOpacity
+                {/*<TouchableOpacity
                   onPress={checkAnswers}
                   style={[styles.button, styles.checkButton]}
                 >
@@ -489,12 +503,11 @@ const Crossword = () => {
                   style={[styles.button, styles.clearButton]}
                 >
                   <Text style={styles.clearButtonText}>Clear</Text>
-                </TouchableOpacity>
+                </TouchableOpacity>*/}
               </View>
               <View style={{ height: theme.spacing.medium }}></View>
             </>
           )}
-          <View style={{ height: theme.spacing.medium }}></View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -533,7 +546,10 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    width: "100%",
+    width: "50%",
+    alignSelf: 'center',
+    alignSelf: 'center',
+
     marginVertical: theme.spacing.small,
   },
   button: {
@@ -606,6 +622,7 @@ const styles = StyleSheet.create({
   },
   clueItem: {
     flexDirection: "row",
+
     alignItems: "flex-start", // Ensure the numbers align with the first line of the clue text
     paddingVertical: 6,
     paddingHorizontal: 6,
@@ -617,6 +634,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   clueItemText: {
+    
     flex: 1, // Allow the clue text to wrap correctly
     color: "#000", // Black for the clue text
     fontSize: 16,
