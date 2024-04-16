@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef,useCallback  } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -13,11 +13,13 @@ import {
   Keyboard, // Import the Keyboard module
   SafeAreaView,
   RefreshControl,
+
 } from "react-native";
 import { fetchCrossword } from "../API";
 import { theme } from "../theme";
 import Header from "../components/Header"; // Adjust the import path as necessary
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ErrorBox from "../components/ErrorBox"; // Adjust the import path as necessary
 
 // https://chat.openai.com/c/26276fd5-f14d-4b63-b3cb-fc18c57d2a34
 
@@ -100,18 +102,27 @@ const Crossword = () => {
   const [userInputs, setUserInputs] = useState({});
   const [temp, setTemp] = useState(false);
   const scrollViewRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
+
   const resetFocusAndHighlight = () => {
     setActiveClue(null);
     setActiveClueBoxes([]); // Clear active clue boxes
     setBoxInFocus(null); // Clear box focus
     setFocusDirection(null);
   };
+
+ 
+
   const keysAreEqual = (obj1, obj2) => {
     const obj1Keys = Object.keys(obj1).sort();
     const obj2Keys = Object.keys(obj2).sort();
     return JSON.stringify(obj1Keys) === JSON.stringify(obj2Keys);
   };
   const loadUserInputs = async () => {
+  
+
     try {
       const savedInputs = await AsyncStorage.getItem("crosswordInputs");
       if (savedInputs) {
@@ -123,7 +134,6 @@ const Crossword = () => {
         setUserInputs(generateUserInputs(GRID_DATA));
       }
     } catch (error) {
-      console.error("Failed to load user inputs:", error);
     }
   };
 
@@ -135,39 +145,49 @@ const Crossword = () => {
       console.error("Failed to save user inputs:", error);
     }
   };
+  const fetchAndProcessCrossword = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const data = await fetchCrossword();
+      await setCLUE_DATA(data); // Save the fetched data
+      const gridData = createGridData(data); // Process fetched data to create grid
+      gridData.forEach((cell) => {
+        cell.ref = React.createRef();
+      });
 
+      await setGRID_DATA(gridData); // Set the grid data
+
+      await loadUserInputs();
+      const keyboardDidHideListener = Keyboard.addListener(
+        "keyboardDidHide",
+        resetFocusAndHighlight
+      );
+      setIsLoading(false);
+
+      return () => {
+        // Clean up the listener when the component unmounts
+        keyboardDidHideListener.remove();
+      };
+    } catch (error) {
+      setError(error.toString());
+
+    }
+    setIsLoading(false);
+
+  };
   useEffect(() => {
-    const fetchAndProcessCrossword = async () => {
-      try {
-        const data = await fetchCrossword();
-        setCLUE_DATA(data); // Save the fetched data
-        const gridData = createGridData(data); // Process fetched data to create grid
-        gridData.forEach((cell) => {
-          cell.ref = React.createRef();
-        });
-
-        setGRID_DATA(gridData); // Set the grid data
-
-        loadUserInputs();
-        const keyboardDidHideListener = Keyboard.addListener(
-          "keyboardDidHide",
-          resetFocusAndHighlight
-        );
-        if (userInputs != '') {
-         
-
-        }
-        return () => {
-          // Clean up the listener when the component unmounts
-          keyboardDidHideListener.remove();
-        };
-      } catch (error) {
-        console.error("Failed to fetch crossword data:", error);
-        Alert.alert("Error", "Failed to load crossword data.");
-      }
-    };
+    
 
     fetchAndProcessCrossword();
+  }, []);
+
+
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await fetchAndProcessCrossword();
+    setRefreshing(false);
   }, []);
 
   useEffect(() => {
@@ -190,18 +210,9 @@ const Crossword = () => {
     const firstBoxRef = GRID_DATA.find((cell) => cell.id === boxId).ref;
     firstBoxRef.current.focus();
   };
-
-  if (!CLUE_DATA) {
-    return (
-      <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
-        <Header title="Crossword" />
-        <ScrollView
-          // Style your ScrollView as needed
-          refreshControl={<RefreshControl refreshing={true} />}
-        ></ScrollView>
-      </SafeAreaView>
-    );
-  }
+ 
+  
+ 
 
   const handleClueSelection = (clueKey) => {
     // make it scroll all the way to the top
@@ -355,9 +366,35 @@ const Crossword = () => {
       resetInputs[key] = ""; // Set each input to an empty string
     });
     setUserInputs(resetInputs);
-    saveUserInputs(resetInputs); // Save the reset state
+    saveUserInputs(); // Save the reset state
   };
-
+  if (isLoading && !refreshing) {
+    return (
+      <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
+        <Header title="Crossword" />
+        <ScrollView
+          // Style your ScrollView as needed
+          refreshControl={<RefreshControl refreshing={true} />}
+        ></ScrollView>
+      </SafeAreaView>
+    );
+  }
+  if (error || !CLUE_DATA) {
+    return (
+      <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
+        <Header title="Crossword" />
+        <ScrollView
+            // Style your ScrollView as needed
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          >
+            {/* Display the ErrorBox if there's an error */}
+            {error && <ErrorBox errorMessage={error} />}
+          </ScrollView>
+      </SafeAreaView>
+    );
+  }
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
