@@ -134,25 +134,44 @@ const Crossword = () => {
   const renderClueDetail = () => {
     if (activeClue && CLUE_DATA && CLUE_DATA[activeClue]) {
       return (
-        <View style={[styles.clueItem, styles.activeClue, { justifyContent: 'center' }]}>
-          <Text style={[styles.clueItemText, { fontSize: 18.2, margin: 4, minHeight: 50}]}
-          // textAlign: 'center'
-          > 
+        <View
+          style={[
+            styles.clueItem,
+            styles.activeClue,
+            { justifyContent: "center" },
+          ]}
+        >
+          <Text
+            style={[
+              styles.clueItemText,
+              { fontSize: 18.2, margin: 4, minHeight: 50 },
+            ]}
+            // textAlign: 'center'
+          >
             {CLUE_DATA[activeClue].clue}
           </Text>
         </View>
       );
     }
     return (
-      <View style={[styles.clueItem, styles.activeClue, { justifyContent: 'center' }]}>
-        <Text style={[styles.clueItemText, { fontSize: 18.2, color: 'transparent', margin: 4, minHeight: 50 }]}>
-          {' S\n S'}
+      <View
+        style={[
+          styles.clueItem,
+          styles.activeClue,
+          { justifyContent: "center" },
+        ]}
+      >
+        <Text
+          style={[
+            styles.clueItemText,
+            { fontSize: 18.2, color: "transparent", margin: 4, minHeight: 50 },
+          ]}
+        >
+          {" S\n S"}
         </Text>
       </View>
     );
   };
-  
-  
 
   // Save user inputs to storage
   const saveUserInputs = async (input = userInputs) => {
@@ -202,7 +221,6 @@ const Crossword = () => {
     setRefreshing(false);
   }, []);
 
-
   const handleClueSelectionFromBox = (boxId, clueKey) => {
     if (!CLUE_DATA[clueKey]) return;
     setActiveClueBoxes(CLUE_DATA[clueKey].boxes);
@@ -235,7 +253,7 @@ const Crossword = () => {
     let newText = text.toUpperCase();
     if (newText === "") {
       newText = " "; // Insert a space if the input is empty
-  }
+    }
     /*
     if (currentInput.length > previousInput.length) {
         // User is typing a new character
@@ -251,22 +269,25 @@ const Crossword = () => {
 
     // Update the state with the new text
     setUserInputs((prevInputs) => {
-        const updatedInputs = { ...prevInputs, [id]: newText };
-        saveUserInputs(updatedInputs);
-        return updatedInputs;
+      const updatedInputs = { ...prevInputs, [id]: newText };
+      saveUserInputs(updatedInputs);
+      return updatedInputs;
     });
 
     // Managing cursor and focus behavior on deletion
     const currentIndex = activeClueBoxes.indexOf(id);
     if (currentIndex !== -1) {
-        const nextIndex = currentInput.length < previousInput.length ? currentIndex - 1 : currentIndex + 1;
-        if (nextIndex >= 0 && nextIndex < activeClueBoxes.length) {
-            const nextBoxId = activeClueBoxes[nextIndex];
-            const nextBoxRef = GRID_DATA.find((c) => c.id === nextBoxId).ref;
-            nextBoxRef.current.focus();
-        }
+      const nextIndex =
+        currentInput.length < previousInput.length
+          ? currentIndex - 1
+          : currentIndex + 1;
+      if (nextIndex >= 0 && nextIndex < activeClueBoxes.length) {
+        const nextBoxId = activeClueBoxes[nextIndex];
+        const nextBoxRef = GRID_DATA.find((c) => c.id === nextBoxId).ref;
+        nextBoxRef.current.focus();
+      }
     }
-};
+  };
 
   const revealAnswers = () => {
     Alert.alert(
@@ -330,24 +351,24 @@ const Crossword = () => {
         {cell.label && <Text style={styles.boxLabel}>{cell.label}</Text>}
         {!!cell.letter && (
           <TextInput
-          selectTextOnFocus={true} // Automatically select all text on focus, making it easy to replace
-
+            selectTextOnFocus={true} // Automatically select all text on focus, making it easy to replace
             ref={cell.ref}
             caretHidden={true}
-            style={[styles.boxInput, {selectionColor: 'transparent'} ]} // Set selection color to transparent
+            style={[
+              styles.boxInput,
+              { selectionColor: "transparent", textTransform: "uppercase" },
+            ]} // Set selection color to transparent
             maxLength={1}
             autoCorrect={false} // Disable auto-correction
             keyboardType="ascii-capable" // Restricts input to ASCII characters
-            autoCapitalize = {"characters"}
+            autoCapitalize={"characters"}
             selectionColor="transparent" // Set selection color to transparent to hide it
-
             autoCompleteType="off"
             value={userInputs[cell.id]} // Controlled component
             onChangeText={(text) => {
               handleInputChange(cell.id, text.toUpperCase());
               // Update the cell's letter in your state or context if you're managing the grid data dynamically (this is not shown here)
               // Move focus to the next box in activeClueBoxes
-             
             }}
             onFocus={() => {
               if (activeClueBoxes.includes(cell.id)) {
@@ -456,8 +477,6 @@ const Crossword = () => {
         <Header title="Crossword" />
 
         <View style={styles.container}>
-          
-         
           <View style={{ height: theme.spacing.medium }}></View>
 
           <View style={styles.grid}>{renderGrid()}</View>
@@ -535,8 +554,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     width: "50%",
-    alignSelf: 'center',
-    alignSelf: 'center',
+    alignSelf: "center",
+    alignSelf: "center",
 
     marginVertical: theme.spacing.small,
   },
@@ -622,7 +641,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   clueItemText: {
-    
     flex: 1, // Allow the clue text to wrap correctly
     color: "#000", // Black for the clue text
     fontSize: 16,

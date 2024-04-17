@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -9,10 +9,11 @@ import {
   RefreshControl,
   Alert,
   Dimensions,
-} from 'react-native';
-import ErrorBox from '../components/ErrorBox';
-import Header from '../components/Header';
-import { fetchConnections } from '../API';
+} from "react-native";
+import ErrorBox from "../components/ErrorBox";
+import Header from "../components/Header";
+import { fetchConnections } from "../API";
+const padding = 20;
 
 const CONNECTIONS_COUNT = 4;
 const Connections = () => {
@@ -58,7 +59,10 @@ const Connections = () => {
 
   const checkConnection = useCallback(() => {
     if (selectedItems.length !== CONNECTIONS_COUNT) {
-      Alert.alert('Error', 'You must select exactly 4 items to make a connection.');
+      Alert.alert(
+        "Error",
+        "You must select exactly 4 items to make a connection."
+      );
       return;
     }
 
@@ -66,7 +70,9 @@ const Connections = () => {
       const connection = data[key];
       const sortedConnection = [...connection].sort();
       const sortedSelectedItems = [...selectedItems].sort();
-      return sortedConnection.every((item, index) => item === sortedSelectedItems[index]);
+      return sortedConnection.every(
+        (item, index) => item === sortedSelectedItems[index]
+      );
     });
 
     if (foundConnectionKey) {
@@ -74,10 +80,10 @@ const Connections = () => {
         ...prevSolved,
         [foundConnectionKey]: data[foundConnectionKey],
       }));
-      Alert.alert('Success', 'A connection has been found!');
+      Alert.alert("Success", "A connection has been found!");
       setSelectedItems([]);
     } else {
-      Alert.alert('Try Again', 'No valid connection with the selected items.');
+      Alert.alert("Try Again", "No valid connection with the selected items.");
     }
   }, [selectedItems, data]);
 
@@ -94,7 +100,11 @@ const Connections = () => {
     return (
       <SafeAreaView style={styles.container}>
         <Header title="Connections" />
-        <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
           {error && <ErrorBox errorMessage={error} />}
         </ScrollView>
       </SafeAreaView>
@@ -109,22 +119,33 @@ const Connections = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header title="Connections" />
+
       <ScrollView
+        style={{ padding: padding }}
         contentContainerStyle={styles.scrollViewContent}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       >
         <Text style={styles.instructions}>Create four groups of four!</Text>
+        {Object.keys(solvedConnections).map((key) => (
+          <View key={key} style={styles.solvedConnectionContainer}>
+            <Text style={styles.solvedConnectionTitle}>
+              {key.toUpperCase()}
+            </Text>
+            <Text style={styles.solvedConnectionItems}>
+              {solvedConnections[key].join(", ").toUpperCase()}
+            </Text>
+          </View>
+        ))}
         <View style={styles.grid}>
-          {Object.keys(solvedConnections).map((key) => (
-            <View key={key} style={[styles.item, styles.solvedConnectionContainer]}>
-              <Text style={styles.solvedConnectionTitle}>{key.toUpperCase()}</Text>
-              <Text style={styles.solvedConnectionItems}>{solvedConnections[key].join(", ").toUpperCase()}</Text>
-            </View>
-          ))}
           {unsolvedItems.map((item, index) => (
             <TouchableOpacity
               key={index}
-              style={[styles.item, selectedItems.includes(item) && styles.selectedItem]}
+              style={[
+                styles.item,
+                selectedItems.includes(item) && styles.selectedItem,
+              ]}
               onPress={() => selectItem(item)}
             >
               <Text style={styles.itemText}>{item}</Text>
@@ -135,7 +156,9 @@ const Connections = () => {
           <TouchableOpacity
             style={[
               styles.button,
-              selectedItems.length !== CONNECTIONS_COUNT ? styles.buttonDisabled : styles.checkButton,
+              selectedItems.length !== CONNECTIONS_COUNT
+                ? styles.buttonDisabled
+                : styles.checkButton,
             ]}
             onPress={checkConnection}
             disabled={selectedItems.length !== CONNECTIONS_COUNT}
@@ -148,89 +171,104 @@ const Connections = () => {
   );
 };
 
-const { width } = Dimensions.get('window');
-const padding = 20;
-const marginPerSide = 3;
-const borderWidth = 1;
-const itemPaddingHorizontal = 10;
+const borderWidth = 3;
 const numberOfCellsPerRow = 4;
-const totalMargin = marginPerSide * 2 * numberOfCellsPerRow;
-const totalBorderWidth = borderWidth * 2 * numberOfCellsPerRow;
-const availableWidth = width - (padding * 2) - totalMargin - totalBorderWidth - 2;
-const boxSize = availableWidth / numberOfCellsPerRow;
-const boxHeight = 60; // Increased height for better visibility and consistency
-
+const boxHeight = 75; // Increased height for better visibility and consistency
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    padding: padding,
+    backgroundColor: "#ffffff", // Bright white background
   },
   scrollViewContent: {
-    justifyContent: 'flex-start',
+    justifyContent: "center",
+    alignItems: "center",
   },
   grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
     marginBottom: 10,
   },
+  itemText: {
+    textTransform: "uppercase",
+    fontSize: 15,
+  },
   item: {
-    width: boxSize,
-    height: boxHeight, // Updated height
-    margin: marginPerSide,
-    paddingVertical: 15, // Adjusted padding
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "23%", 
+    height: boxHeight, 
+    margin: 3,
+    
+    marginHorizontal: "1%",
+    paddingVertical: 15,
+    justifyContent: "center",
+    alignItems: "center",
     borderWidth: borderWidth,
-    borderColor: '#000',
-    backgroundColor: '#f0f0f0',
+    borderColor: "#3A3A3C", // Consistent dark border for better contrast
+    backgroundColor: "#EAEAEA", // Light grey for default state
     borderRadius: 10,
     elevation: 2,
   },
   selectedItem: {
-    backgroundColor: '#ccc',
+    backgroundColor: "#AED581", // Light green for selected items
   },
   solvedConnectionContainer: {
-    // Additional style for solved connections
-    backgroundColor: '#e8eaf6',
-    alignItems: 'center', // Center items within the container
+    width: "98%",
+    flex: 1,
+    marginHorizontal: "1%",
+    height: boxHeight,
+    flexDirection: "column",
+    alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 3,
+    paddingHorizontal: 10,
+    borderWidth: borderWidth,
+    borderColor: "#3A3A3C",
+    backgroundColor: "#C5E1A5", // Soft green for solved connections
+    borderRadius: 10,
+    elevation: 2,
   },
   solvedConnectionTitle: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 18,
-    color: '#3f51b5',
+    color: "#1B5E20", // Deep green for headers
+    textTransform: "uppercase",
   },
   solvedConnectionItems: {
     fontSize: 16,
-    color: '#6a1b9a',
-    textAlign: 'center',
+    color: "#33691E", // Dark green to match item text
+    textAlign: "center",
+    textTransform: "uppercase",
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "center",
     padding: 10,
   },
   button: {
-    flex: 1,
+    width: "50%",
     padding: 10,
-    marginHorizontal: 75,
     borderRadius: 10,
+    backgroundColor: "#66BB6A",
   },
   checkButton: {
-    backgroundColor: '#4caf50',
+    backgroundColor: "#66BB6A",
   },
   buttonDisabled: {
-    backgroundColor: '#ccc',
+    backgroundColor: "#BDBDBD",
   },
   footer: {
     marginTop: 10,
+    marginBottom: 10,
+    justifyContent: "center",
+    width: "100%",
   },
   instructions: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 16,
-    marginTop: 10,
+    color: "#424242", // Added color to make text more visible and consistent with overall design
+    fontWeight: "bold", // Added bold to make instructions stand out
+    marginVertical: 10, // Added vertical margin for better spacing
   },
 });
-
 export default Connections;
