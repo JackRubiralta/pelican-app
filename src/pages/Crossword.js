@@ -21,6 +21,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import ErrorBox from "../components/ErrorBox"; // Adjust the import path as necessary
 
 // https://chat.openai.com/c/26276fd5-f14d-4b63-b3cb-fc18c57d2a34
+const numberOfCellsPerRow = 11; // Assuming 11 cells per row
 
 function createGridData(CLUE_DATA) {
   // Assuming a grid size of 11x11 based on your provided structure
@@ -34,9 +35,9 @@ function createGridData(CLUE_DATA) {
   }
 
   // Initialize grid with null values
-  for (let i = 0; i < 11; i++) {
+  for (let i = 0; i < numberOfCellsPerRow; i++) {
     grid[i] = [];
-    for (let j = 0; j < 11; j++) {
+    for (let j = 0; j < numberOfCellsPerRow; j++) {
       grid[i][j] = {
         id: `${String.fromCharCode(65 + i)}${j + 1}`,
         letter: null,
@@ -80,7 +81,7 @@ function generateUserInputs(gridData) {
     // Check if the cell has a non-null letter
     if (cell.letter !== null) {
       // Add the cell's ID with an empty string as its initial input value
-      userInputs[cell.id] = "";
+      userInputs[cell.id] = " ";
     }
   });
 
@@ -255,23 +256,42 @@ const Crossword = () => {
   };
 
   const handleInputChange = (id, text) => {
-    let newText = text.toUpperCase().replace(userInputs[id], "");
-    newText = newText.length > 1 ? newText.charAt(text.length - 1) : newText;
+    // Get the current and previous input values
+    const currentInput = text;
+    const previousInput = userInputs[id] || "";
 
+    // Determine the operation: insertion or deletion
+    let newText;
+    if (currentInput.length > previousInput.length) {
+        // User is typing a new character
+        newText = currentInput[currentInput.length - 1].toUpperCase(); // Just get the new character, ensure it is uppercase
+    } else if (currentInput.length < previousInput.length) {
+        // User is deleting a character
+        newText = currentInput.toUpperCase(); // Use the current input as the new text
+        if (newText === "") {
+            newText = " "; // Insert a space if the input is empty
+        }
+    }
+
+    // Update the state with the new text
     setUserInputs((prevInputs) => {
-      const updatedInputs = { ...prevInputs, [id]: newText };
-      saveUserInputs(updatedInputs);
-      return updatedInputs;
+        const updatedInputs = { ...prevInputs, [id]: newText };
+        saveUserInputs(updatedInputs);
+        return updatedInputs;
     });
 
-    // Move focus to the next box in activeClueBoxes
+    // Managing cursor and focus behavior on deletion
     const currentIndex = activeClueBoxes.indexOf(id);
-    if (currentIndex !== -1 && currentIndex + 1 < activeClueBoxes.length) {
-      const nextBoxId = activeClueBoxes[currentIndex + 1];
-      const nextBoxRef = GRID_DATA.find((c) => c.id === nextBoxId).ref;
-      nextBoxRef.current.focus();
+    if (currentIndex !== -1) {
+        const nextIndex = currentInput.length < previousInput.length ? currentIndex - 1 : currentIndex + 1;
+        if (nextIndex >= 0 && nextIndex < activeClueBoxes.length) {
+            const nextBoxId = activeClueBoxes[nextIndex];
+            const nextBoxRef = GRID_DATA.find((c) => c.id === nextBoxId).ref;
+            nextBoxRef.current.focus();
+        }
     }
-  };
+};
+
   const revealAnswers = () => {
     Alert.alert(
       "Reveal All Answers", // Title of the alert
@@ -346,19 +366,7 @@ const Crossword = () => {
               handleInputChange(cell.id, text);
               // Update the cell's letter in your state or context if you're managing the grid data dynamically (this is not shown here)
               // Move focus to the next box in activeClueBoxes
-              if (text != "") {
-                const currentIndex = activeClueBoxes.indexOf(cell.id);
-                if (
-                  currentIndex !== -1 &&
-                  currentIndex + 1 < activeClueBoxes.length
-                ) {
-                  const nextBoxId = activeClueBoxes[currentIndex + 1];
-                  const nextBoxRef = GRID_DATA.find(
-                    (c) => c.id === nextBoxId
-                  ).ref;
-                  nextBoxRef.current.focus();
-                }
-              }
+             
             }}
             onFocus={() => {
               if (activeClueBoxes.includes(cell.id)) {
@@ -514,7 +522,6 @@ const Crossword = () => {
   );
 };
 const { width } = Dimensions.get("window");
-const numberOfCellsPerRow = 11; // Assuming 11 cells per row
 const boxSize = (width - 40 - 2.001) / numberOfCellsPerRow; // 40 is the total horizontal padding
 const SPACING = 12; // Consistent spacing for layout coherence
 const styles = StyleSheet.create({
