@@ -95,7 +95,6 @@ const Crossword = () => {
   const [activeClue, setActiveClue] = useState(null);
   const [boxInFocus, setBoxInFocus] = useState(null);
   const [focusDirection, setFocusDirection] = useState(null); // New state to track focus direction
-  const [cursorPositions, setCursorPositions] = useState({}); // State to keep track of cursor positions
   const [correctness, setCorrectness] = useState({});
   const [CLUE_DATA, setCLUE_DATA] = useState(null);
   const [GRID_DATA, setGRID_DATA] = useState([]);
@@ -104,7 +103,6 @@ const Crossword = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
-  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
   const resetFocusAndHighlight = () => {
     setActiveClue(null);
@@ -155,23 +153,7 @@ const Crossword = () => {
   };
   
   
-  
 
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      () => setIsKeyboardVisible(true)
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => setIsKeyboardVisible(false)
-    );
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
   // Save user inputs to storage
   const saveUserInputs = async (input = userInputs) => {
     try {
@@ -220,17 +202,6 @@ const Crossword = () => {
     setRefreshing(false);
   }, []);
 
-  useEffect(() => {
-    // Initialize cursor positions based on user inputs
-    const initialPositions = {};
-    Object.keys(userInputs).forEach((key) => {
-      initialPositions[key] = {
-        start: userInputs[key].length,
-        end: userInputs[key].length,
-      };
-    });
-    setCursorPositions(initialPositions);
-  }, [userInputs]);
 
   const handleClueSelectionFromBox = (boxId, clueKey) => {
     if (!CLUE_DATA[clueKey]) return;
@@ -261,7 +232,11 @@ const Crossword = () => {
     const previousInput = userInputs[id] || "";
 
     // Determine the operation: insertion or deletion
-    let newText;
+    let newText = text.toUpperCase();
+    if (newText === "") {
+      newText = " "; // Insert a space if the input is empty
+  }
+    /*
     if (currentInput.length > previousInput.length) {
         // User is typing a new character
         newText = currentInput[currentInput.length - 1].toUpperCase(); // Just get the new character, ensure it is uppercase
@@ -272,6 +247,7 @@ const Crossword = () => {
             newText = " "; // Insert a space if the input is empty
         }
     }
+    */
 
     // Update the state with the new text
     setUserInputs((prevInputs) => {
@@ -354,16 +330,20 @@ const Crossword = () => {
         {cell.label && <Text style={styles.boxLabel}>{cell.label}</Text>}
         {!!cell.letter && (
           <TextInput
+          selectTextOnFocus={true} // Automatically select all text on focus, making it easy to replace
+
             ref={cell.ref}
             caretHidden={true}
-            style={styles.boxInput}
-            selection={cursorPositions[cell.id]} // Keep cursor to the right
-            maxLength={2}
+            style={{ ...styles.boxInput, selectionColor: 'transparent' }} // Set selection color to transparent
+            maxLength={1}
+            autoCorrect={false} // Disable auto-correction
+            keyboardType="ascii-capable" // Restricts input to ASCII characters
+            autoCapitalize = {"characters"}
+
             autoCompleteType="off"
-            keyboardType="default" // You can change this based on expected input
             value={userInputs[cell.id]} // Controlled component
             onChangeText={(text) => {
-              handleInputChange(cell.id, text);
+              handleInputChange(cell.id, text.toUpperCase());
               // Update the cell's letter in your state or context if you're managing the grid data dynamically (this is not shown here)
               // Move focus to the next box in activeClueBoxes
              
@@ -427,7 +407,7 @@ const Crossword = () => {
           onPress: () => {
             const resetInputs = {};
             Object.keys(userInputs).forEach((key) => {
-              resetInputs[key] = ""; // Set each input to an empty string
+              resetInputs[key] = " "; // Set each input to an empty string
             });
             setUserInputs(resetInputs);
             saveUserInputs(resetInputs); // Save the reset state

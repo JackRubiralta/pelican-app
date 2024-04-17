@@ -16,118 +16,119 @@ import { fetchConnections } from '../API';
 
 const CONNECTIONS_COUNT = 4;
 const Connections = () => {
-    const [data, setData] = useState({});
-    const [selectedItems, setSelectedItems] = useState([]);
-    const [solvedConnections, setSolvedConnections] = useState({});
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [refreshing, setRefreshing] = useState(false);
-  
-    const loadData = useCallback(async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const fetchedData = await fetchConnections();
-        setData(fetchedData);
-      } catch (e) {
-        setError(e.message);
-      }
-      setIsLoading(false);
-    }, []);
-  
-    useEffect(() => {
-      loadData();
-    }, [loadData]);
-  
-    const onRefresh = useCallback(async () => {
-      setRefreshing(true);
-      await loadData();
-      setRefreshing(false);
-    }, [loadData]);
-  
-    const selectItem = useCallback((item) => {
-      setSelectedItems((prevSelectedItems) => {
-        if (prevSelectedItems.includes(item)) {
-          return prevSelectedItems.filter((selected) => selected !== item);
-        } else if (prevSelectedItems.length < CONNECTIONS_COUNT) {
-          return [...prevSelectedItems, item];
-        }
-        return prevSelectedItems;
-      });
-    }, []);
-  
-    const checkConnection = useCallback(() => {
-      if (selectedItems.length !== CONNECTIONS_COUNT) {
-        Alert.alert('Error', 'You must select exactly 4 items to make a connection.');
-        return;
-      }
-  
-      const foundConnectionKey = Object.keys(data).find((key) => {
-        const connection = data[key];
-        const sortedConnection = [...connection].sort();
-        const sortedSelectedItems = [...selectedItems].sort();
-        return sortedConnection.every((item, index) => item === sortedSelectedItems[index]);
-      });
-  
-      if (foundConnectionKey) {
-        setSolvedConnections((prevSolved) => ({
-          ...prevSolved,
-          [foundConnectionKey]: data[foundConnectionKey],
-        }));
-        Alert.alert('Success', 'A connection has been found!');
-        setSelectedItems([]);
-      } else {
-        Alert.alert('Try Again', 'No valid connection with the selected items.');
-      }
-    }, [selectedItems, data]);
-  
-    if (isLoading && !refreshing) {
-      return (
-        <SafeAreaView style={[styles.centered, styles.container]}>
-          <Header title="Connections" />
-          <ScrollView refreshControl={<RefreshControl refreshing={true} />} />
-        </SafeAreaView>
-      );
+  const [data, setData] = useState({});
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [solvedConnections, setSolvedConnections] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const loadData = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const fetchedData = await fetchConnections();
+      setData(fetchedData);
+    } catch (e) {
+      setError(e.message);
     }
-  
-    if (error || !data) {
-      return (
-        <SafeAreaView style={styles.container}>
-          <Header title="Connections" />
-          <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-            {error && <ErrorBox errorMessage={error} />}
-          </ScrollView>
-        </SafeAreaView>
-      );
+    setIsLoading(false);
+  }, []);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await loadData();
+    setRefreshing(false);
+  }, [loadData]);
+
+  const selectItem = useCallback((item) => {
+    setSelectedItems((prevSelectedItems) => {
+      if (prevSelectedItems.includes(item)) {
+        return prevSelectedItems.filter((selected) => selected !== item);
+      } else if (prevSelectedItems.length < CONNECTIONS_COUNT) {
+        return [...prevSelectedItems, item];
+      }
+      return prevSelectedItems;
+    });
+  }, []);
+
+  const checkConnection = useCallback(() => {
+    if (selectedItems.length !== CONNECTIONS_COUNT) {
+      Alert.alert('Error', 'You must select exactly 4 items to make a connection.');
+      return;
     }
-  
-    const unsolvedItems = Object.keys(data)
-      .filter((key) => !(key in solvedConnections))
-      .reduce((acc, key) => [...acc, ...data[key]], [])
-      .sort(() => 1);
-  
+
+    const foundConnectionKey = Object.keys(data).find((key) => {
+      const connection = data[key];
+      const sortedConnection = [...connection].sort();
+      const sortedSelectedItems = [...selectedItems].sort();
+      return sortedConnection.every((item, index) => item === sortedSelectedItems[index]);
+    });
+
+    if (foundConnectionKey) {
+      setSolvedConnections((prevSolved) => ({
+        ...prevSolved,
+        [foundConnectionKey]: data[foundConnectionKey],
+      }));
+      Alert.alert('Success', 'A connection has been found!');
+      setSelectedItems([]);
+    } else {
+      Alert.alert('Try Again', 'No valid connection with the selected items.');
+    }
+  }, [selectedItems, data]);
+
+  if (isLoading && !refreshing) {
+    return (
+      <SafeAreaView style={[styles.centered, styles.container]}>
+        <Header title="Connections" />
+        <ScrollView refreshControl={<RefreshControl refreshing={true} />} />
+      </SafeAreaView>
+    );
+  }
+
+  if (error || !data) {
     return (
       <SafeAreaView style={styles.container}>
         <Header title="Connections" />
-        <ScrollView
-          contentContainerStyle={styles.scrollViewContent}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-        >
-          <Text style={styles.instructions}>Create four groups of four!</Text>
+        <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+          {error && <ErrorBox errorMessage={error} />}
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+
+  const unsolvedItems = Object.keys(data)
+    .filter((key) => !(key in solvedConnections))
+    .reduce((acc, key) => [...acc, ...data[key]], [])
+    .sort(() => 1);
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <Header title="Connections" />
+      <ScrollView
+        contentContainerStyle={styles.scrollViewContent}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
+        <Text style={styles.instructions}>Create four groups of four!</Text>
+        <View style={styles.grid}>
           {Object.keys(solvedConnections).map((key) => (
-            <View key={key} style={styles.solvedConnectionContainer}>
+            <View key={key} style={[styles.item, styles.solvedConnectionContainer]}>
               <Text style={styles.solvedConnectionTitle}>{key.toUpperCase()}</Text>
               <Text style={styles.solvedConnectionItems}>{solvedConnections[key].join(", ").toUpperCase()}</Text>
             </View>
           ))}
-          <View style={styles.grid}>
-            {unsolvedItems.map((item, index) => (
-              <TouchableOpacity
-                key={index}
-                style={[styles.item, selectedItems.includes(item) && styles.selectedItem]}
-                onPress={() => selectItem(item)}
-              >
-                <Text style={styles.itemText}>{item}</Text></TouchableOpacity>
+          {unsolvedItems.map((item, index) => (
+            <TouchableOpacity
+              key={index}
+              style={[styles.item, selectedItems.includes(item) && styles.selectedItem]}
+              onPress={() => selectItem(item)}
+            >
+              <Text style={styles.itemText}>{item}</Text>
+            </TouchableOpacity>
           ))}
         </View>
         <View style={styles.footer}>
@@ -172,7 +173,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    marginHorizontal: 5,
     marginBottom: 10,
   },
   item: {
@@ -192,19 +192,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#ccc',
   },
   solvedConnectionContainer: {
-    width: availableWidth + 15 ,
-    height: boxHeight, // Consistent with item height
-    flexDirection: 'column',
-    alignSelf: 'center',
-    justifyContent: 'center', // Adjusted for vertical alignment
-    alignItems: 'center',
-    marginVertical: 3,
-    paddingHorizontal: 10,
-    borderWidth: borderWidth,
-    borderColor: '#000',
+    // Additional style for solved connections
     backgroundColor: '#e8eaf6',
-    borderRadius: 10,
-    elevation: 2,
+    alignItems: 'center', // Center items within the container
   },
   solvedConnectionTitle: {
     fontWeight: 'bold',
@@ -244,4 +234,3 @@ const styles = StyleSheet.create({
 });
 
 export default Connections;
-  
