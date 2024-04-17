@@ -334,11 +334,12 @@ const Crossword = () => {
 
             ref={cell.ref}
             caretHidden={true}
-            style={{ ...styles.boxInput, selectionColor: 'transparent' }} // Set selection color to transparent
+            style={[styles.boxInput, {selectionColor: 'transparent'} ]} // Set selection color to transparent
             maxLength={1}
             autoCorrect={false} // Disable auto-correction
             keyboardType="ascii-capable" // Restricts input to ASCII characters
             autoCapitalize = {"characters"}
+            selectionColor="transparent" // Set selection color to transparent to hide it
 
             autoCompleteType="off"
             value={userInputs[cell.id]} // Controlled component
