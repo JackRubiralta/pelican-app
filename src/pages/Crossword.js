@@ -114,20 +114,20 @@ const Crossword = () => {
   const keysAreEqual = (obj1, obj2) => {
     const obj1Keys = Object.keys(obj1).sort();
     const obj2Keys = Object.keys(obj2).sort();
+    console.log(obj1)
+    console.log(obj2)
+
     return JSON.stringify(obj1Keys) === JSON.stringify(obj2Keys);
   };
   const loadUserInputs = async () => {
     try {
-      const savedInputs = await AsyncStorage.getItem("crosswordInputs");
+      const savedInputs = await JSON.parse(await AsyncStorage.getItem("crosswordInputs"));
       if (savedInputs) {
-        await setUserInputs(JSON.parse(savedInputs));
-        if (!keysAreEqual(generateUserInputs(GRID_DATA), userInputs)) {
-          await setUserInputs(generateUserInputs(GRID_DATA));
-          await saveUserInputs(generateUserInputs(GRID_DATA));
-        }
-      } else {
-        await setUserInputs(generateUserInputs(GRID_DATA));
-        await saveUserInputs(generateUserInputs(GRID_DATA));
+        console.log(savedInputs)
+        
+          await setUserInputs(savedInputs);
+        
+     
       }
     } catch (error) {}
   };
@@ -181,36 +181,54 @@ const Crossword = () => {
       console.error("Failed to save user inputs:", error);
     }
   };
-
+  const isEqual = (data1, data2) => {
+    // This is a simplistic comparison function; adapt it to your needs
+    if (!data1 || !data2) {
+      return false;
+    }
+  
+    return JSON.stringify(data1) === JSON.stringify(data2);
+  };
+  
   const fetchAndProcessCrossword = async () => {
     setIsLoading(true);
     setError(null);
     try {
       const data = await fetchCrossword();
+      const oldData = JSON.parse(await AsyncStorage.getItem("crosswordData"));
+      
+      if (!isEqual(oldData, data)) {
+        // If the crossword data is different, reset the userInputs
+        await AsyncStorage.removeItem("crosswordInputs");
+        setUserInputs({});
+      }
+  
       await setCLUE_DATA(data); // Save the fetched data
+      await AsyncStorage.setItem("crosswordData", JSON.stringify(data)); // Store the current crossword data for future comparisons
       const gridData = createGridData(data); // Process fetched data to create grid
       gridData.forEach((cell) => {
         cell.ref = React.createRef();
       });
-
+  
       await setGRID_DATA(gridData); // Set the grid data
-
-      await loadUserInputs();
+      await loadUserInputs(); // Load user inputs whether new or from storage
+  
       const keyboardDidHideListener = Keyboard.addListener(
         "keyboardDidHide",
         resetFocusAndHighlight
       );
       setIsLoading(false);
-
+  
       return () => {
         // Clean up the listener when the component unmounts
         keyboardDidHideListener.remove();
       };
     } catch (error) {
       setError(error.toString());
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
+  
   useEffect(() => {
     fetchAndProcessCrossword();
   }, []);
@@ -247,7 +265,7 @@ const Crossword = () => {
   const handleInputChange = (id, text) => {
     // Get the current and previous input values
     const currentInput = text;
-    const previousInput = userInputs[id] || "";
+    const previousInput = userInputs[id] || " ";
 
     // Determine the operation: insertion or deletion
     let newText = text.toUpperCase();
@@ -356,7 +374,7 @@ const Crossword = () => {
             caretHidden={true}
             style={[
               styles.boxInput,
-              { selectionColor: "transparent", textTransform: "uppercase" },
+              { textTransform: "uppercase" },
             ]} // Set selection color to transparent
             maxLength={1}
             autoCorrect={false} // Disable auto-correction
@@ -397,8 +415,8 @@ const Crossword = () => {
     const newCorrectness = {};
 
     GRID_DATA.forEach((cell) => {
-      const userInput = userInputs[cell.id] || "";
-      const correctAnswer = cell.letter || "";
+      const userInput = userInputs[cell.id] || " ";
+      const correctAnswer = cell.letter || " ";
       const isCellCorrect =
         userInput.toUpperCase() === correctAnswer.toUpperCase();
       newCorrectness[cell.id] = isCellCorrect;
