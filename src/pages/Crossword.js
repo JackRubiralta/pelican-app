@@ -349,7 +349,7 @@ const Crossword = () => {
               onPress={() => handleClueSelection(key)}
               style={[styles.clueItem, false && styles.activeClue]}
             >
-              <Text style={styles.clueItemNumber}>{clue.number}.</Text>
+              <Text style={styles.clueItemNumber }>{clue.number}.{clue.number <= 9 && " "}</Text>
               <Text style={styles.clueItemText}>{clue.clue}</Text>
             </TouchableOpacity>
           ))}
