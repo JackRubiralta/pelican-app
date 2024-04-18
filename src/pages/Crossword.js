@@ -636,7 +636,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     textAlign: "center",
-    top: 2.15,
+    paddingTop: 2.15,
     fontSize: 15.8,
     color: "#333",
     backgroundColor: "transparent", // Ensure input background doesn't distract
