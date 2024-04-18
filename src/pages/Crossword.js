@@ -358,16 +358,21 @@ const Crossword = () => {
   };
 
   const renderGrid = () => {
-    return GRID_DATA.map((cell, index) => (
-      <View
-        key={index}
-        style={[
-          styles.box,
-          !cell.letter && styles.blank,
-          activeClueBoxes.includes(cell.id) && styles.highlight,
-          boxInFocus === cell.id && styles.focus,
-        ]}
-      >
+    return GRID_DATA.map((cell, index) => {
+      const isLastRow = Math.floor(index / numberOfCellsPerRow) === numberOfCellsPerRow - 1;
+      const isLastColumn = (index % numberOfCellsPerRow) === numberOfCellsPerRow - 1;
+      return (
+        <View
+          key={index}
+          style={[
+            styles.box,
+            !cell.letter && styles.blank,
+            activeClueBoxes.includes(cell.id) && styles.highlight,
+            boxInFocus === cell.id && styles.focus,
+            isLastRow && styles.lastRowBox,
+            isLastColumn && styles.lastColumnBox,
+          ]}
+        >
         {cell.label && <Text style={styles.boxLabel}>{cell.label}</Text>}
         {!!cell.letter && (
           <TextInput
@@ -412,7 +417,8 @@ const Crossword = () => {
 
           </View>
       </View>
-    ));
+      );
+  });
   };
   const checkAnswers = () => {
     let isCorrect = true;
@@ -545,7 +551,7 @@ const Crossword = () => {
 };
 const padding1 = theme.spacing.medium;
 const { width } = Dimensions.get("window");
-const boxSize = (width - padding1 * 2 - 2.001) / numberOfCellsPerRow; // 40 is the total horizontal padding
+const boxSize = (width - padding1 * 2 - 4.001) / numberOfCellsPerRow; // 40 is the total horizontal padding
 const SPACING = 12; // Consistent spacing for layout coherence
 const styles = StyleSheet.create({
   container: {
@@ -560,18 +566,25 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
-    borderWidth: 1,
-    padding: 0,
+    borderWidth: 2,
     borderColor: "#000",
+    backgroundColor: "#fff",
   },
   box: {
     width: boxSize,
     height: boxSize,
-    borderWidth: 1,
+    borderRightWidth: 2,
+    borderBottomWidth: 2,
     borderColor: "#000",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#E8E8E8", // Slightly lighter gray for a softer look
+  },
+  lastRowBox: {
+    borderBottomWidth: 0, // No border at the bottom for the last row
+  },
+  lastColumnBox: {
+    borderRightWidth: 0, // No border on the right for the last column
   },
   buttonContainer: {
     flexDirection: "row",
