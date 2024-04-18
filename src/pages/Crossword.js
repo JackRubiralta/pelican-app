@@ -111,23 +111,22 @@ const Crossword = () => {
     setFocusDirection(null);
   };
 
-  const keysAreEqual = (obj1, obj2) => {
-    const obj1Keys = Object.keys(obj1).sort();
-    const obj2Keys = Object.keys(obj2).sort();
-    console.log(obj1)
-    console.log(obj2)
-
-    return JSON.stringify(obj1Keys) === JSON.stringify(obj2Keys);
-  };
+  
   const loadUserInputs = async () => {
     try {
-      const savedInputs = await JSON.parse(await AsyncStorage.getItem("crosswordInputs"));
+      const savedInputs = await JSON.parse(
+        await AsyncStorage.getItem("crosswordInputs")
+      );
       if (savedInputs) {
-        console.log(savedInputs)
-        
-          await setUserInputs(savedInputs);
-        
-     
+        console.log(savedInputs);
+        await setUserInputs(savedInputs);
+      } else {
+        const resetInputs = {};
+        await Object.keys(userInputs).forEach((key) => {
+          resetInputs[key] = " "; // Set each input to an empty string
+        });
+        await setUserInputs(resetInputs);
+        await saveUserInputs(resetInputs);
       }
     } catch (error) {}
   };
@@ -186,39 +185,39 @@ const Crossword = () => {
     if (!data1 || !data2) {
       return false;
     }
-  
+
     return JSON.stringify(data1) === JSON.stringify(data2);
   };
-  
+
   const fetchAndProcessCrossword = async () => {
     setIsLoading(true);
     setError(null);
     try {
       const data = await fetchCrossword();
       const oldData = JSON.parse(await AsyncStorage.getItem("crosswordData"));
-      
+
       if (!isEqual(oldData, data)) {
         // If the crossword data is different, reset the userInputs
         await AsyncStorage.removeItem("crosswordInputs");
         setUserInputs({});
       }
-  
+
       await setCLUE_DATA(data); // Save the fetched data
       await AsyncStorage.setItem("crosswordData", JSON.stringify(data)); // Store the current crossword data for future comparisons
       const gridData = createGridData(data); // Process fetched data to create grid
       gridData.forEach((cell) => {
         cell.ref = React.createRef();
       });
-  
+
       await setGRID_DATA(gridData); // Set the grid data
       await loadUserInputs(); // Load user inputs whether new or from storage
-  
+
       const keyboardDidHideListener = Keyboard.addListener(
         "keyboardDidHide",
         resetFocusAndHighlight
       );
       setIsLoading(false);
-  
+
       return () => {
         // Clean up the listener when the component unmounts
         keyboardDidHideListener.remove();
@@ -228,7 +227,7 @@ const Crossword = () => {
       setIsLoading(false);
     }
   };
-  
+
   useEffect(() => {
     fetchAndProcessCrossword();
   }, []);
@@ -372,17 +371,14 @@ const Crossword = () => {
             selectTextOnFocus={true} // Automatically select all text on focus, making it easy to replace
             ref={cell.ref}
             caretHidden={true}
-            style={[
-              styles.boxInput,
-              { textTransform: "uppercase" },
-            ]} // Set selection color to transparent
+            style={[styles.boxInput, { textTransform: "uppercase" }]} // Set selection color to transparent
             maxLength={1}
             autoCorrect={false} // Disable auto-correction
             keyboardType="ascii-capable" // Restricts input to ASCII characters
             autoCapitalize={"characters"}
             selectionColor="transparent" // Set selection color to transparent to hide it
             autoCompleteType="off"
-            value={userInputs[cell.id]} // Controlled component
+            value={userInputs[cell.id] || " "} // Controlled component
             onChangeText={(text) => {
               handleInputChange(cell.id, text.toUpperCase());
               // Update the cell's letter in your state or context if you're managing the grid data dynamically (this is not shown here)
