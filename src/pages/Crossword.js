@@ -143,7 +143,7 @@ const Crossword = () => {
           <Text
             style={[
               styles.clueItemText,
-              { fontSize: 18.2, margin: 4, minHeight: 50 },
+              { fontSize: 18.2, margin: 4},
             ]}
             // textAlign: 'center'
           >
@@ -163,10 +163,10 @@ const Crossword = () => {
         <Text
           style={[
             styles.clueItemText,
-            { fontSize: 18.2, color: "transparent", margin: 4, minHeight: 50 },
+            { fontSize: 18.2, color: "transparent", margin: 4},
           ]}
         >
-          {" S\n S"}
+          {" |S"}
         </Text>
       </View>
     );
@@ -535,13 +535,14 @@ const Crossword = () => {
     </KeyboardAvoidingView>
   );
 };
+const padding1 = theme.spacing.medium;
 const { width } = Dimensions.get("window");
-const boxSize = (width - 40 - 2.001) / numberOfCellsPerRow; // 40 is the total horizontal padding
+const boxSize = (width - (padding1 * 2) - 2.001) / numberOfCellsPerRow; // 40 is the total horizontal padding
 const SPACING = 12; // Consistent spacing for layout coherence
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: padding1,
     paddingBottom: 0,
     paddingTop: 0,
     backgroundColor: "#fff",
@@ -617,7 +618,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     textAlign: "center",
-    fontSize: 17,
+    fontSize: 15.5,
     color: "#333",
     backgroundColor: "transparent", // Ensure input background doesn't distract
   },
@@ -632,9 +633,9 @@ const styles = StyleSheet.create({
   },
   boxLabel: {
     position: "absolute",
-    top: 0,
-    left: 1.25,
-    fontSize: 8,
+    top: -0.4,
+    left: 0.8,
+    fontSize: 6.3,
     color: "#333",
     fontWeight: "bold",
   },
@@ -645,7 +646,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
 
     alignItems: "flex-start", // Ensure the numbers align with the first line of the clue text
-    paddingVertical: 6,
+    paddingVertical: 3.8,
     paddingHorizontal: 6,
   },
   clueItemNumber: {
@@ -657,7 +658,7 @@ const styles = StyleSheet.create({
   clueItemText: {
     flex: 1, // Allow the clue text to wrap correctly
     color: "#000", // Black for the clue text
-    fontSize: 16,
+    fontSize: 15.5,
     fontFamily: "Arial", // Common font family
   },
   activeClue: {

@@ -13,14 +13,12 @@ export const fetchCurrentIssueNumber = async () => {
       throw new Error("Network response was not ok.");
     }
     const data = await response.json();
-    return data;  // This will return an object like { currentIssueNumber: 10 }
+    return data; // This will return an object like { currentIssueNumber: 10 }
   } catch (error) {
     console.error("Failed to fetch current issue number:", error);
-    throw error;  // Rethrow so callers can handle errors.
+    throw error; // Rethrow so callers can handle errors.
   }
 };
-
-
 
 export const fetchArticleById = async (id) => {
   try {
@@ -73,7 +71,6 @@ export const fetchCurrentIssue = async () => {
   }
 };
 
-
 export const fetchCrossword = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/current_crossword`);
@@ -101,4 +98,3 @@ export const fetchConnections = async () => {
     throw error; // Rethrow so callers can handle errors.
   }
 };
-
