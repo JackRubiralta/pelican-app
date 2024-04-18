@@ -91,6 +91,7 @@ function generateUserInputs(gridData) {
 const Crossword = () => {
   const [activeClueBoxes, setActiveClueBoxes] = useState([]);
   const [isFocused, setIsFocused] = useState(false);
+  const [cursorPositions, setCursorPositions] = useState({}); // State to keep track of cursor positions
 
   const [activeClue, setActiveClue] = useState(null);
   const [boxInFocus, setBoxInFocus] = useState(null);
@@ -246,7 +247,17 @@ const Crossword = () => {
     const firstBoxRef = GRID_DATA.find((cell) => cell.id === boxId).ref;
     firstBoxRef.current.focus();
   };
-
+  useEffect(() => {
+    // Initialize cursor positions based on user inputs
+    const initialPositions = {};
+    Object.keys(userInputs).forEach((key) => {
+      initialPositions[key] = {
+        start: userInputs[key].length,
+        end: userInputs[key].length,
+      };
+    });
+    setCursorPositions(initialPositions);
+  }, [userInputs]);
   const handleClueSelection = (clueKey) => {
     // make it scroll all the way to the top
     scrollViewRef.current.scrollTo({ y: 0, animated: true }); // Scroll to the top of the ScrollView
@@ -268,10 +279,8 @@ const Crossword = () => {
 
     // Determine the operation: insertion or deletion
     let newText = text.toUpperCase();
-    if (newText === "") {
-      newText = " "; // Insert a space if the input is empty
-    }
-    /*
+    
+    
     if (currentInput.length > previousInput.length) {
         // User is typing a new character
         newText = currentInput[currentInput.length - 1].toUpperCase(); // Just get the new character, ensure it is uppercase
@@ -282,7 +291,7 @@ const Crossword = () => {
             newText = " "; // Insert a space if the input is empty
         }
     }
-    */
+    
 
     // Update the state with the new text
     setUserInputs((prevInputs) => {
@@ -344,6 +353,7 @@ const Crossword = () => {
             <TouchableOpacity
               key={key}
               onPress={() => handleClueSelection(key)}
+
               style={[styles.clueItem, false && styles.activeClue]}
             >
               <Text style={styles.clueItemNumber}>{clue.number}.</Text>
@@ -368,11 +378,14 @@ const Crossword = () => {
         {cell.label && <Text style={styles.boxLabel}>{cell.label}</Text>}
         {!!cell.letter && (
           <TextInput
+
             selectTextOnFocus={true} // Automatically select all text on focus, making it easy to replace
             ref={cell.ref}
             caretHidden={true}
             style={[styles.boxInput, { textTransform: "uppercase" }]} // Set selection color to transparent
-            maxLength={1}
+            maxLength={2}
+            selection={cursorPositions[cell.id]} // Keep cursor to the right
+
             autoCorrect={false} // Disable auto-correction
             keyboardType="ascii-capable" // Restricts input to ASCII characters
             autoCapitalize={"characters"}
@@ -618,7 +631,8 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     textAlign: "center",
-    fontSize: 15.5,
+    top: 2.05,
+    fontSize: 15.8,
     color: "#333",
     backgroundColor: "transparent", // Ensure input background doesn't distract
   },
@@ -633,9 +647,9 @@ const styles = StyleSheet.create({
   },
   boxLabel: {
     position: "absolute",
-    top: -0.4,
-    left: 0.8,
-    fontSize: 6.3,
+    top: -0.3,
+    left: 1,
+    fontSize: 6.5,
     color: "#333",
     fontWeight: "bold",
   },
