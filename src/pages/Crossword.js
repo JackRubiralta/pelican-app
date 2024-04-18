@@ -112,7 +112,6 @@ const Crossword = () => {
     setFocusDirection(null);
   };
 
-  
   const loadUserInputs = async () => {
     try {
       const savedInputs = await JSON.parse(
@@ -142,10 +141,7 @@ const Crossword = () => {
           ]}
         >
           <Text
-            style={[
-              styles.clueItemText,
-              { fontSize: 18.2, margin: 4},
-            ]}
+            style={[styles.clueItemText, { fontSize: 18.2, margin: 4 }]}
             // textAlign: 'center'
           >
             {CLUE_DATA[activeClue].clue}
@@ -164,7 +160,7 @@ const Crossword = () => {
         <Text
           style={[
             styles.clueItemText,
-            { fontSize: 18.2, color: "transparent", margin: 4},
+            { fontSize: 18.2, color: "transparent", margin: 4 },
           ]}
         >
           {" |S"}
@@ -279,19 +275,17 @@ const Crossword = () => {
 
     // Determine the operation: insertion or deletion
     let newText = text.toUpperCase();
-    
-    
+
     if (currentInput.length > previousInput.length) {
-        // User is typing a new character
-        newText = currentInput[currentInput.length - 1].toUpperCase(); // Just get the new character, ensure it is uppercase
+      // User is typing a new character
+      newText = currentInput[currentInput.length - 1].toUpperCase(); // Just get the new character, ensure it is uppercase
     } else if (currentInput.length < previousInput.length) {
-        // User is deleting a character
-        newText = currentInput.toUpperCase(); // Use the current input as the new text
-        if (newText === "") {
-            newText = " "; // Insert a space if the input is empty
-        }
+      // User is deleting a character
+      newText = currentInput.toUpperCase(); // Use the current input as the new text
+      if (newText === "") {
+        newText = " "; // Insert a space if the input is empty
+      }
     }
-    
 
     // Update the state with the new text
     setUserInputs((prevInputs) => {
@@ -353,7 +347,6 @@ const Crossword = () => {
             <TouchableOpacity
               key={key}
               onPress={() => handleClueSelection(key)}
-
               style={[styles.clueItem, false && styles.activeClue]}
             >
               <Text style={styles.clueItemNumber}>{clue.number}.</Text>
@@ -378,14 +371,12 @@ const Crossword = () => {
         {cell.label && <Text style={styles.boxLabel}>{cell.label}</Text>}
         {!!cell.letter && (
           <TextInput
-
             selectTextOnFocus={true} // Automatically select all text on focus, making it easy to replace
             ref={cell.ref}
             caretHidden={true}
             style={[styles.boxInput, { textTransform: "uppercase" }]} // Set selection color to transparent
             maxLength={2}
             selection={cursorPositions[cell.id]} // Keep cursor to the right
-
             autoCorrect={false} // Disable auto-correction
             keyboardType="ascii-capable" // Restricts input to ASCII characters
             autoCapitalize={"characters"}
@@ -416,6 +407,7 @@ const Crossword = () => {
             }}
           />
         )}
+        <Text style={styles.boxLetter}>{userInputs[cell.id] || " "}</Text>
       </View>
     ));
   };
@@ -550,7 +542,7 @@ const Crossword = () => {
 };
 const padding1 = theme.spacing.medium;
 const { width } = Dimensions.get("window");
-const boxSize = (width - (padding1 * 2) - 2.001) / numberOfCellsPerRow; // 40 is the total horizontal padding
+const boxSize = (width - padding1 * 2 - 2.001) / numberOfCellsPerRow; // 40 is the total horizontal padding
 const SPACING = 12; // Consistent spacing for layout coherence
 const styles = StyleSheet.create({
   container: {
@@ -628,10 +620,23 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   boxInput: {
+    position: 'absolute',
+
     width: "100%",
     height: "100%",
     textAlign: "center",
     top: 2.05,
+    fontSize: 15.8,
+    color: "transparent",
+    backgroundColor: "transparent", // Ensure input background doesn't distract
+  },
+  textInput: {
+    position: 'absolute',
+
+    width: "100%",
+    height: "100%",
+    textAlign: "center",
+    top: 2.15,
     fontSize: 15.8,
     color: "#333",
     backgroundColor: "transparent", // Ensure input background doesn't distract
