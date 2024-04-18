@@ -407,7 +407,10 @@ const Crossword = () => {
             }}
           />
         )}
+        <View styles>
         <Text style={styles.boxLetter}>{userInputs[cell.id] || " "}</Text>
+
+          </View>
       </View>
     ));
   };
@@ -630,13 +633,10 @@ const styles = StyleSheet.create({
     color: "transparent",
     backgroundColor: "transparent", // Ensure input background doesn't distract
   },
-  textInput: {
-    position: 'absolute',
+  boxLetter: {
 
-    width: "100%",
-    height: "100%",
+    top: 2.1,
     textAlign: "center",
-    paddingTop: 2.15,
     fontSize: 15.8,
     color: "#333",
     backgroundColor: "transparent", // Ensure input background doesn't distract
