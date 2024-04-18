@@ -617,7 +617,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     textAlign: "center",
-    fontSize: 18,
+    fontSize: 17,
     color: "#333",
     backgroundColor: "transparent", // Ensure input background doesn't distract
   },
@@ -632,9 +632,9 @@ const styles = StyleSheet.create({
   },
   boxLabel: {
     position: "absolute",
-    top: 1.5,
-    left: 2.5,
-    fontSize: 9,
+    top: 0,
+    left: 1.25,
+    fontSize: 8,
     color: "#333",
     fontWeight: "bold",
   },
