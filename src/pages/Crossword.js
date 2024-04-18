@@ -21,7 +21,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import ErrorBox from "../components/ErrorBox"; // Adjust the import path as necessary
 
 // https://chat.openai.com/c/26276fd5-f14d-4b63-b3cb-fc18c57d2a34
-const numberOfCellsPerRow = 11; // Assuming 11 cells per row
+const numberOfCellsPerRow = 15; // Assuming 11 cells per row
 
 function createGridData(CLUE_DATA) {
   // Assuming a grid size of 11x11 based on your provided structure
