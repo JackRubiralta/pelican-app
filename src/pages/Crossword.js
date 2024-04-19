@@ -391,6 +391,8 @@ const Crossword = () => {
           ]}
         >
         {cell.label && <Text style={styles.boxLabel}>{cell.label}</Text>}
+        <Text style={styles.boxLetter}>{userInputs[cell.id] || " "}</Text>
+
         {!!cell.letter && (
           <TextInput
             selectTextOnFocus={true} // Automatically select all text on focus, making it easy to replace
@@ -430,7 +432,6 @@ const Crossword = () => {
           />
         )}
         <View styles>
-        <Text style={styles.boxLetter}>{userInputs[cell.id] || " "}</Text>
 
           </View>
       </View>
