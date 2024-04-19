@@ -19,6 +19,7 @@ import { theme } from "../theme";
 import Header from "../components/Header"; // Adjust the import path as necessary
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ErrorBox from "../components/ErrorBox"; // Adjust the import path as necessary
+import { debounce } from 'lodash';
 
 // https://chat.openai.com/c/26276fd5-f14d-4b63-b3cb-fc18c57d2a34
 const numberOfCellsPerRow = 15; // Assuming 11 cells per row
@@ -105,7 +106,7 @@ const Crossword = () => {
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
 
-  const resetFocusAndHighlight = async () => {
+  const resetFocusAndHighlight = () => {
     setActiveClue(null);
     setActiveClueBoxes([]); // Clear active clue boxes
     setBoxInFocus(null); // Clear box focus
@@ -172,7 +173,7 @@ const Crossword = () => {
   // Save user inputs to storage
   const saveUserInputs = async (input = userInputs) => {
     try {
-      await AsyncStorage.setItem("crosswordInputs", JSON.stringify(input));
+      AsyncStorage.setItem("crosswordInputs", JSON.stringify(input)); // removed await
     } catch (error) {
       console.error("Failed to save user inputs:", error);
     }
@@ -235,14 +236,14 @@ const Crossword = () => {
     setRefreshing(false);
   }, []);
 
-  const handleClueSelectionFromBox = async (boxId, clueKey) => {
+  const handleClueSelectionFromBox = useCallback((boxId, clueKey) => {
     if (!CLUE_DATA[clueKey]) return;
     setActiveClueBoxes(CLUE_DATA[clueKey].boxes);
     setActiveClue(clueKey);
     setBoxInFocus(boxId);
     const firstBoxRef = GRID_DATA.find((cell) => cell.id === boxId).ref;
     firstBoxRef.current.focus();
-  };
+  });
   useEffect(() => {
     // Initialize cursor positions based on user inputs
     const initialPositions = {};
@@ -254,7 +255,7 @@ const Crossword = () => {
     });
     setCursorPositions(initialPositions);
   }, [userInputs]);
-  const handleClueSelection = (clueKey) => {
+  const handleClueSelection = useCallback((clueKey) => {
     // make it scroll all the way to the top
     scrollViewRef.current.scrollTo({ y: 0, animated: true }); // Scroll to the top of the ScrollView
 
@@ -266,9 +267,14 @@ const Crossword = () => {
       (cell) => cell.id === CLUE_DATA[clueKey].boxes[0]
     ).ref;
     firstBoxRef.current.focus();
-  };
-
-  const handleInputChange = async (id, text) => {
+  });
+  const debouncedSaveUserInputs = useCallback(debounce((inputs) => {
+    AsyncStorage.setItem("crosswordInputs", JSON.stringify(inputs))
+      .then(() => console.log("Inputs saved successfully!"))
+      .catch(error => console.error("Failed to save user inputs:", error));
+  }, 2000), []);
+  
+  const handleInputChange = useCallback((id, text) => {
     // Get the current and previous input values
     const currentInput = text;
     const previousInput = userInputs[id] || " ";
@@ -290,7 +296,7 @@ const Crossword = () => {
     // Update the state with the new text
     setUserInputs((prevInputs) => {
       const updatedInputs = { ...prevInputs, [id]: newText };
-      saveUserInputs(updatedInputs);
+      debouncedSaveUserInputs(updatedInputs);
       return updatedInputs;
     });
 
@@ -307,8 +313,15 @@ const Crossword = () => {
         nextBoxRef.current.focus();
       }
     }
-  };
-
+  }, [userInputs]);
+  /*
+  useEffect(() => {
+    // Cleanup function to cancel the debounced call if the component unmounts
+    return () => {
+      debouncedSaveUserInputs.cancel();
+    };
+  }, [debouncedSaveUserInputs]);
+  */
   const revealAnswers = () => {
     Alert.alert(
       "Reveal All Answers", // Title of the alert
@@ -357,6 +370,16 @@ const Crossword = () => {
     );
   };
 
+
+
+
+
+
+
+
+
+
+  
   const renderGrid = () => {
     return GRID_DATA.map((cell, index) => {
       const isLastRow = Math.floor(index / numberOfCellsPerRow) === numberOfCellsPerRow - 1;
@@ -388,12 +411,12 @@ const Crossword = () => {
             selectionColor="transparent" // Set selection color to transparent to hide it
             autoCompleteType="off"
             value={userInputs[cell.id] || " "} // Controlled component
-            onChangeText={async (text) => {
+            onChangeText={(text) => {
               handleInputChange(cell.id, text.toUpperCase());
               // Update the cell's letter in your state or context if you're managing the grid data dynamically (this is not shown here)
               // Move focus to the next box in activeClueBoxes
             }}
-            onFocus={async () => {
+            onFocus={() => {
               if (activeClueBoxes.includes(cell.id)) {
                 // If the focused box is part of the currently active clue, keep everything as is
                 setBoxInFocus(cell.id);
@@ -419,7 +442,27 @@ const Crossword = () => {
       </View>
       );
   });
+  
   };
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   const checkAnswers = () => {
     let isCorrect = true;
     const newCorrectness = {};
