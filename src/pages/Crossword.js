@@ -105,7 +105,7 @@ const Crossword = () => {
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
 
-  const resetFocusAndHighlight = () => {
+  const resetFocusAndHighlight = async () => {
     setActiveClue(null);
     setActiveClueBoxes([]); // Clear active clue boxes
     setBoxInFocus(null); // Clear box focus
@@ -235,7 +235,7 @@ const Crossword = () => {
     setRefreshing(false);
   }, []);
 
-  const handleClueSelectionFromBox = (boxId, clueKey) => {
+  const handleClueSelectionFromBox = async (boxId, clueKey) => {
     if (!CLUE_DATA[clueKey]) return;
     setActiveClueBoxes(CLUE_DATA[clueKey].boxes);
     setActiveClue(clueKey);
@@ -268,7 +268,7 @@ const Crossword = () => {
     firstBoxRef.current.focus();
   };
 
-  const handleInputChange = (id, text) => {
+  const handleInputChange = async (id, text) => {
     // Get the current and previous input values
     const currentInput = text;
     const previousInput = userInputs[id] || " ";
@@ -288,7 +288,7 @@ const Crossword = () => {
     }
 
     // Update the state with the new text
-    setUserInputs((prevInputs) => {
+    setUserInputs(async (prevInputs) => {
       const updatedInputs = { ...prevInputs, [id]: newText };
       saveUserInputs(updatedInputs);
       return updatedInputs;
@@ -388,7 +388,7 @@ const Crossword = () => {
             selectionColor="transparent" // Set selection color to transparent to hide it
             autoCompleteType="off"
             value={userInputs[cell.id] || " "} // Controlled component
-            onChangeText={(text) => {
+            onChangeText={async (text) => {
               handleInputChange(cell.id, text.toUpperCase());
               // Update the cell's letter in your state or context if you're managing the grid data dynamically (this is not shown here)
               // Move focus to the next box in activeClueBoxes
@@ -646,7 +646,7 @@ const styles = StyleSheet.create({
   },
   boxLetter: {
 
-    top: 2.1,
+    top: 2.2,
     textAlign: "center",
     fontSize: 15.8,
     color: "#333",
