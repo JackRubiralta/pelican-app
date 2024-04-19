@@ -549,7 +549,7 @@ const Crossword = () => {
 };
 const padding1 = theme.spacing.medium;
 const { width } = Dimensions.get("window");
-const boxSize = (width - numberOfCellsPerRow * 2) / numberOfCellsPerRow; // 40 is the total horizontal padding
+const boxSize = (width - padding1 * 2 - 4.001 ) / numberOfCellsPerRow; // 40 is the total horizontal padding
 const SPACING = 12; // Consistent spacing for layout coherence
 const styles = StyleSheet.create({
   container: {
