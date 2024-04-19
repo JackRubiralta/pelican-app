@@ -288,7 +288,7 @@ const Crossword = () => {
     }
 
     // Update the state with the new text
-    setUserInputs(async (prevInputs) => {
+    setUserInputs((prevInputs) => {
       const updatedInputs = { ...prevInputs, [id]: newText };
       saveUserInputs(updatedInputs);
       return updatedInputs;
@@ -393,7 +393,7 @@ const Crossword = () => {
               // Update the cell's letter in your state or context if you're managing the grid data dynamically (this is not shown here)
               // Move focus to the next box in activeClueBoxes
             }}
-            onFocus={() => {
+            onFocus={async () => {
               if (activeClueBoxes.includes(cell.id)) {
                 // If the focused box is part of the currently active clue, keep everything as is
                 setBoxInFocus(cell.id);
