@@ -281,10 +281,11 @@ const Crossword = () => {
   
     // Determine the operation: insertion or deletion
     const operationType = currentInput.length > previousInput.length ? 'insert' : 'delete';
-  
+    newText = currentInput[currentInput.length - 1] || " "; // Just get the new character, ensure it is uppercase
+
     // Update the userInputs state
     setUserInputs((prevInputs) => {
-      const updatedInputs = { ...prevInputs, [id]: currentInput };
+      const updatedInputs = { ...prevInputs, [id]:newText };
       debouncedSaveUserInputs(updatedInputs);
       return updatedInputs;
     });
