@@ -10,7 +10,7 @@ import {
   Alert,
   Dimensions,
 } from "react-native";
-
+import { theme } from "../theme";
 // Other imports remain unchanged...
 
 
@@ -160,6 +160,7 @@ const Connections = () => {
           ))}
         </View>
         <View style={styles.footer}>
+        <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[
               styles.button,
@@ -171,7 +172,10 @@ const Connections = () => {
             disabled={selectedItems.length !== CONNECTIONS_COUNT}
           >
             <Text style={styles.checkButtonText}>Submit</Text>
+          
           </TouchableOpacity>
+          </View>
+
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -195,7 +199,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonContainer: {
-   
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "50%",
+    alignSelf: "center",
+    alignSelf: "center",
+
   },
   solvedConnectionContainer: {
     height: boxSize,
@@ -211,6 +220,12 @@ const styles = StyleSheet.create({
     
 
   },
+  checkButtonText: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "600",
+    textAlign: "center",
+  },
   solvedConnectionItems: {
     // ... other styles remain unchanged ...
     fontSize: 16, // Match fontSize with itemText
@@ -218,13 +233,20 @@ const styles = StyleSheet.create({
     color: '#424242', // Match color with itemText
   },
   button: {
- 
+    flex: 1,
+    marginHorizontal: 5,
   },
   checkButton: {
-    backgroundColor: "#66BB6A", // Green color for submit button
+    backgroundColor: "#4169E1",
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    borderRadius: 8,
   },
   buttonDisabled: {
     backgroundColor: "#BDBDBD", // Grey color when disabled
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    borderRadius: 8,
   },
   footer: {
     marginTop: 20,
