@@ -275,45 +275,39 @@ const Crossword = () => {
   }, 2000), []);
   
   const handleInputChange = useCallback((id, text) => {
-    // Get the current and previous input values
-    const currentInput = text;
-    const previousInput = userInputs[id] || " ";
-
+    // Ensure the input text is handled as a non-null string and converted to upper case
+    const currentInput = (text || "").toUpperCase();
+    const previousInput = (userInputs[id] || "").toUpperCase();
+  
     // Determine the operation: insertion or deletion
-    let newText = text.toUpperCase();
-
-    if (currentInput.length > previousInput.length) {
-      // User is typing a new character
-      newText = currentInput[currentInput.length - 1].toUpperCase(); // Just get the new character, ensure it is uppercase
-    } else if (currentInput.length < previousInput.length) {
-      // User is deleting a character
-      newText = currentInput.toUpperCase(); // Use the current input as the new text
-      if (newText === "") {
-        newText = " "; // Insert a space if the input is empty
-      }
-    }
-
-    // Update the state with the new text
+    const operationType = currentInput.length > previousInput.length ? 'insert' : 'delete';
+  
+    // Update the userInputs state
     setUserInputs((prevInputs) => {
-      const updatedInputs = { ...prevInputs, [id]: newText };
+      const updatedInputs = { ...prevInputs, [id]: currentInput };
       debouncedSaveUserInputs(updatedInputs);
       return updatedInputs;
     });
-
-    // Managing cursor and focus behavior on deletion
+  
+    // Find the current index in the active clue boxes
     const currentIndex = activeClueBoxes.indexOf(id);
-    if (currentIndex !== -1) {
-      const nextIndex =
-        currentInput.length < previousInput.length
-          ? currentIndex - 1
-          : currentIndex + 1;
-      if (nextIndex >= 0 && nextIndex < activeClueBoxes.length) {
-        const nextBoxId = activeClueBoxes[nextIndex];
-        const nextBoxRef = GRID_DATA.find((c) => c.id === nextBoxId).ref;
-        nextBoxRef.current.focus();
-      }
+    let nextIndex = currentIndex;
+    
+    if (operationType === 'insert' && currentInput.length > previousInput.length) {
+      nextIndex = currentIndex + 1;
+    } else if (operationType === 'delete' && currentInput.length < previousInput.length) {
+      nextIndex = currentIndex - 1;
     }
-  }, [userInputs]);
+  
+    // Focus the next appropriate box if within valid range
+    if (nextIndex >= 0 && nextIndex < activeClueBoxes.length) {
+      const nextBoxId = activeClueBoxes[nextIndex];
+      const nextBoxRef = GRID_DATA.find((c) => c.id === nextBoxId).ref;
+      nextBoxRef.current.focus();
+    }
+  }, [activeClueBoxes, GRID_DATA, userInputs, debouncedSaveUserInputs]);
+  
+  
   /*
   useEffect(() => {
     // Cleanup function to cancel the debounced call if the component unmounts
