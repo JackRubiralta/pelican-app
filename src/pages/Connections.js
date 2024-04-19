@@ -10,12 +10,19 @@ import {
   Alert,
   Dimensions,
 } from "react-native";
+
+// Other imports remain unchanged...
+
+
+
 import ErrorBox from "../components/ErrorBox";
 import Header from "../components/Header";
 import { fetchConnections } from "../API";
 const padding = 20;
 
 const CONNECTIONS_COUNT = 4;
+
+
 const Connections = () => {
   const [data, setData] = useState({});
   const [selectedItems, setSelectedItems] = useState([]);
@@ -171,104 +178,108 @@ const Connections = () => {
   );
 };
 
-const borderWidth = 3;
-const numberOfCellsPerRow = 4;
-const boxHeight = 75; // Increased height for better visibility and consistency
+
+const boxMargin = 10; // Margin for each box
+const gridSize = 4; // Number of items in each row and column
+const screenWidth = Dimensions.get('window').width; // Get the screen width
+const boxSize = (screenWidth - padding * 2 - boxMargin * (gridSize)) / gridSize; // Calculate the size for each box
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff", // Bright white background
+    backgroundColor: '#F5F5F5', // Light grey background for subtle texture
   },
   scrollViewContent: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    marginBottom: 10,
-  },
-  itemText: {
-    textTransform: "uppercase",
-    fontSize: 15,
-  },
-  item: {
-    width: "23%", 
-    height: boxHeight, 
-    margin: 3,
-    
-    marginHorizontal: "1%",
-    paddingVertical: 15,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: borderWidth,
-    borderColor: "#3A3A3C", // Consistent dark border for better contrast
-    backgroundColor: "#EAEAEA", // Light grey for default state
-    borderRadius: 10,
-    elevation: 2,
-  },
-  selectedItem: {
-    backgroundColor: "#AED581", // Light green for selected items
-  },
-  solvedConnectionContainer: {
-    width: "98%",
-    flex: 1,
-    marginHorizontal: "1%",
-    height: boxHeight,
-    flexDirection: "column",
-    alignSelf: "center",
-    justifyContent: "center",
-    alignItems: "center",
-    marginVertical: 3,
-    paddingHorizontal: 10,
-    borderWidth: borderWidth,
-    borderColor: "#3A3A3C",
-    backgroundColor: "#C5E1A5", // Soft green for solved connections
-    borderRadius: 10,
-    elevation: 2,
-  },
-  solvedConnectionTitle: {
-    fontWeight: "bold",
-    fontSize: 18,
-    color: "#1B5E20", // Deep green for headers
-    textTransform: "uppercase",
-  },
-  solvedConnectionItems: {
-    fontSize: 16,
-    color: "#33691E", // Dark green to match item text
-    textAlign: "center",
-    textTransform: "uppercase",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    padding: 10,
+   
+  },
+  solvedConnectionContainer: {
+    height: boxSize,
+    margin: boxMargin / 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    width: boxSize * 4 + boxMargin * (gridSize - 1),
+    backgroundColor: '#E8F5E9', // A lighter shade for solved connections
+    borderWidth: 1,
+    borderColor: '#E0E0E0', // Softer border color
+    borderRadius: 8, // Rounded corners
+    
+
+  },
+  solvedConnectionItems: {
+    // ... other styles remain unchanged ...
+    fontSize: 16, // Match fontSize with itemText
+    fontWeight: 'bold', // Match fontWeight with itemText
+    color: '#424242', // Match color with itemText
   },
   button: {
-    width: "50%",
-    padding: 10,
-    borderRadius: 10,
-    backgroundColor: "#66BB6A",
+ 
   },
   checkButton: {
-    backgroundColor: "#66BB6A",
+    backgroundColor: "#66BB6A", // Green color for submit button
   },
   buttonDisabled: {
-    backgroundColor: "#BDBDBD",
+    backgroundColor: "#BDBDBD", // Grey color when disabled
   },
   footer: {
-    marginTop: 10,
-    marginBottom: 10,
+    marginTop: 20,
+    marginBottom: 20,
     justifyContent: "center",
     width: "100%",
   },
   instructions: {
     textAlign: "center",
-    fontSize: 16,
-    color: "#424242", // Added color to make text more visible and consistent with overall design
-    fontWeight: "bold", // Added bold to make instructions stand out
-    marginVertical: 10, // Added vertical margin for better spacing
+    fontSize: 18,
+    color: "#424242",
+    fontWeight: "bold",
+    marginVertical: 20,
   },
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
+  item: {
+    width: boxSize,
+    height: boxSize,
+    margin: boxMargin / 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    borderRadius: 8, // Rounded corners for items
+      // ... other styles remain unchanged ...
+      backgroundColor: '#E0E0E0', // Light grey background color
+      borderRadius: 10, // Rounded corners
+      elevation: 1, // Subtle shadow on Android
+      // For iOS, use shadow properties:
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+    
+  
+  },
+  selectedItem: {
+    backgroundColor: '#A5D6A7', // Change to a green color to indicate selection
+  },
+  itemText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    textAlign: 'center',
+    color: '#424242',
+  },
+  // ... Add other styles that might be needed ...
 });
+
 export default Connections;

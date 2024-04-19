@@ -36,6 +36,12 @@ const GamesPage = () => {
         >
           <Text style={styles.buttonText}>Play Crossword</Text>
         </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.gameButton} 
+          onPress={navigateToConnections}
+        >
+          <Text style={styles.buttonText}>Play Connections</Text>
+        </TouchableOpacity>
         {/*<TouchableOpacity 
           style={styles.gameButton} 
           onPress={navigateToSpellingBee}
@@ -46,12 +52,7 @@ const GamesPage = () => {
        
 
 
-        <TouchableOpacity 
-          style={styles.gameButton} 
-          onPress={navigateToConnections}
-        >
-          <Text style={styles.buttonText}>Play Connections</Text>
-        </TouchableOpacity>*/}
+       */}
       </View>
     </View>
   );
