@@ -698,7 +698,6 @@ const styles = StyleSheet.create({
 
     alignItems: "flex-start", // Ensure the numbers align with the first line of the clue text
     paddingVertical: 3.8,
-    paddingHorizontal: 6,
   },
   clueItemNumber: {
     fontWeight: "bold",
