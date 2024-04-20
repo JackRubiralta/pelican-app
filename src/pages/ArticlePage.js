@@ -234,7 +234,7 @@ const ArticlePage = () => {
 const SIZE_MULTIPLIER = 1.15;
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: theme.spacing.large,
+    paddingHorizontal: theme.spacing.medium,
     paddingBottom: 0,
     paddingTop: 0,
     backgroundColor: theme.colors.background,

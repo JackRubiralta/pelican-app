@@ -29,7 +29,7 @@ const GamesPage = () => {
     <View style={[{backgroundColor: '#ffff'}, { flex: 1}]}>
       <Header title="Games" />
       <View style={styles.container}>
-        <View style={{height: 20}}></View>
+        <View style={{height: theme.spacing.medium}}></View>
         <TouchableOpacity 
           style={styles.gameButton} 
           onPress={navigateToCrossword}
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'top',
-    padding: 20,
+    padding: theme.spacing.medium,
     paddingTop: 0,
     backgroundColor: '#ffff',
   },

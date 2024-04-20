@@ -72,7 +72,7 @@ const NewsBlock = ({ article }) => {
 };
 const styles = StyleSheet.create({
   storyWrapper: {
-    padding: theme.spacing.large,
+    padding: theme.spacing.medium,
     backgroundColor: "#fff",
     position: "relative",
     paddingVertical: 0,

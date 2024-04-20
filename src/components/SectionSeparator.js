@@ -17,7 +17,8 @@ const styles = StyleSheet.create({
     marginVertical: theme.spacing.large + 7 + 3,
 
     marginBottom: 5,
-    width: "90%",
+    paddingHorizontal: theme.spacing.medium,
+    width: "100%",
   },
   separator: {
     height: 2.4,

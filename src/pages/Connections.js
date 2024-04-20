@@ -18,7 +18,7 @@ import { theme } from "../theme";
 import ErrorBox from "../components/ErrorBox";
 import Header from "../components/Header";
 import { fetchConnections } from "../API";
-const padding = 20;
+const padding = theme.spacing.medium;
 
 const CONNECTIONS_COUNT = 4;
 

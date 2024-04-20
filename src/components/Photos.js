@@ -15,7 +15,7 @@ const Photos = ({ imageInfo, isSquare = false, showCaption = false }) => {
       Image.getSize(
         imageUrl,
         (width, height) => {
-          const screenWidth = Dimensions.get("window").width - 40; // Assuming 20 padding on each side
+          const screenWidth = Dimensions.get("window").width - (theme.spacing.medium * 2); // Assuming 20 padding on each side
           const scaleFactor = width / screenWidth;
           const imageHeight = height / scaleFactor;
           setImageHeight(imageHeight);
