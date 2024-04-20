@@ -19,7 +19,7 @@ import { theme } from "../theme";
 import Header from "../components/Header"; // Adjust the import path as necessary
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ErrorBox from "../components/ErrorBox"; // Adjust the import path as necessary
-import { debounce } from 'lodash';
+import { debounce } from "lodash";
 
 // https://chat.openai.com/c/26276fd5-f14d-4b63-b3cb-fc18c57d2a34
 const numberOfCellsPerRow = 15; // Assuming 11 cells per row
@@ -119,7 +119,6 @@ const Crossword = () => {
         await AsyncStorage.getItem("crosswordInputs")
       );
       if (savedInputs) {
-        console.log(savedInputs);
         await setUserInputs(savedInputs);
       } else {
         const resetInputs = {};
@@ -192,7 +191,7 @@ const Crossword = () => {
     setError(null);
     try {
       const data = await fetchCrossword();
-      const oldData = JSON.parse(await AsyncStorage.getItem("crosswordData1"));
+      const oldData = JSON.parse(await AsyncStorage.getItem("crosswordData"));
 
       if (!isEqual(oldData, data)) {
         // If the crossword data is different, reset the userInputs
@@ -202,7 +201,7 @@ const Crossword = () => {
 
       await setCLUE_DATA(data); // Save the fetched data
       await AsyncStorage.setItem("crosswordData", JSON.stringify(data)); // Store the current crossword data for future comparisons
-      const gridData = createGridData(data); // Process fetched data to create grid
+      const gridData = await createGridData(data); // Process fetched data to create grid
       gridData.forEach((cell) => {
         cell.ref = React.createRef();
       });
@@ -268,47 +267,59 @@ const Crossword = () => {
     ).ref;
     firstBoxRef.current.focus();
   });
-  const debouncedSaveUserInputs = useCallback(debounce((inputs) => {
-    AsyncStorage.setItem("crosswordInputs", JSON.stringify(inputs))
-      .then(() => console.log("Inputs saved successfully!"))
-      .catch(error => console.error("Failed to save user inputs:", error));
-  }, 2000), []);
-  
-  const handleInputChange = useCallback((id, text) => {
-    // Ensure the input text is handled as a non-null string and converted to upper case
-    const currentInput = (text || "").toUpperCase();
-    const previousInput = (userInputs[id] || " ").toUpperCase();
-  
-    // Determine the operation: insertion or deletion
-    const operationType = currentInput.length > previousInput.length ? 'insert' : 'delete';
-    newText = currentInput[currentInput.length - 1] || " "; // Just get the new character, ensure it is uppercase
+  const debouncedSaveUserInputs = useCallback(
+    debounce((inputs) => {
+      AsyncStorage.setItem("crosswordInputs", JSON.stringify(inputs))
+        .then(() => console.log("Inputs saved successfully!"))
+        .catch((error) => console.error("Failed to save user inputs:", error));
+    }, 2000),
+    []
+  );
 
-    // Update the userInputs state
-    setUserInputs((prevInputs) => {
-      const updatedInputs = { ...prevInputs, [id]:newText };
-      debouncedSaveUserInputs(updatedInputs);
-      return updatedInputs;
-    });
-  
-    // Find the current index in the active clue boxes
-    const currentIndex = activeClueBoxes.indexOf(id);
-    let nextIndex = currentIndex;
-    
-    if (operationType === 'insert' && currentInput.length > previousInput.length) {
-      nextIndex = currentIndex + 1;
-    } else if (operationType === 'delete' && currentInput.length < previousInput.length) {
-      nextIndex = currentIndex - 1;
-    }
-  
-    // Focus the next appropriate box if within valid range
-    if (nextIndex >= 0 && nextIndex < activeClueBoxes.length) {
-      const nextBoxId = activeClueBoxes[nextIndex];
-      const nextBoxRef = GRID_DATA.find((c) => c.id === nextBoxId).ref;
-      nextBoxRef.current.focus();
-    }
-  }, [activeClueBoxes, GRID_DATA, userInputs, debouncedSaveUserInputs]);
-  
-  
+  const handleInputChange = useCallback(
+    (id, text) => {
+      // Ensure the input text is handled as a non-null string and converted to upper case
+      const currentInput = (text || "").toUpperCase();
+      const previousInput = (userInputs[id] || " ").toUpperCase();
+
+      // Determine the operation: insertion or deletion
+      const operationType =
+        currentInput.length > previousInput.length ? "insert" : "delete";
+      newText = currentInput[currentInput.length - 1] || " "; // Just get the new character, ensure it is uppercase
+
+      // Update the userInputs state
+      setUserInputs((prevInputs) => {
+        const updatedInputs = { ...prevInputs, [id]: newText };
+        debouncedSaveUserInputs(updatedInputs);
+        return updatedInputs;
+      });
+
+      // Find the current index in the active clue boxes
+      const currentIndex = activeClueBoxes.indexOf(id);
+      let nextIndex = currentIndex;
+
+      if (
+        operationType === "insert" &&
+        currentInput.length > previousInput.length
+      ) {
+        nextIndex = currentIndex + 1;
+      } else if (
+        operationType === "delete" &&
+        currentInput.length < previousInput.length
+      ) {
+        nextIndex = currentIndex - 1;
+      }
+
+      // Focus the next appropriate box if within valid range
+      if (nextIndex >= 0 && nextIndex < activeClueBoxes.length) {
+        const nextBoxId = activeClueBoxes[nextIndex];
+        const nextBoxRef = GRID_DATA.find((c) => c.id === nextBoxId).ref;
+        nextBoxRef.current.focus();
+      }
+    },
+    [activeClueBoxes, GRID_DATA, userInputs, debouncedSaveUserInputs]
+  );
+
   /*
   useEffect(() => {
     // Cleanup function to cancel the debounced call if the component unmounts
@@ -357,7 +368,9 @@ const Crossword = () => {
               onPress={() => handleClueSelection(key)}
               style={[styles.clueItem, false && styles.activeClue]}
             >
-              <Text style={styles.clueItemNumber }>{clue.number}.{clue.number <= 9 && " "}</Text>
+              <Text style={styles.clueItemNumber}>
+                {clue.number}.{clue.number <= 9 && " "}
+              </Text>
               <Text style={styles.clueItemText}>{clue.clue}</Text>
             </TouchableOpacity>
           ))}
@@ -365,20 +378,12 @@ const Crossword = () => {
     );
   };
 
-
-
-
-
-
-
-
-
-
-  
   const renderGrid = () => {
     return GRID_DATA.map((cell, index) => {
-      const isLastRow = Math.floor(index / numberOfCellsPerRow) === numberOfCellsPerRow - 1;
-      const isLastColumn = (index % numberOfCellsPerRow) === numberOfCellsPerRow - 1;
+      const isLastRow =
+        Math.floor(index / numberOfCellsPerRow) === numberOfCellsPerRow - 1;
+      const isLastColumn =
+        index % numberOfCellsPerRow === numberOfCellsPerRow - 1;
       return (
         <View
           key={index}
@@ -391,73 +396,53 @@ const Crossword = () => {
             isLastColumn && styles.lastColumnBox,
           ]}
         >
-        {cell.label && <Text style={styles.boxLabel}>{cell.label}</Text>}
-        <Text style={styles.boxLetter}>{userInputs[cell.id] || " "}</Text>
+          {cell.label && <Text style={styles.boxLabel}>{cell.label}</Text>}
+          <Text style={styles.boxLetter}>{userInputs[cell.id] || " "}</Text>
 
-        {!!cell.letter && (
-          <TextInput
-            selectTextOnFocus={true} // Automatically select all text on focus, making it easy to replace
-            ref={cell.ref}
-            caretHidden={true}
-            style={[styles.boxInput, { textTransform: "uppercase" }]} // Set selection color to transparent
-            maxLength={2}
-            selection={cursorPositions[cell.id]} // Keep cursor to the right
-            autoCorrect={false} // Disable auto-correction
-            keyboardType="ascii-capable" // Restricts input to ASCII characters
-            autoCapitalize={"characters"}
-            selectionColor="transparent" // Set selection color to transparent to hide it
-            autoCompleteType="off"
-            value={userInputs[cell.id] || " "} // Controlled component
-            onChangeText={(text) => {
-              handleInputChange(cell.id, text.toUpperCase());
-              // Update the cell's letter in your state or context if you're managing the grid data dynamically (this is not shown here)
-              // Move focus to the next box in activeClueBoxes
-            }}
-            onFocus={() => {
-              if (activeClueBoxes.includes(cell.id)) {
-                // If the focused box is part of the currently active clue, keep everything as is
-                setBoxInFocus(cell.id);
-              } else {
-                // Find a new clue to activate based on the focus direction or switch to the other direction if necessary
-                const clueKey =
-                  cell.clues.find(
-                    (clue) => CLUE_DATA[clue].direction === focusDirection
-                  ) ||
-                  cell.clues.find(
-                    (clue) => CLUE_DATA[clue].direction !== focusDirection
-                  );
-                handleClueSelectionFromBox(cell.id, clueKey);
-                setBoxInFocus(cell.id);
-              }
-            }}
-          />
-        )}
-        <View styles>
+          {!!cell.letter && (
+            <TextInput
+              ref={cell.ref}
+              caretHidden={true}
+              style={[styles.boxInput, { textTransform: "uppercase" }]} // Set selection color to transparent
+              maxLength={2}
+              selection={cursorPositions[cell.id]} // Keep cursor to the right
+              autoCorrect={false} // Disable auto-correction
+              keyboardType="ascii-capable" // Restricts input to ASCII characters
+              autoCapitalize={"characters"}
+              selectionColor="transparent" // Set selection color to transparent to hide it
+              autoCompleteType="off"
+              value={userInputs[cell.id] || " "} // Controlled component
+              onChangeText={(text) => {
+                console.log("|"+text+"|");
 
-          </View>
-      </View>
+                handleInputChange(cell.id, text.toUpperCase());
+                // Update the cell's letter in your state or context if you're managing the grid data dynamically (this is not shown here)
+                // Move focus to the next box in activeClueBoxes
+              }}
+              onFocus={() => {
+                if (activeClueBoxes.includes(cell.id)) {
+                  // If the focused box is part of the currently active clue, keep everything as is
+                  setBoxInFocus(cell.id);
+                } else {
+                  // Find a new clue to activate based on the focus direction or switch to the other direction if necessary
+                  const clueKey =
+                    cell.clues.find(
+                      (clue) => CLUE_DATA[clue].direction === focusDirection
+                    ) ||
+                    cell.clues.find(
+                      (clue) => CLUE_DATA[clue].direction !== focusDirection
+                    );
+                  handleClueSelectionFromBox(cell.id, clueKey);
+                  setBoxInFocus(cell.id);
+                }
+              }}
+            />
+          )}
+          <View styles></View>
+        </View>
       );
-  });
-  
+    });
   };
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   const checkAnswers = () => {
     let isCorrect = true;
@@ -535,9 +520,7 @@ const Crossword = () => {
     );
   }
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-    >
+    <KeyboardAvoidingView style={{ flex: 1 }}>
       <ScrollView ref={scrollViewRef}>
         <Header title="Crossword" />
 
@@ -588,7 +571,7 @@ const Crossword = () => {
 };
 const padding1 = theme.spacing.medium;
 const { width } = Dimensions.get("window");
-const boxSize = (width - padding1 * 2 - 4.001 ) / numberOfCellsPerRow; // 40 is the total horizontal padding
+const boxSize = (width - padding1 * 2 - 4.001) / numberOfCellsPerRow; // 40 is the total horizontal padding
 const SPACING = 12; // Consistent spacing for layout coherence
 const styles = StyleSheet.create({
   container: {
@@ -673,7 +656,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   boxInput: {
-    position: 'absolute',
+    position: "absolute",
 
     width: "100%",
     height: "100%",
@@ -682,7 +665,6 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent", // Ensure input background doesn't distract
   },
   boxLetter: {
-
     top: 2.2,
     textAlign: "center",
     fontSize: 15.8,
