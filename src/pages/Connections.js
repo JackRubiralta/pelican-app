@@ -38,70 +38,86 @@ const Connections = () => {
 
   const positionRefs = useRef(new Map());
 
- // A utility function to compare data
-const isEqual = (data1, data2) => {
-  return JSON.stringify(data1) === JSON.stringify(data2);
-};
+  // A utility function to compare data
+  const isEqual = (data1, data2) => {
+    return JSON.stringify(data1) === JSON.stringify(data2);
+  };
 
-const loadData = useCallback(async () => {
-  setIsLoading(true);
-  setError(null);
+  const loadData = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
 
-  try {
-    const fetchedData = await fetchConnections();
-    const oldDataJSON = await AsyncStorage.getItem("connectionData");
-    const oldData = oldDataJSON ? JSON.parse(oldDataJSON) : null;
+    try {
+      const fetchedData = await fetchConnections();
+      const oldDataJSON = await AsyncStorage.getItem("connectionData");
+      const oldData = oldDataJSON ? JSON.parse(oldDataJSON) : null;
 
-    const savedStateJSON = await AsyncStorage.getItem("gameState");
-    const savedState = savedStateJSON ? JSON.parse(savedStateJSON) : null;
+      const savedStateJSON = await AsyncStorage.getItem("gameState");
+      const savedState = savedStateJSON ? JSON.parse(savedStateJSON) : null;
 
-    if (!isEqual(oldData, fetchedData)) {
-      // If the data from the API has changed, reset the game state
-      setData(fetchedData);
-      setSolvedConnections({});
-      setMistakes(0);
-      await AsyncStorage.multiSet([
-        ["connectionData", JSON.stringify(fetchedData)],
-        ["gameState", JSON.stringify({ data: fetchedData, solvedConnections: {}, mistakes: 0 })]
-      ]);
-    } else if (savedState) {
-      // If the data is the same, load the saved state
-      setData(savedState.data);
-      setSolvedConnections(savedState.solvedConnections);
-      setMistakes(savedState.mistakes);
-    } else {
-      // No saved state, initialize with fetched data
-      setData(fetchedData);
-      setSolvedConnections({});
-      setMistakes(0);
-      await AsyncStorage.setItem("gameState", JSON.stringify({ data: fetchedData, solvedConnections: {}, mistakes: 0 }));
+      if (!isEqual(oldData, fetchedData)) {
+        // If the data from the API has changed, reset the game state
+        setData(fetchedData);
+        setSolvedConnections({});
+        setMistakes(0);
+        await AsyncStorage.multiSet([
+          ["connectionData", JSON.stringify(fetchedData)],
+          [
+            "gameState",
+            JSON.stringify({
+              data: fetchedData,
+              solvedConnections: {},
+              mistakes: 0,
+            }),
+          ],
+        ]);
+      } else if (savedState) {
+        // If the data is the same, load the saved state
+        setData(savedState.data);
+        setSolvedConnections(savedState.solvedConnections);
+        setMistakes(savedState.mistakes);
+      } else {
+        // No saved state, initialize with fetched data
+        setData(fetchedData);
+        setSolvedConnections({});
+        setMistakes(0);
+        await AsyncStorage.setItem(
+          "gameState",
+          JSON.stringify({
+            data: fetchedData,
+            solvedConnections: {},
+            mistakes: 0,
+          })
+        );
+      }
+    } catch (error) {
+      setError(error.message);
     }
-  } catch (error) {
-    setError(error.message);
-  }
-  setIsLoading(false);
-}, []);
+    setIsLoading(false);
+  }, []);
 
-useEffect(() => {
-  loadData();
-}, [loadData]);
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
-// Ensure that game state is saved whenever data, solvedConnections, or mistakes change
-useEffect(() => {
-  if (!isLoading) {
-    saveGameState().catch(error => console.error("Failed to save game state:", error));
-  }
-}, [data, solvedConnections, mistakes, isLoading]);
+  // Ensure that game state is saved whenever data, solvedConnections, or mistakes change
+  useEffect(() => {
+    if (!isLoading) {
+      saveGameState().catch((error) =>
+        console.error("Failed to save game state:", error)
+      );
+    }
+  }, [data, solvedConnections, mistakes, isLoading]);
 
-// Assume saveGameState function is defined similarly to saveUserInputs
-const saveGameState = async () => {
-  try {
-    const gameState = JSON.stringify({ data, solvedConnections, mistakes });
-    await AsyncStorage.setItem("gameState", gameState);
-  } catch (error) {
-    console.error("Failed to save game state:", error);
-  }
-};
+  // Assume saveGameState function is defined similarly to saveUserInputs
+  const saveGameState = async () => {
+    try {
+      const gameState = JSON.stringify({ data, solvedConnections, mistakes });
+      await AsyncStorage.setItem("gameState", gameState);
+    } catch (error) {
+      console.error("Failed to save game state:", error);
+    }
+  };
   const shakeAnimation = (key) => {
     const position = positionRefs.current.get(key) || new Animated.ValueXY();
     positionRefs.current.set(key, position);
@@ -199,7 +215,7 @@ const saveGameState = async () => {
   const revealAllAnswers = useCallback(() => {
     animateAllItems(() => {
       const newSolvedConnections = { ...solvedConnections };
-  
+
       // Loop through all connections in data
       Object.keys(data).forEach((key) => {
         // Only add to solved connections if not already solved
@@ -207,21 +223,21 @@ const saveGameState = async () => {
           newSolvedConnections[key] = data[key];
         }
       });
-  
+
       // Update state to show all answers
       setSolvedConnections(newSolvedConnections);
       setSelectedItems([]); // Clear any selected items
     });
   }, [data, solvedConnections]);
-  
-  
+
   const checkConnection = useCallback(() => {
     if (selectedItems.length !== CONNECTIONS_COUNT) {
-      selectedItems.forEach(item => shakeAnimation(item));
+      selectedItems.forEach((item) => shakeAnimation(item));
       setMistakes((prevMistakes) => {
         const newMistakes = prevMistakes + 1;
         if (newMistakes >= MAX_MISTAKES) {
-          setTimeout(() => { // Set a timeout to delay the reveal
+          setTimeout(() => {
+            // Set a timeout to delay the reveal
             revealAllAnswers();
           }, 1000); // Wait for 1 second before revealing all answers
         }
@@ -229,14 +245,16 @@ const saveGameState = async () => {
       });
       return;
     }
-  
+
     const foundConnectionKey = Object.keys(data).find((key) => {
       const connection = data[key];
       const sortedConnection = [...connection].sort();
       const sortedSelectedItems = [...selectedItems].sort();
-      return sortedConnection.every((item, index) => item === sortedSelectedItems[index]);
+      return sortedConnection.every(
+        (item, index) => item === sortedSelectedItems[index]
+      );
     });
-  
+
     if (foundConnectionKey) {
       animateAllItems(() => {
         setSolvedConnections((prevSolved) => ({
@@ -246,11 +264,12 @@ const saveGameState = async () => {
         setSelectedItems([]);
       });
     } else {
-      selectedItems.forEach(item => shakeAnimation(item));
+      selectedItems.forEach((item) => shakeAnimation(item));
       setMistakes((prevMistakes) => {
         const newMistakes = prevMistakes + 1;
         if (newMistakes >= MAX_MISTAKES) {
-          setTimeout(() => { // Set a timeout to delay the reveal
+          setTimeout(() => {
+            // Set a timeout to delay the reveal
             revealAllAnswers();
           }, 1000); // Wait for 1 second before revealing all answers
         }
@@ -258,8 +277,6 @@ const saveGameState = async () => {
       });
     }
   }, [selectedItems, data, revealAllAnswers]);
-  
-  
 
   if (isLoading && !refreshing) {
     return (
@@ -296,8 +313,7 @@ const saveGameState = async () => {
         style={{ padding: padding }}
         contentContainerStyle={styles.scrollViewContent}
       >
-        <View style={{ height: theme.spacing.medium }}></View>
-        <Text style={styles.instructions}>Create four groups of four!</Text>
+        <View style={{ height: boxMargin / 2 }}></View>
         {Object.keys(solvedConnections).map((key) => (
           <Animated.View
             key={key}
@@ -312,29 +328,34 @@ const saveGameState = async () => {
           </Animated.View>
         ))}
         <View style={styles.grid}>
-        {unsolvedItems.map((item, index) => {
-  const itemPosition =
-    positionRefs.current.get(item) || new Animated.ValueXY();
-  positionRefs.current.set(item, itemPosition); // Ensure each item has a position ref
-  return (
-    <Animated.View
-      key={item} // Ensure each item has a unique key at the first element of the list
-      style={{ transform: itemPosition.getTranslateTransform() }}
-    >
-      <TouchableOpacity
-        style={[
-          styles.item,
-          styles.itemBoxContainer,
-          selectedItems.includes(item) && styles.selectedItem,
-        ]}
-        onPress={() => selectItem(item)}
-      >
-        <Text style={styles.itemText}>{item}</Text>
-      </TouchableOpacity>
-    </Animated.View>
-  );
-})}
-
+          {unsolvedItems.map((item, index) => {
+            const itemPosition =
+              positionRefs.current.get(item) || new Animated.ValueXY();
+            positionRefs.current.set(item, itemPosition); // Ensure each item has a position ref
+            return (
+              <Animated.View
+                key={item} // Ensure each item has a unique key at the first element of the list
+                style={{ transform: itemPosition.getTranslateTransform() }}
+              >
+                <TouchableOpacity
+                  style={[
+                    styles.item,
+                    styles.itemBoxContainer,
+                    selectedItems.includes(item) && styles.selectedItem,
+                  ]}
+                  onPress={() => selectItem(item)}
+                >
+                  <Text
+                    style={styles.itemText}
+                    adjustsFontSizeToFit={true}
+                    numberOfLines={1}
+                  >
+                    {item}
+                  </Text>
+                </TouchableOpacity>
+              </Animated.View>
+            );
+          })}
         </View>
         <Text style={styles.mistakesRemaining}>
           {mistakes < MAX_MISTAKES
@@ -344,14 +365,19 @@ const saveGameState = async () => {
         <View style={styles.footer}>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
-                  style={[
-                    styles.button,
-                    (selectedItems.length !== CONNECTIONS_COUNT || mistakes >= MAX_MISTAKES) ? styles.buttonDisabled : styles.checkButton,
-                  ]} 
-              
+              style={[
+                styles.button,
+                selectedItems.length !== CONNECTIONS_COUNT ||
+                mistakes >= MAX_MISTAKES
+                  ? styles.buttonDisabled
+                  : styles.checkButton,
+              ]}
               onPress={checkConnection}
-              disabled={selectedItems.length !== CONNECTIONS_COUNT || mistakes >= MAX_MISTAKES}
-              >
+              disabled={
+                selectedItems.length !== CONNECTIONS_COUNT ||
+                mistakes >= MAX_MISTAKES
+              }
+            >
               <Text style={styles.checkButtonText}>Submit</Text>
             </TouchableOpacity>
           </View>
@@ -389,7 +415,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    width: "40%",
+    width: "35%",
     alignSelf: "center",
     alignSelf: "center",
   },
@@ -399,7 +425,7 @@ const styles = StyleSheet.create({
   mistakesRemaining: {
     fontSize: 17.4,
     marginTop: 5,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: "#000",
     marginBottom: 10,
     textAlign: "center",
@@ -423,7 +449,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#A5D6A7", // Change to a green color to indicate selection
   },
   solvedConnectionTitle: {
-    fontSize: 20,
+    fontSize: 22,
     position: "relative",
     fontWeight: "bold",
     textTransform: "uppercase",
@@ -480,7 +506,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#a5b5d6", // Change to a green color to indicate selection
   },
   itemText: {
-    fontSize: 16,
+    fontSize: 17,
+    marginHorizontal: 4,
     fontWeight: "500",
     textTransform: "uppercase",
     textAlign: "center",

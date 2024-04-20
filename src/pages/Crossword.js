@@ -113,7 +113,6 @@ const Crossword = () => {
     setFocusDirection(null);
   };
 
-
   const renderClueDetail = () => {
     if (activeClue && CLUE_DATA && CLUE_DATA[activeClue]) {
       return (
@@ -224,7 +223,7 @@ const Crossword = () => {
       setError(error.toString());
       setIsLoading(false);
     }
-  },[]);
+  }, []);
 
   useEffect(() => {
     fetchAndProcessCrossword();
@@ -352,7 +351,6 @@ const Crossword = () => {
             saveUserInputs(newInputs);
             setCorrectness({}); // Optionally clear correctness state if you don't want to validate after revealing answers
             scrollViewRef.current.scrollTo({ y: 0, animated: true }); // Scroll to the top of the ScrollView
-
           },
         },
       ],
@@ -416,7 +414,7 @@ const Crossword = () => {
               autoCompleteType="off"
               value={userInputs[cell.id] || " "} // Controlled component
               onChangeText={(text) => {
-                console.log("|"+text+"|");
+                console.log("|" + text + "|");
 
                 handleInputChange(cell.id, text.toUpperCase());
                 // Update the cell's letter in your state or context if you're managing the grid data dynamically (this is not shown here)
@@ -612,7 +610,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    width: "50%",
+    width: "35%",
     alignSelf: "center",
     alignSelf: "center",
   },
