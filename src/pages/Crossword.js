@@ -192,7 +192,7 @@ const Crossword = () => {
     setError(null);
     try {
       const data = await fetchCrossword();
-      const oldData = JSON.parse(await AsyncStorage.getItem("crosswordData"));
+      const oldData = JSON.parse(await AsyncStorage.getItem("crosswordData1"));
 
       if (!isEqual(oldData, data)) {
         // If the crossword data is different, reset the userInputs
@@ -277,7 +277,7 @@ const Crossword = () => {
   const handleInputChange = useCallback((id, text) => {
     // Ensure the input text is handled as a non-null string and converted to upper case
     const currentInput = (text || "").toUpperCase();
-    const previousInput = (userInputs[id] || "").toUpperCase();
+    const previousInput = (userInputs[id] || " ").toUpperCase();
   
     // Determine the operation: insertion or deletion
     const operationType = currentInput.length > previousInput.length ? 'insert' : 'delete';
