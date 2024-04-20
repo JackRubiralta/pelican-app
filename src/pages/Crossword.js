@@ -665,7 +665,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent", // Ensure input background doesn't distract
   },
   boxLetter: {
-    top: 2.2,
+    top: 2.22,
     textAlign: "center",
     fontSize: 15.8,
     color: "#333",
