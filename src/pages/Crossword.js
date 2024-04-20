@@ -350,6 +350,8 @@ const Crossword = () => {
             setUserInputs(newInputs); // Update state to show all answers
             saveUserInputs(newInputs);
             setCorrectness({}); // Optionally clear correctness state if you don't want to validate after revealing answers
+            scrollViewRef.current.scrollTo({ y: 0, animated: true }); // Scroll to the top of the ScrollView
+
           },
         },
       ],
