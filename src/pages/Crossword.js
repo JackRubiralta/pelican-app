@@ -113,23 +113,7 @@ const Crossword = () => {
     setFocusDirection(null);
   };
 
-  const loadUserInputs = async () => {
-    try {
-      const savedInputs = await JSON.parse(
-        await AsyncStorage.getItem("crosswordInputs")
-      );
-      if (savedInputs) {
-        await setUserInputs(savedInputs);
-      } else {
-        const resetInputs = {};
-        await Object.keys(userInputs).forEach((key) => {
-          resetInputs[key] = " "; // Set each input to an empty string
-        });
-        await setUserInputs(resetInputs);
-        await saveUserInputs(resetInputs);
-      }
-    } catch (error) {}
-  };
+
   const renderClueDetail = () => {
     if (activeClue && CLUE_DATA && CLUE_DATA[activeClue]) {
       return (
@@ -137,7 +121,7 @@ const Crossword = () => {
           style={[
             styles.clueItem,
             styles.activeClue,
-            { justifyContent: "center" },
+            { justifyContent: "center", marginTop: 0 },
           ]}
         >
           <Text
@@ -169,6 +153,23 @@ const Crossword = () => {
     );
   };
 
+  const loadUserInputs = async () => {
+    try {
+      const savedInputs = await JSON.parse(
+        await AsyncStorage.getItem("crosswordInputs")
+      );
+      if (savedInputs) {
+        await setUserInputs(savedInputs);
+      } else {
+        const resetInputs = {};
+        await Object.keys(userInputs).forEach((key) => {
+          resetInputs[key] = " "; // Set each input to an empty string
+        });
+        await setUserInputs(resetInputs);
+        await saveUserInputs(resetInputs);
+      }
+    } catch (error) {}
+  };
   // Save user inputs to storage
   const saveUserInputs = async (input = userInputs) => {
     try {
@@ -186,7 +187,7 @@ const Crossword = () => {
     return JSON.stringify(data1) === JSON.stringify(data2);
   };
 
-  const fetchAndProcessCrossword = async () => {
+  const fetchAndProcessCrossword = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
@@ -223,7 +224,7 @@ const Crossword = () => {
       setError(error.toString());
       setIsLoading(false);
     }
-  };
+  },[]);
 
   useEffect(() => {
     fetchAndProcessCrossword();
@@ -614,12 +615,9 @@ const styles = StyleSheet.create({
     width: "50%",
     alignSelf: "center",
     alignSelf: "center",
-
-    marginVertical: theme.spacing.small,
   },
   button: {
     flex: 1,
-    marginHorizontal: 5,
   },
   checkButton: {
     backgroundColor: "#4169E1",
