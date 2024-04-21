@@ -41,10 +41,11 @@ const ArticleListPage = ({
 
   const fetchArticles = async () => {
     setIsLoading(true);
-    setError(null);
     try {
       const data = await fetchArticlesFunction();
       setArticles(data);
+      setError(null);
+
     } catch (error) {
       setError(error.toString());
     }
@@ -58,6 +59,8 @@ const ArticleListPage = ({
   }, []);
 
   useEffect(() => {
+    setError(null);
+
     fetchArticles();
   }, []);
 

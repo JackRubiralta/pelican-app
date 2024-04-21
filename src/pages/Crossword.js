@@ -188,7 +188,6 @@ const Crossword = () => {
 
   const fetchAndProcessCrossword = useCallback(async () => {
     setIsLoading(true);
-    setError(null);
     try {
       const data = await fetchCrossword();
       const oldData = JSON.parse(await AsyncStorage.getItem("crosswordData"));
@@ -214,6 +213,7 @@ const Crossword = () => {
         resetFocusAndHighlight
       );
       setIsLoading(false);
+      setError(null);
 
       return () => {
         // Clean up the listener when the component unmounts
@@ -226,6 +226,7 @@ const Crossword = () => {
   }, []);
 
   useEffect(() => {
+    setError(null);
     fetchAndProcessCrossword();
   }, []);
 

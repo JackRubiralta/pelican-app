@@ -45,7 +45,6 @@ const Connections = () => {
 
   const loadData = useCallback(async () => {
     setIsLoading(true);
-    setError(null);
 
     try {
       const fetchedData = await fetchConnections();
@@ -90,13 +89,18 @@ const Connections = () => {
           })
         );
       }
+      setError(null);
+
     } catch (error) {
       setError(error.message);
     }
     setIsLoading(false);
+    
   }, []);
 
   useEffect(() => {
+    setError(null);
+
     loadData();
   }, [loadData]);
 
@@ -118,6 +122,12 @@ const Connections = () => {
       console.error("Failed to save game state:", error);
     }
   };
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    
+    await loadData();
+    setRefreshing(false);
+  }, []);
   const shakeAnimation = (key) => {
     const position = positionRefs.current.get(key) || new Animated.ValueXY();
     positionRefs.current.set(key, position);

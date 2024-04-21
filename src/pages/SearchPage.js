@@ -55,7 +55,6 @@ const SearchPage = ({}) => {
   const fetchArticles = async () => {
     if (query.length === 0) {
       setArticles([]);
-      setError(null);
       setIsLoading(false);
       setRefreshing(false);
       return;
@@ -68,6 +67,8 @@ const SearchPage = ({}) => {
         article.image.show = false;
         article.title.size = "medium";
       });
+      setError(null);
+
       setArticles(data);
     } catch (error) {
       setError(error.toString());
@@ -82,6 +83,8 @@ const SearchPage = ({}) => {
   }, []);
 
   useEffect(() => {
+    setError(null);
+
     fetchArticles();
   }, [query]);
 
