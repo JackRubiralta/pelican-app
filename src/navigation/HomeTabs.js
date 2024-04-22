@@ -38,10 +38,7 @@ function HomeTabs() {
         },
         tabBarLabel: () => null, // Hides the tab bar label
       })}
-      tabBarOptions={{
-        activeTintColor: "tomato",
-        inactiveTintColor: "gray",
-      }}
+     
     >
       <Tab.Screen name="Search" component={SearchPage} />
 

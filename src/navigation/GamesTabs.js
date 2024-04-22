@@ -32,7 +32,7 @@ function GamesTabs() {
           title: "Back",
           tabBarLabel: () => null,
           headerShown: false,
-        }}
+        }} 
       />
       <Tab.Screen
         name="SpellingBees"

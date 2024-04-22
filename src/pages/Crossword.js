@@ -550,7 +550,7 @@ const Crossword = () => {
           autoCorrect={false} // Disable auto-correction
           keyboardType="ascii-capable" // Restricts input to ASCII characters
           autoCapitalize={"characters"}
-          selection={cursorPositions} // Keep cursor to the right
+          selection={cursorPositions || { start: 0, end: 0 }} // Keep cursor to the right
           selectionColor="transparent" // Set selection color to transparent to hide it
           autoCompleteType="off"
           value={userInputs[boxInFocus] || " "} // Controlled component
