@@ -12,6 +12,7 @@ import {
   Platform,
   Keyboard, // Import the Keyboard module
   SafeAreaView,
+  TouchableWithoutFeedback,
   RefreshControl,
 } from "react-native";
 import { fetchCrossword } from "../API";
@@ -93,6 +94,7 @@ const Crossword = () => {
   const [activeClueBoxes, setActiveClueBoxes] = useState([]);
   const [isFocused, setIsFocused] = useState(false);
   const [cursorPositions, setCursorPositions] = useState({}); // State to keep track of cursor positions
+  const inputRef = useRef(null);
 
   const [activeClue, setActiveClue] = useState(null);
   const [boxInFocus, setBoxInFocus] = useState(null);
@@ -111,6 +113,7 @@ const Crossword = () => {
     setActiveClueBoxes([]); // Clear active clue boxes
     setBoxInFocus(null); // Clear box focus
     setFocusDirection(null);
+    inputRef.current?.blur();
   };
 
   const renderClueDetail = () => {
@@ -241,8 +244,6 @@ const Crossword = () => {
     setActiveClueBoxes(CLUE_DATA[clueKey].boxes);
     setActiveClue(clueKey);
     setBoxInFocus(boxId);
-    const firstBoxRef = GRID_DATA.find((cell) => cell.id === boxId).ref;
-    firstBoxRef.current.focus();
   });
   useEffect(() => {
     // Initialize cursor positions based on user inputs
@@ -255,6 +256,42 @@ const Crossword = () => {
     });
     setCursorPositions(initialPositions);
   }, [userInputs]);
+
+  const handleOnPress = (cell_id, is_button = false) => {
+    inputRef.current && inputRef.current.focus();
+
+    // Check if the pressed cell is the currently focused cell
+    console.log(boxInFocus === cell_id && is_button);
+    if (boxInFocus === cell_id && is_button) {
+      const clues = GRID_DATA.find((cell) => cell.id === cell_id).clues;
+
+      // Find an alternate clue that is not the currently active clue
+      const alternateClueKey = clues.find((clue) => clue !== activeClue);
+
+      // If an alternate clue exists, switch to it, otherwise keep the current
+      const clueKey = alternateClueKey || activeClue;
+
+      handleClueSelectionFromBox(cell_id, clueKey);
+      setBoxInFocus(cell_id);
+    } else if (activeClueBoxes.includes(cell_id)) {
+      // If the cell is part of the active clue boxes but not currently focused
+      setBoxInFocus(cell_id);
+    } else {
+      // If the cell is not currently focused or part of the active clues
+      const clueKey =
+        GRID_DATA.find((cell) => cell.id === cell_id).clues.find(
+          (clue) => CLUE_DATA[clue].direction === focusDirection
+        ) ||
+        GRID_DATA.find((cell) => cell.id === cell_id).clues.find(
+          (clue) => CLUE_DATA[clue].direction !== focusDirection
+        );
+
+      handleClueSelectionFromBox(cell_id, clueKey);
+      setBoxInFocus(cell_id);
+    }
+    inputRef.current && inputRef.current.focus();
+  };
+
   const handleClueSelection = useCallback((clueKey) => {
     // make it scroll all the way to the top
     scrollViewRef.current.scrollTo({ y: 0, animated: true }); // Scroll to the top of the ScrollView
@@ -263,10 +300,9 @@ const Crossword = () => {
     setActiveClue(clueKey);
     setBoxInFocus(CLUE_DATA[clueKey].boxes[0]);
     setFocusDirection(CLUE_DATA[clueKey].direction); // Update focus direction when clue is selected
-    const firstBoxRef = GRID_DATA.find(
-      (cell) => cell.id === CLUE_DATA[clueKey].boxes[0]
-    ).ref;
-    firstBoxRef.current.focus();
+    handleOnPress(CLUE_DATA[clueKey].boxes[0]);
+
+    //firstBoxRef.current.focus();
   });
   const debouncedSaveUserInputs = useCallback(
     debounce((inputs) => {
@@ -276,6 +312,11 @@ const Crossword = () => {
     }, 2000),
     []
   );
+  useEffect(() => {
+    if (!isLoading) {
+      debouncedSaveUserInputs(userInputs);
+    }
+  }, [userInputs, isLoading]);
 
   const handleInputChange = useCallback(
     (id, text) => {
@@ -291,7 +332,6 @@ const Crossword = () => {
       // Update the userInputs state
       setUserInputs((prevInputs) => {
         const updatedInputs = { ...prevInputs, [id]: newText };
-        debouncedSaveUserInputs(updatedInputs);
         return updatedInputs;
       });
 
@@ -312,10 +352,10 @@ const Crossword = () => {
       }
 
       // Focus the next appropriate box if within valid range
+
       if (nextIndex >= 0 && nextIndex < activeClueBoxes.length) {
         const nextBoxId = activeClueBoxes[nextIndex];
-        const nextBoxRef = GRID_DATA.find((c) => c.id === nextBoxId).ref;
-        nextBoxRef.current.focus();
+        handleOnPress(nextBoxId);
       }
     },
     [activeClueBoxes, GRID_DATA, userInputs, debouncedSaveUserInputs]
@@ -367,7 +407,9 @@ const Crossword = () => {
           .map(([key, clue], index) => (
             <TouchableOpacity
               key={key}
-              onPress={() => handleClueSelection(key)}
+              onPress={() => {
+                handleClueSelection(key);
+              }}
               style={[styles.clueItem, false && styles.activeClue]}
             >
               <Text style={styles.clueItemNumber}>
@@ -399,48 +441,17 @@ const Crossword = () => {
           ]}
         >
           {cell.label && <Text style={styles.boxLabel}>{cell.label}</Text>}
-          <Text style={styles.boxLetter}>{userInputs[cell.id] || " "}</Text>
+          <Text style={styles.boxLetter}>{userInputs[cell.id]}</Text>
 
           {!!cell.letter && (
-            <TextInput
+            <TouchableOpacity
               ref={cell.ref}
-              caretHidden={true}
-              style={[styles.boxInput, { textTransform: "uppercase" }]} // Set selection color to transparent
-              maxLength={2}
-              selection={cursorPositions[cell.id]} // Keep cursor to the right
-              autoCorrect={false} // Disable auto-correction
-              keyboardType="ascii-capable" // Restricts input to ASCII characters
-              autoCapitalize={"characters"}
-              selectionColor="transparent" // Set selection color to transparent to hide it
-              autoCompleteType="off"
-              value={userInputs[cell.id] || " "} // Controlled component
-              onChangeText={(text) => {
-                console.log("|" + text + "|");
-
-                handleInputChange(cell.id, text.toUpperCase());
-                // Update the cell's letter in your state or context if you're managing the grid data dynamically (this is not shown here)
-                // Move focus to the next box in activeClueBoxes
-              }}
-              onFocus={() => {
-                if (activeClueBoxes.includes(cell.id)) {
-                  // If the focused box is part of the currently active clue, keep everything as is
-                  setBoxInFocus(cell.id);
-                } else {
-                  // Find a new clue to activate based on the focus direction or switch to the other direction if necessary
-                  const clueKey =
-                    cell.clues.find(
-                      (clue) => CLUE_DATA[clue].direction === focusDirection
-                    ) ||
-                    cell.clues.find(
-                      (clue) => CLUE_DATA[clue].direction !== focusDirection
-                    );
-                  handleClueSelectionFromBox(cell.id, clueKey);
-                  setBoxInFocus(cell.id);
-                }
-              }}
+              style={[styles.boxInput]} // Set selection color to transparent
+              onPress={() => {
+                handleOnPress(cell.id, true);
+              }} // Use arrow function to pass cell.id
             />
           )}
-          <View styles></View>
         </View>
       );
     });
@@ -523,8 +534,34 @@ const Crossword = () => {
   }
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
-      <ScrollView ref={scrollViewRef}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+
+      <ScrollView
+        ref={scrollViewRef}
+        keyboardShouldPersistTaps="handled" // or "always" based on your need
+      >
         <Header title="Crossword" />
+
+        <TextInput
+          ref={inputRef}
+          caretHidden={true}
+          style={[styles.inputTextHidden]} // Set selection color to transparent
+          maxLength={2}
+          autoCorrect={false} // Disable auto-correction
+          keyboardType="ascii-capable" // Restricts input to ASCII characters
+          autoCapitalize={"characters"}
+          selection={cursorPositions} // Keep cursor to the right
+          selectionColor="transparent" // Set selection color to transparent to hide it
+          autoCompleteType="off"
+          value={userInputs[boxInFocus] || " "} // Controlled component
+          onChangeText={(text) => {
+            console.log("|" + text + "|");
+
+            handleInputChange(boxInFocus, text.toUpperCase());
+            // Update the cell's letter in your state or context if you're managing the grid data dynamically (this is not shown here)
+            // Move focus to the next box in activeClueBoxes
+          }}
+        />
 
         <View style={styles.container}>
           <View style={{ height: theme.spacing.medium }}></View>
@@ -533,6 +570,7 @@ const Crossword = () => {
           <View style={{ height: theme.spacing.medium }}></View>
 
           {renderClueDetail()}
+          
           <View style={{ height: 0, marginBottom: -9 }}></View>
           {true && ( // Show these only when keyboard is down
             <>
@@ -568,6 +606,8 @@ const Crossword = () => {
           )}
         </View>
       </ScrollView>
+      </TouchableWithoutFeedback>
+
     </KeyboardAvoidingView>
   );
 };
@@ -654,13 +694,19 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     textAlign: "center",
   },
+  inputTextHidden: {
+    position: "absolute",
+    backgroundColor: "transparent", // Ensure input background doesn't distract
+    color: "transparent",
+    height: 0,
+    width: 0,
+  },
   boxInput: {
     position: "absolute",
 
     width: "100%",
     height: "100%",
     textAlign: "center",
-    color: "transparent",
     backgroundColor: "transparent", // Ensure input background doesn't distract
   },
   boxLetter: {
