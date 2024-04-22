@@ -163,10 +163,12 @@ const Crossword = () => {
       if (savedInputs) {
         await setUserInputs(savedInputs);
       } else {
+        console.log("NO")
         const resetInputs = {};
         await Object.keys(userInputs).forEach((key) => {
           resetInputs[key] = " "; // Set each input to an empty string
         });
+
         await setUserInputs(resetInputs);
         await saveUserInputs(resetInputs);
       }
@@ -551,7 +553,7 @@ const Crossword = () => {
           autoCorrect={false} // Disable auto-correction
           keyboardType="ascii-capable" // Restricts input to ASCII characters
           autoCapitalize={"characters"}
-          selection={cursorPositions[boxInFocus] || { start: 0, end: 0 }} // Keep cursor to the right
+          selection={cursorPositions[boxInFocus] || { start: 1, end: 1 }} // Keep cursor to the right
           selectionColor="transparent" // Set selection color to transparent to hide it
           autoCompleteType="off"
           value={userInputs[boxInFocus] || " "} // Controlled component
