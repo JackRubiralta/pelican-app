@@ -75,10 +75,6 @@ const styles = StyleSheet.create({
     borderRadius: 10, // Rounded corners for a smoother look
     marginVertical: 20, // Increases space between buttons
     marginTop: 0,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 5,
     elevation: 6,
     fontFamily: "roboto", // Common font family
 
