@@ -47,7 +47,8 @@
             "utm-times-bold": "./assets/fonts/UTMTimesBold.ttf",
             "utm-times-regular": "./assets/fonts/UTMTimesRegular.ttf",
             "Arial": "./assets/fonts/arial-regular.ttf",
-            "georgia": "./assets/fonts/georgia.ttf"
+            "georgia": "./assets/fonts/georgia.ttf",
+            "roboto": "./assets/fonts/Roboto-Regular.ttf"
 
           }
         }

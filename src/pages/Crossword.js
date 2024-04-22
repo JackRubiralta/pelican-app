@@ -250,12 +250,13 @@ const Crossword = () => {
     const initialPositions = {};
     Object.keys(userInputs).forEach((key) => {
       initialPositions[key] = {
-        start: userInputs[key].length,
-        end: userInputs[key].length,
+        start: 1,
+        end: 1,
       };
     });
     setCursorPositions(initialPositions);
   }, [userInputs]);
+  
 
   const handleOnPress = (cell_id, is_button = false) => {
     inputRef.current && inputRef.current.focus();
@@ -550,7 +551,7 @@ const Crossword = () => {
           autoCorrect={false} // Disable auto-correction
           keyboardType="ascii-capable" // Restricts input to ASCII characters
           autoCapitalize={"characters"}
-          selection={cursorPositions || { start: 0, end: 0 }} // Keep cursor to the right
+          selection={cursorPositions[boxInFocus] || { start: 0, end: 0 }} // Keep cursor to the right
           selectionColor="transparent" // Set selection color to transparent to hide it
           autoCompleteType="off"
           value={userInputs[boxInFocus] || " "} // Controlled component
@@ -679,7 +680,7 @@ const styles = StyleSheet.create({
   checkButtonText: {
     color: "#FFFFFF",
     fontSize: 18,
-    fontFamily: "Arial", // Common font family
+    fontFamily: "roboto", // Common font family
 
     fontWeight: "600",
     textAlign: "center",
@@ -687,7 +688,7 @@ const styles = StyleSheet.create({
   revealButtonText: {
     color: "#FFFFFF",
     fontSize: 18,
-    fontFamily: "Arial", // Common font family
+    fontFamily: "roboto", // Common font family
 
     fontWeight: "600",
     textAlign: "center",
@@ -695,7 +696,7 @@ const styles = StyleSheet.create({
   clearButtonText: {
     color: "#FFFFFF",
     fontSize: 18,
-    fontFamily: "Arial", // Common font family
+    fontFamily: "roboto", // Common font family
 
     fontWeight: "600",
     textAlign: "center",
@@ -720,7 +721,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 15.8,
     color: "#333",
-    fontFamily: "Arial", // Common font family
+    fontFamily: "roboto", // Common font family
 
     backgroundColor: "transparent", // Ensure input background doesn't distract
   },
@@ -738,7 +739,7 @@ const styles = StyleSheet.create({
     top: -0.3,
     left: 1,
     fontSize: 6.5,
-    fontFamily: "Arial", // Common font family
+    fontFamily: "roboto", // Common font family
 
     color: "#333",
     fontWeight: "bold",
@@ -757,14 +758,14 @@ const styles = StyleSheet.create({
     marginRight: 6,
     color: "#5A5A5A", // Grey for numbers
     fontSize: 16,
-    fontFamily: "Arial", // Common font family
+    fontFamily: "roboto", // Common font family
 
   },
   clueItemText: {
     flex: 1, // Allow the clue text to wrap correctly
     color: "#000", // Black for the clue text
     fontSize: 15.5,
-    fontFamily: "Arial", // Common font family
+    fontFamily: "roboto", // Common font family
   },
   activeClue: {
     backgroundColor: "#ADD8E6", // Light blue for active clue background
@@ -773,7 +774,7 @@ const styles = StyleSheet.create({
   },
   clueHeader: {
     fontSize: 19.5, // Slightly reduced font size for a cleaner look
-    fontFamily: "Arial", // Common font family
+    fontFamily: "roboto", // Common font family
 
     fontWeight: "bold", // Keep bold for emphasis
     color: "#333", // Dark enough for good readability

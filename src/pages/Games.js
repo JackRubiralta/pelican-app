@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 5,
     elevation: 6,
-    fontFamily: "Arial", // Common font family
+    fontFamily: "roboto", // Common font family
 
   },
   buttonText: {

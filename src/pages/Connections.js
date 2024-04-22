@@ -404,7 +404,7 @@ const styles = StyleSheet.create({
   },
   dot: {
     fontSize: 30,
-    fontFamily: "Arial", // Common font family
+    fontFamily: "roboto", // Common font family
 
   },
   mistakesText: {
@@ -412,7 +412,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#222222",
     fontSize: 18,
-    fontFamily: "Arial", // Common font family
+    fontFamily: "roboto", // Common font family
 
     fontWeight: "bold",
     marginBottom: 5,
@@ -438,7 +438,7 @@ const styles = StyleSheet.create({
   },
   mistakesRemaining: {
     fontSize: 17.4,
-    fontFamily: "Arial", // Common font family
+    fontFamily: "roboto", // Common font family
 
     marginTop: 5,
     fontWeight: "bold",
@@ -468,7 +468,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
 
-    fontFamily: "Arial", // Common font family
+    fontFamily: "roboto", // Common font family
 
     position: "relative",
     textTransform: "uppercase",
@@ -477,7 +477,7 @@ const styles = StyleSheet.create({
   checkButtonText: {
     color: "#FFFFFF",
     fontSize: 18,
-    fontFamily: "Arial", // Common font family
+    fontFamily: "roboto", // Common font family
 
     fontWeight: "600",
     textAlign: "center",
@@ -486,7 +486,7 @@ const styles = StyleSheet.create({
     fontSize: 16, // Match fontSize with itemText
     fontWeight: "bold", // Match fontWeight with itemText
 
-    fontFamily: "Arial", // Common font family
+    fontFamily: "roboto", // Common font family
 
     color: "#222222",
   },
@@ -511,7 +511,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 24,
     color: "#222222",
-    fontFamily: "Arial", // Common font family
+    fontFamily: "roboto", // Common font family
 
     fontWeight: "bold",
     marginBottom: theme.spacing.medium,
@@ -533,7 +533,7 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 17,
-    fontFamily: "Arial", // Common font family
+    fontFamily: "roboto", // Common font family
 
     marginHorizontal: 4,
     fontWeight: "500",

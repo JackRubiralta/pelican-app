@@ -37,6 +37,7 @@ const App = () => {
       'utm-times-bold': require('./assets/fonts/UTMTimesBold.ttf'),
       'utm-times-regular': require('./assets/fonts/UTMTimesRegular.ttf'),
       'georgia': require('./assets/fonts/georgia.ttf'),
+      'roboto': require('./assets/fonts/Roboto-Regular.ttf'),
     });
   }
 
