@@ -17,6 +17,8 @@ const styles = StyleSheet.create({
   errorMessage: {
     fontSize: 18,
     color: 'red',
+    fontFamily: "Arial", // Common font family
+
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 14,

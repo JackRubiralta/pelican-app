@@ -108,7 +108,7 @@ const SearchPage = ({}) => {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <Text>Please enter a query to search for articles.</Text>
+          <Text></Text>
         </View>
       ) : isLoading && !refreshing ? (
         <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>

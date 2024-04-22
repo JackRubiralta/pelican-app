@@ -45,7 +45,10 @@
             "nyt-cheltenham-normal": "./fonts/nyt-cheltenham-normal.ttf",
             
             "utm-times-bold": "./assets/fonts/UTMTimesBold.ttf",
-            "utm-times-regular": "./assets/fonts/UTMTimesRegular.ttf"
+            "utm-times-regular": "./assets/fonts/UTMTimesRegular.ttf",
+            "Arial": "./assets/fonts/arial-regular.ttf",
+            "georgia": "./assets/fonts/georgia.ttf"
+
           }
         }
       ]

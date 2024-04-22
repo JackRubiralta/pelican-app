@@ -80,6 +80,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 5,
     elevation: 6,
+    fontFamily: "Arial", // Common font family
+
   },
   buttonText: {
     fontSize: 24, // Larger font size for better visibility and touch

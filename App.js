@@ -19,9 +19,12 @@ const App = () => {
        'nyt-franklin': require('./assets/fonts/nyt-franklin.ttf'),
        'nyt-cheltenham-normal': require('./assets/fonts/nyt-cheltenham-normal.ttf'),
        // Fraunces fonts
-    
+       'Arial': require('./assets/fonts/arial-regular.ttf'),  // Updated to the correct filename for Arial
+
        'utm-times-bold': require('./assets/fonts/UTMTimesBold.ttf'),
        'utm-times-regular': require('./assets/fonts/UTMTimesRegular.ttf'),
+       'georgia': require('./assets/fonts/georgia.ttf'),  // Make sure the path matches where you've placed the file
+
 
        // Include any other fonts here
     });

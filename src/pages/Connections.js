@@ -404,12 +404,16 @@ const styles = StyleSheet.create({
   },
   dot: {
     fontSize: 30,
+    fontFamily: "Arial", // Common font family
+
   },
   mistakesText: {
     marginTop: 5,
     textAlign: "center",
-    color: "#424242",
+    color: "#222222",
     fontSize: 18,
+    fontFamily: "Arial", // Common font family
+
     fontWeight: "bold",
     marginBottom: 5,
   },
@@ -434,9 +438,11 @@ const styles = StyleSheet.create({
   },
   mistakesRemaining: {
     fontSize: 17.4,
+    fontFamily: "Arial", // Common font family
+
     marginTop: 5,
     fontWeight: "bold",
-    color: "#000",
+    color: "#222222",
     marginBottom: 10,
     textAlign: "center",
   },
@@ -460,21 +466,29 @@ const styles = StyleSheet.create({
   },
   solvedConnectionTitle: {
     fontSize: 22,
-    position: "relative",
     fontWeight: "bold",
+
+    fontFamily: "Arial", // Common font family
+
+    position: "relative",
     textTransform: "uppercase",
-    color: "#424242",
+    color: "#222222",
   },
   checkButtonText: {
     color: "#FFFFFF",
     fontSize: 18,
+    fontFamily: "Arial", // Common font family
+
     fontWeight: "600",
     textAlign: "center",
   },
   solvedConnectionItems: {
     fontSize: 16, // Match fontSize with itemText
     fontWeight: "bold", // Match fontWeight with itemText
-    color: "#424242", // Match color with itemText
+
+    fontFamily: "Arial", // Common font family
+
+    color: "#222222",
   },
   checkButton: {
     backgroundColor: "#4169E1",
@@ -496,7 +510,9 @@ const styles = StyleSheet.create({
   instructions: {
     textAlign: "center",
     fontSize: 24,
-    color: "#424242",
+    color: "#222222",
+    fontFamily: "Arial", // Common font family
+
     fontWeight: "bold",
     marginBottom: theme.spacing.medium,
   },
@@ -517,12 +533,14 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 17,
+    fontFamily: "Arial", // Common font family
+
     marginHorizontal: 4,
     fontWeight: "500",
     textTransform: "uppercase",
     textAlign: "center",
 
-    color: "#424242",
+    color: "#222222",
     position: "relative",
   },
   // ... Add other styles that might be needed ...
