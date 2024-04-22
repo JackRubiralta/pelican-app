@@ -249,14 +249,8 @@ const Crossword = () => {
   });
   useEffect(() => {
     // Initialize cursor positions based on user inputs
-    const initialPositions = {};
-    Object.keys(userInputs).forEach((key) => {
-      initialPositions[key] = {
-        start: 1,
-        end: 1,
-      };
-    });
-    setCursorPositions(initialPositions);
+    
+    setCursorPositions({ start: 1, end: 1 });
   }, [userInputs]);
   
 
@@ -553,7 +547,7 @@ const Crossword = () => {
           autoCorrect={false} // Disable auto-correction
           keyboardType="ascii-capable" // Restricts input to ASCII characters
           autoCapitalize={"characters"}
-          selection={cursorPositions[boxInFocus] || { start: 1, end: 1 }} // Keep cursor to the right
+          selection={cursorPositions || { start: 1, end: 1 }} // Keep cursor to the right
           selectionColor="transparent" // Set selection color to transparent to hide it
           autoCompleteType="off"
           value={userInputs[boxInFocus] || " "} // Controlled component
