@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity,SafeView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity,SafeAreaView } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import Header from '../components/Header'; // Ensure this path matches your project structure
 import { theme } from "../theme";
@@ -26,7 +26,7 @@ const GamesPage = () => {
   };
 
   return (
-    <SafeView style={[{backgroundColor: '#ffff'}, { flex: 1}]}>
+    <SafeAreaView style={[{backgroundColor: '#ffff'}, { flex: 1}]}>
       <Header title="Games" />
       <View style={styles.container}>
         <View style={{height: theme.spacing.medium}}></View>
@@ -54,7 +54,7 @@ const GamesPage = () => {
 
        */}
       </View>
-    </SafeView>
+    </SafeAreaView>
   );
 };
 

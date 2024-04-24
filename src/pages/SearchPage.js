@@ -89,8 +89,7 @@ const SearchPage = ({}) => {
   }, [query]);
 
   return (
-    <SafeAreaView>
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {headerComponent && (
         <Animated.View
           style={[
@@ -112,16 +111,16 @@ const SearchPage = ({}) => {
           <Text></Text>
         </View>
       ) : isLoading && !refreshing ? (
-        <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
+        <View style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
           <View style={{ height: 60 }}></View>
 
           <ScrollView
             // Style your ScrollView as needed
             refreshControl={<RefreshControl refreshing={true} />}
           ></ScrollView>
-        </SafeAreaView>
+        </View>
       ) : error || articles.length === 0 ? (
-        <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
+        <View style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
           <View style={{ height: 60 }}></View>
 
           <ScrollView
@@ -133,7 +132,7 @@ const SearchPage = ({}) => {
             {/* Display the ErrorBox if there's an error */}
             {error && <ErrorBox errorMessage={error} />}
           </ScrollView>
-        </SafeAreaView>
+        </View>
       ) : (
         <ArticleList
           articles={articles}
@@ -144,7 +143,6 @@ const SearchPage = ({}) => {
           refreshControl={null}
         />
       )}
-    </View>
     </SafeAreaView>
   );
 };

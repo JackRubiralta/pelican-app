@@ -66,8 +66,7 @@ const ArticleListPage = ({
 
 
   return (
-    <SafeAreaView>
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {headerComponent && (
         <Animated.View
           style={[
@@ -82,15 +81,15 @@ const ArticleListPage = ({
       )}
 
       {isLoading && !refreshing ? (
-        <View style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
+        <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
           <View style={{ height: 60 }}></View>
           <ScrollView
             // Style your ScrollView as needed
             refreshControl={<RefreshControl refreshing={true} />}
           ></ScrollView>
-        </View>
+        </SafeAreaView>
       ) : error ? (
-        <View style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
+        <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
           <View style={{ height: 60 }}></View>
           <ScrollView
             // Style your ScrollView as needed
@@ -100,7 +99,7 @@ const ArticleListPage = ({
           >
             {error && <ErrorBox errorMessage={error} />}
           </ScrollView>
-        </View>
+        </SafeAreaView>
       ) : (
         <ArticleList
           articles={articles}
@@ -110,7 +109,6 @@ const ArticleListPage = ({
           headerHeight={headerHeight}
         />
       )} 
-    </View>
     </SafeAreaView>
 
   );

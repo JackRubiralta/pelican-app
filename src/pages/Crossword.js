@@ -530,9 +530,9 @@ const Crossword = () => {
     );
   }
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
 
-    <KeyboardAvoidingView style={{ flex: 1 }}>
+    <KeyboardAvoidingView >
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
 
       <ScrollView
