@@ -530,6 +530,8 @@ const Crossword = () => {
     );
   }
   return (
+    <SafeAreaView>
+
     <KeyboardAvoidingView style={{ flex: 1 }}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
 
@@ -606,6 +608,8 @@ const Crossword = () => {
       </TouchableWithoutFeedback>
 
     </KeyboardAvoidingView>
+    </SafeAreaView>
+
   );
 };
 const padding1 = theme.spacing.medium;

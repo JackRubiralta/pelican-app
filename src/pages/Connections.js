@@ -394,6 +394,7 @@ const Connections = () => {
         </View>
       </ScrollView>
     </SafeAreaView>
+    
   );
 };
 

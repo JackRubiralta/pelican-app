@@ -89,6 +89,7 @@ const SearchPage = ({}) => {
   }, [query]);
 
   return (
+    <SafeAreaView>
     <View style={styles.container}>
       {headerComponent && (
         <Animated.View
@@ -144,6 +145,7 @@ const SearchPage = ({}) => {
         />
       )}
     </View>
+    </SafeAreaView>
   );
 };
 
