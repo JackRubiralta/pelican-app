@@ -88,7 +88,7 @@ const SearchPage = ({}) => {
     fetchArticles();
   }, [query]);
 
-  return (
+return (
     <SafeAreaView style={styles.container}>
       {headerComponent && (
         <Animated.View
@@ -105,45 +105,47 @@ const SearchPage = ({}) => {
 
       {query.length === 0 ? (
         // Your UI component or message indicating that no query has been entered
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
-          <Text></Text>
-        </View>
-      ) : isLoading && !refreshing ? (
-        <View style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
-          <View style={{ height: 60 }}></View>
+        <SafeAreaView style={[{ flex: 1,  justifyContent: "center", alignItems: "center" }, { backgroundColor: "#fff" }]}>
 
+          <Text>Enter query to search.</Text>
+        </SafeAreaView>
+      ) : isLoading && !refreshing ? (
+        <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
+          <View style={{ height: 60 }}></View>
           <ScrollView
             // Style your ScrollView as needed
             refreshControl={<RefreshControl refreshing={true} />}
           ></ScrollView>
-        </View>
-      ) : error || articles.length === 0 ? (
-        <View style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
+        </SafeAreaView>
+      ) : error ? (
+        <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
           <View style={{ height: 60 }}></View>
-
           <ScrollView
             // Style your ScrollView as needed
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
           >
-            {/* Display the ErrorBox if there's an error */}
             {error && <ErrorBox errorMessage={error} />}
           </ScrollView>
-        </View>
+        </SafeAreaView>
+      ) : articles.length === 0 ? (
+        // Your UI component or message indicating that no query has been entered
+        <SafeAreaView style={[{ flex: 1,  justifyContent: "center", alignItems: "center" }, { backgroundColor: "#fff" }]}>
+
+          <Text>No articles found.</Text>
+        </SafeAreaView>
       ) : (
         <ArticleList
           articles={articles}
-          refreshing={false}
-          onRefresh={null}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
           scrollY={scrollY}
           headerHeight={headerHeight}
-          refreshControl={null}
         />
-      )}
+      )} 
     </SafeAreaView>
+
   );
 };
 
