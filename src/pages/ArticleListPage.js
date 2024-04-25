@@ -81,15 +81,15 @@ const ArticleListPage = ({
       )}
 
       {isLoading && !refreshing ? (
-        <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
+        <View style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
           <View style={{ height: 60 }}></View>
           <ScrollView
             // Style your ScrollView as needed
             refreshControl={<RefreshControl refreshing={true} />}
           ></ScrollView>
-        </SafeAreaView>
+        </View>
       ) : error ? (
-        <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
+        <View style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
           <View style={{ height: 60 }}></View>
           <ScrollView
             // Style your ScrollView as needed
@@ -99,7 +99,7 @@ const ArticleListPage = ({
           >
             {error && <ErrorBox errorMessage={error} />}
           </ScrollView>
-        </SafeAreaView>
+        </View>
       ) : (
         <ArticleList
           articles={articles}
