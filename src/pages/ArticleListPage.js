@@ -8,9 +8,10 @@ import {
   SafeAreaView,
   ScrollView,
 } from "react-native";
+
 import ArticleList from "../components/ArticleList"; // Adjust the import path as necessary
 import ErrorBox from "../components/ErrorBox"; // Adjust the import path as necessary
-
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 const headerHeight = 60; // Assuming the header height is 60, adjust if necessary
 
 const ArticleListPage = ({
@@ -23,7 +24,7 @@ const ArticleListPage = ({
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const scrollY = new Animated.Value(0);
-
+  const insets = useSafeAreaInsets();
   // Clamping the initial negative values to zero
   const scrollYPositive = scrollY.interpolate({
     inputRange: [-1, 0],
@@ -64,13 +65,18 @@ const ArticleListPage = ({
     fetchArticles();
   }, []);
 
+  const headerStyle = {
+    ...styles.header,
+    top: insets.top,
+  }
 
   return (
     <SafeAreaView style={styles.container}>
-      {headerComponent && (
+
+      {{headerComponent} && (
         <Animated.View
           style={[
-            styles.header,
+            headerStyle,
             {
               transform: [{ translateY: headerTranslateY }],
             },
@@ -82,7 +88,7 @@ const ArticleListPage = ({
 
       {isLoading && !refreshing ? (
         <View style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
-          <View style={{ height: 60 }}></View>
+          <View style={{ height: 0 }}></View>
           <ScrollView
             // Style your ScrollView as needed
             refreshControl={<RefreshControl refreshing={true} />}
@@ -90,7 +96,7 @@ const ArticleListPage = ({
         </View>
       ) : error ? (
         <View style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
-          <View style={{ height: 60 }}></View>
+          <View style={{ height: 0 }}></View>
           <ScrollView
             // Style your ScrollView as needed
             refreshControl={
@@ -118,7 +124,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    padding: 0,
   },
   header: {
     position: "absolute",

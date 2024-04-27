@@ -13,6 +13,7 @@ import {
 import ArticleList from "../components/ArticleList"; // Adjust the import path as necessary
 import ErrorBox from "../components/ErrorBox"; // Adjust the import path as necessary
 import { fetchSearchResults } from "../API";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const headerHeight = 60; // Assuming the header height is 60, adjust if necessary
 
@@ -39,9 +40,10 @@ const SearchPage = ({}) => {
     outputRange: [0, -headerHeight],
     extrapolate: "clamp",
   });
+  const insets = useSafeAreaInsets();
 
   const headerComponent = (
-    <View style={styles.searchBarContainer}>
+    <View style={[styles.searchBarContainer, {top: insets.top}]}>
       <TextInput
         style={styles.searchBar}
         placeholder="Search articles..."
@@ -105,20 +107,20 @@ return (
 
       {query.length === 0 ? (
         // Your UI component or message indicating that no query has been entered
-        <SafeAreaView style={[{ flex: 1,  justifyContent: "center", alignItems: "center" }, { backgroundColor: "#fff" }]}>
+        <View style={[{ flex: 1,  justifyContent: "center", alignItems: "center" }, { backgroundColor: "#fff" }]}>
 
           <Text>Enter query to search.</Text>
-        </SafeAreaView>
+        </View>
       ) : isLoading && !refreshing ? (
-        <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
+        <View style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
           <View style={{ height: 60 }}></View>
           <ScrollView
             // Style your ScrollView as needed
             refreshControl={<RefreshControl refreshing={true} />}
           ></ScrollView>
-        </SafeAreaView>
+        </View>
       ) : error ? (
-        <SafeAreaView style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
+        <View style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
           <View style={{ height: 60 }}></View>
           <ScrollView
             // Style your ScrollView as needed
@@ -128,13 +130,13 @@ return (
           >
             {error && <ErrorBox errorMessage={error} />}
           </ScrollView>
-        </SafeAreaView>
+        </View>
       ) : articles.length === 0 ? (
         // Your UI component or message indicating that no query has been entered
-        <SafeAreaView style={[{ flex: 1,  justifyContent: "center", alignItems: "center" }, { backgroundColor: "#fff" }]}>
+        <View style={[{ flex: 1,  justifyContent: "center", alignItems: "center" }, { backgroundColor: "#fff" }]}>
 
           <Text>No articles found.</Text>
-        </SafeAreaView>
+        </View>
       ) : (
         <ArticleList
           articles={articles}
