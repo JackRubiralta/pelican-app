@@ -45,3 +45,5 @@ yarn-error.*
 # some for ios testing
 ios
 index.js
+android
+babel.config.js
