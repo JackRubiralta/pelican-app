@@ -67,17 +67,18 @@ const ArticleListPage = ({
 
   const headerStyle = {
     ...styles.header,
-    top: insets.top,
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
+                <View style={{ height: insets.top, backgroundColor: '#ffff', zIndex: 2, width: '100%' }}></View>
 
       {{headerComponent} && (
         <Animated.View
           style={[
             headerStyle,
             {
+              top: insets.top,
               transform: [{ translateY: headerTranslateY }],
             },
           ]}
@@ -88,7 +89,7 @@ const ArticleListPage = ({
 
       {isLoading && !refreshing ? (
         <View style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
-          <View style={{ height: 0 }}></View>
+          <View style={{ height: headerHeight }}></View>
           <ScrollView
             // Style your ScrollView as needed
             refreshControl={<RefreshControl refreshing={true} />}
@@ -96,7 +97,7 @@ const ArticleListPage = ({
         </View>
       ) : error ? (
         <View style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
-          <View style={{ height: 0 }}></View>
+          <View style={{ height: headerHeight }}></View>
           <ScrollView
             // Style your ScrollView as needed
             refreshControl={
@@ -115,7 +116,7 @@ const ArticleListPage = ({
           headerHeight={headerHeight}
         />
       )} 
-    </SafeAreaView>
+    </View>
 
   );
 };

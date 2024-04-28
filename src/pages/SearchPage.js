@@ -14,6 +14,7 @@ import ArticleList from "../components/ArticleList"; // Adjust the import path a
 import ErrorBox from "../components/ErrorBox"; // Adjust the import path as necessary
 import { fetchSearchResults } from "../API";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { theme } from "../theme";
 
 const headerHeight = 60; // Assuming the header height is 60, adjust if necessary
 
@@ -91,12 +92,16 @@ const SearchPage = ({}) => {
   }, [query]);
 
 return (
-    <SafeAreaView style={styles.container}>
+  
+    <View style={styles.container}>
+                <View style={{ height: insets.top, backgroundColor: '#ffff', zIndex: 2, width: '100%' }}></View>
+
       {headerComponent && (
         <Animated.View
           style={[
             styles.header,
             {
+              
               transform: [{ translateY: headerTranslateY }],
             },
           ]}
@@ -113,7 +118,7 @@ return (
         </View>
       ) : isLoading && !refreshing ? (
         <View style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
-          <View style={{ height: 60 }}></View>
+          <View style={{ height: headerHeight }}></View>
           <ScrollView
             // Style your ScrollView as needed
             refreshControl={<RefreshControl refreshing={true} />}
@@ -121,7 +126,7 @@ return (
         </View>
       ) : error ? (
         <View style={[{ flex: 1 }, { backgroundColor: "#fff" }]}>
-          <View style={{ height: 60 }}></View>
+          <View style={{ height: headerHeight }}></View>
           <ScrollView
             // Style your ScrollView as needed
             refreshControl={
@@ -146,7 +151,7 @@ return (
           headerHeight={headerHeight}
         />
       )} 
-    </SafeAreaView>
+    </View>
 
   );
 };
@@ -173,7 +178,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#dedede",
     height: 60, // Maintain the explicit height setting for the container
     justifyContent: "center", // Centers the searchBar vertically within the container
-    paddingHorizontal: 10, // Optional: add some horizontal padding to the container if desired
+    paddingHorizontal: 0, // Optional: add some horizontal padding to the container if desired
     backgroundColor: "#ffff",
     width: "100%",
   },

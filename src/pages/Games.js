@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20, // Increased padding for a taller button
     paddingHorizontal: 20,
     borderRadius: 10, // Rounded corners for a smoother look
-    marginVertical: 20, // Increases space between buttons
+    marginVertical: theme.spacing.medium, // Increases space between buttons
     marginTop: 0,
     elevation: 6,
     fontFamily: "roboto", // Common font family
