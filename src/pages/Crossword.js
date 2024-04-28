@@ -358,14 +358,14 @@ const Crossword = () => {
     [activeClueBoxes, GRID_DATA, userInputs, debouncedSaveUserInputs]
   );
 
-  /*
+  
   useEffect(() => {
     // Cleanup function to cancel the debounced call if the component unmounts
     return () => {
       debouncedSaveUserInputs.cancel();
     };
   }, [debouncedSaveUserInputs]);
-  */
+  
   const revealAnswers = () => {
     Alert.alert(
       "Reveal All Answers", // Title of the alert
