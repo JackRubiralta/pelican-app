@@ -318,9 +318,8 @@ const Connections = () => {
     .sort(() => 1);
   return (
     <SafeAreaView style={styles.container}>
-                    <Header title="Connections" />
-
-      <View
+      <Header title="Connections" />
+      <ScrollView
         style={{ padding: padding }}
         contentContainerStyle={styles.scrollViewContent}
       >
@@ -393,9 +392,8 @@ const Connections = () => {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
-    
   );
 };
 
@@ -545,7 +543,7 @@ const styles = StyleSheet.create({
     color: "#222222",
     position: "relative",
   },
-  // ... Add other styles that might be needed ...
+  // ... Add other styles that might b  e needed ...
 });
 
 export default Connections;
