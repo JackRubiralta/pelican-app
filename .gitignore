@@ -43,3 +43,5 @@ yarn-error.*
 # @end expo-cli
 
 # some for ios testing
+ios
+index.js
