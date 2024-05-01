@@ -56,6 +56,7 @@ const SearchPage = ({}) => {
     </View> 
   );
   const fetchArticles = async () => {
+
     if (query.length === 0) {
       setArticles([]);
       setIsLoading(false);
@@ -81,6 +82,7 @@ const SearchPage = ({}) => {
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
+    setError(null);
     await fetchArticles();
     setRefreshing(false);
   }, []);
