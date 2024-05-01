@@ -98,19 +98,20 @@ const ArticlePage = () => {
     return <Text>{parseText(text)}</Text>;
   };
 
-  const renderMainImage = (position) =>
+  const renderMainImage = (position) => {
     article.image &&
     article.image.source && (
       <View
         style={
           position === "bottom"
             ? { marginTop: theme.spacing.small }
-            : { marginTop: theme.spacing.medium *SIZE_MULTIPLIER }
+            : { marginTop: theme.spacing.medium }
         }
       >
         <Photos imageInfo={article.image} showCaption={true} />
       </View>
     );
+  }
 
   if (article.image?.position === "side") {
     article.image.position = "bottom";
@@ -122,8 +123,7 @@ const ArticlePage = () => {
       marginTop:
         article.image.position === "top"
           ? theme.spacing.small
-          : theme.spacing.medium *
-              SIZE_MULTIPLIER,
+          : theme.spacing.medium,
     },
   ];
 
